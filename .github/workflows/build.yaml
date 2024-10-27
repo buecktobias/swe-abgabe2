@@ -32,9 +32,24 @@ jobs:
       - name: Log Containers
         run: docker ps
 
-      - name: Test Connectivity to Backend from Docker Container
-        working-directory: ./backend
-        run: docker exec nestjs curl -s http://localhost:3000/health/liveness
+      - name: Wait for Backend to be Ready
+        run: |
+          for i in {1..10}; do
+            echo "Checking if backend is available (attempt $i/10)..."
+            if docker exec nestjs curl -s http://nestjs:3000/health/liveness | grep -q "200"; then
+              echo "Backend is ready and reachable."
+              break
+            else
+              echo "Backend not yet available; retrying in 10 seconds..."
+              sleep 10
+            fi
+          done
+
+          # Fail if not ready after retries
+          if ! docker exec nestjs curl -s http://nestjs:3000/health/liveness | grep -q "200"; then
+            echo "Backend did not become ready in time."
+            exit 1
+          fi
 
 
       - name: Check if backend is ready
