@@ -49,7 +49,7 @@ jobs:
 
       - name: Run Angular Tests
         working-directory: ./angular-buch-frontend
-        run: npm run test -- --watch=false
+        run: npm run test-headless
 
   sonarcloud:
     name: SonarCloud
