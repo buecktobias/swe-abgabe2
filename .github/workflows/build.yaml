@@ -32,7 +32,10 @@ jobs:
       - name: Log Containers
         run: docker ps
 
-      # Health check for backend
+      - name: Test Connectivity to Backend from Docker Container
+        working-directory: ./backend
+        run: docker exec nestjs curl -s http://localhost:3000/health/liveness
+
       - name: Check if backend is ready
         run: |
           for i in {1..6}; do
