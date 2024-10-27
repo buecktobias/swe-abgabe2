@@ -8,7 +8,7 @@ services:
       - NODE_ENV=development
       - NEST_HOST=localhost
       - CLIENT_SECRET=tkm7M8wb1C38HMn8e3CDK6U3e4yib5Qt
-    mem_limit: 1g
+    mem_limit: 2g
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest
