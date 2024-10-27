@@ -37,7 +37,7 @@ jobs:
           for i in {1..10}; do
             echo "Checking if backend is available (attempt $i/10)..."
             docker ps
-            if docker exec nestjs curl -s http://nestjs:3000/health/liveness | grep -q "200"; then
+            if curl -s http://localhost:3000/health/liveness | grep -q "200"; then
               echo "Backend is ready and reachable."
               break
             else
@@ -47,7 +47,7 @@ jobs:
           done
 
           # Fail if not ready after retries
-          if ! docker exec nestjs curl -s http://nestjs:3000/health/liveness | grep -q "200"; then
+          if ! curl -s http://localhost:3000/health/liveness | grep -q "200"; then
             echo "Backend did not become ready in time."
             exit 1
           fi
