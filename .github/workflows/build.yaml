@@ -29,6 +29,9 @@ jobs:
         working-directory: ./backend
         run: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
+      - name: Log Containers
+        run: docker ps
+
       # Health check for backend
       - name: Check if backend is ready
         run: |
@@ -42,7 +45,6 @@ jobs:
             fi
           done
 
-      # Cache node_modules for Angular frontend
       - name: Cache node_modules
         uses: actions/cache@v3
         with:
