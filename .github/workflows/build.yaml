@@ -27,7 +27,7 @@ jobs:
 
       - name: Start backend with Docker Compose
         working-directory: ./backend
-        run: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
+        run: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
       - name: Log Containers
         run: docker ps
