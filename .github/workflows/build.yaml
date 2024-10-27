@@ -34,7 +34,11 @@ jobs:
 
       - name: Test Connectivity to Backend from Docker Container
         working-directory: ./backend
-        run: docker exec nestjs curl -s http://localhost:3000/health/liveness
+        run: |
+          docker exec nestjs apt-get update
+          docker exec nestjs apt-get install -y curl
+          docker exec nestjs curl -s http://localhost:3000/health/liveness
+
 
       - name: Check if backend is ready
         run: |
