@@ -37,11 +37,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install dependencies and start Angular (if not using Docker)
+      - name: Install dependencies and start Angular
         working-directory: ./angular-buch-frontend
         run: |
           npm install
-          npm run start & # Start Angular in the background
+          npm run start &
 
       - name: Run Cypress Tests
         working-directory: ./angular-buch-frontend
