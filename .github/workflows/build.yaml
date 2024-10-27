@@ -21,28 +21,10 @@ jobs:
         working-directory: ./backend
         run: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
-      - name: Wait for backend to be ready
-        run: |
-          until curl -s http://localhost:3000/health/liveness | grep -q '"status":"ok"'; do
-            echo "Waiting for backend to be ready..."
-            sleep 5
-          done
-
-      # Optional: If you want to run Angular inside Docker Compose, uncomment the next section
-      # - name: Start Angular frontend with Docker Compose
-      #   working-directory: ./angular-buch-frontend
-      #   run: docker-compose up -d
-
       - name: Start Angular (if not using Docker)
         working-directory: ./angular-buch-frontend
-        run: npm install && npm run start & # Run in background
+        run: npm install && npm run start &
 
-      - name: Wait for Angular to be ready
-        run: |
-          until curl -s http://localhost:4200 | grep -q "<title>Angular"; do
-            echo "Waiting for Angular app to be ready..."
-            sleep 5
-          done
 
       - name: Run Cypress Tests
         working-directory: ./angular-buch-frontend
