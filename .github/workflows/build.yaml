@@ -28,7 +28,7 @@ jobs:
 
       - name: Run Cypress Tests
         working-directory: ./angular-buch-frontend
-        run: npx cypress run --spec "cypress/e2e/backend-health.spec.js"
+        run: npx cypress run --headless --browser chrome
 
       - name: Run Angular Tests
         working-directory: ./angular-buch-frontend
