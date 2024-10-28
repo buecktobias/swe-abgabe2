@@ -1,58 +1,47 @@
 import { Art } from '../entities';
 
-export class BuchInput {
-  constructor(
-    public isbn: string | null,
-    public rating: number | null,
-    public art: Art | null,
-    public preis: number | null,
-    public rabatt: number | null,
-    public lieferbar: boolean | null,
-    public datum: string | null,
-    public homepage: string | null,
-    public schlagwoerter: string[] | null,
-    public titel: TitelInput,
-    public abbildungen: AbbildungInput[] | null,
-  ) {}
+export interface BuchInput {
+  isbn?: string | null;
+  rating?: number | null;
+  art?: Art | null;
+  preis?: number | null;
+  rabatt?: number | null;
+  lieferbar?: boolean | null;
+  datum?: string | null;
+  homepage?: string | null;
+  schlagwoerter?: string[] | null;
+  titel?: TitelInput;
+  abbildungen?: AbbildungInput[] | null;
 }
 
-// inputs/buch-update-input.ts
-export class BuchUpdateInput {
-  constructor(
-    public id: number | null,
-    public version: number | null,
-    public isbn: string | null,
-    public rating: number | null,
-    public art: Art | null,
-    public preis: number | null,
-    public rabatt: number | null,
-    public lieferbar: boolean | null,
-    public datum: string | null,
-    public homepage: string | null,
-    public schlagwoerter: string[] | null,
-  ) {}
+export interface BuchUpdateInput {
+  id?: number | null;
+  version?: number | null;
+  isbn?: string | null;
+  rating?: number | null;
+  art?: Art | null;
+  preis?: number | null;
+  rabatt?: number | null;
+  lieferbar?: boolean | null;
+  datum?: string | null;
+  homepage?: string | null;
+  schlagwoerter?: string[] | null;
 }
 
-export class TitelInput {
-  constructor(
-    public titel: string,
-    public untertitel: string | null,
-  ) {}
+export interface TitelInput {
+  titel?: string;
+  untertitel?: string | null;
 }
 
-export class AbbildungInput {
-  constructor(
-    public beschriftung: string,
-    public contentType: string,
-  ) {}
+export interface AbbildungInput {
+  beschriftung?: string;
+  contentType?: string;
 }
 
-export class SuchkriterienInput {
-  constructor(
-    public titel: string | null,
-    public isbn: string | null,
-    public rating: number | null,
-    public art: Art | null,
-    public lieferbar: boolean | null,
-  ) {}
+export interface SuchkriterienInput {
+  titel?: string | null;
+  isbn?: string | null;
+  rating?: number | null;
+  art?: Art | null;
+  lieferbar?: boolean | null;
 }
