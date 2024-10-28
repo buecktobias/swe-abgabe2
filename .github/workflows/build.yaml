@@ -44,8 +44,10 @@ jobs:
           npm run start &
 
       - name: Run Cypress Tests
-        working-directory: ./angular-buch-frontend
-        run: npx cypress run --headless --browser chrome
+        working-directory: ./e2e-tests
+        run: |
+          npm install
+          npx cypress run --headless
 
       - name: Run Angular Tests
         working-directory: ./angular-buch-frontend
