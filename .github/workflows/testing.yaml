@@ -52,7 +52,7 @@ jobs:
 
       - name: Run Angular Tests
         working-directory: ./angular-buch-frontend
-        run: npm run test-headless
+        run: npm run test:headless
 
       - name: Run Cypress Tests
         working-directory: ./e2e-tests
