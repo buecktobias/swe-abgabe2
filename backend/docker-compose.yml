@@ -3,7 +3,7 @@ services:
     image: tobiasbueck/swe-nest-buch:latest
     ports:
       - "3000:3000"
-    container_name: nestjs
+    container_name: nest
     environment:
       - NODE_ENV=development
       - NEST_HOST=localhost

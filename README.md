@@ -54,7 +54,7 @@ In the production environment, the setup is optimized and certain services are r
 - **PostgreSQL**: Same as in development, with persistent storage.
 
 #### Removed Services:
-- **pgAdmin**: Not included in the production setup.
+- **pgAdmin**: Not included in the production setup.  
 - **Keycloak Admin Console**: Disabled for security reasons.
 
 ### Commands

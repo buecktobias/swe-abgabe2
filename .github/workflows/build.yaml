@@ -43,15 +43,20 @@ jobs:
           npm install
           npm run start &
 
+      - name: Test Nest Backend Runs Correctly
+        run: docker exec nest npm run test
+
+      - name: Run Angular Tests
+        working-directory: ./angular-buch-frontend
+        run: npm run test-headless
+
       - name: Run Cypress Tests
         working-directory: ./e2e-tests
         run: |
           npm install
           npx cypress run --headless
 
-      - name: Run Angular Tests
-        working-directory: ./angular-buch-frontend
-        run: npm run test-headless
+
 
   sonarcloud:
     name: SonarCloud
