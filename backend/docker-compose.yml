@@ -20,7 +20,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - keycloak_data:/opt/keycloak/data
+      - keycloak_test:/opt/keycloak/data
       - ./keycloak/nest-realm.json:/opt/keycloak/data/import/nest-realm.json
     mem_limit: 512m
     depends_on:
@@ -81,4 +81,4 @@ services:
 volumes:
   postgres_data:
   pgadmin_data:
-  keycloak_data:
+  keycloak_test:
