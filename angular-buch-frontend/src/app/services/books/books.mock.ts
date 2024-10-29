@@ -1,4 +1,4 @@
-import { Art, BuchEntity } from '../../entities';
+import { Art, BuchEntity } from '../../graphql/entities';
 
 export const mockBooks: BuchEntity[] = [
   {

@@ -1,4 +1,4 @@
-import { Art } from '../entities';
+import { Art } from './entities';
 
 export interface BuchInput {
   isbn?: string | null;

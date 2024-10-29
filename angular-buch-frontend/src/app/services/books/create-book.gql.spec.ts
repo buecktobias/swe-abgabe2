@@ -6,7 +6,7 @@ import {
 import { CreateBookGQL } from './create-book.gql';
 import { BuchInput } from '../../graphql/inputs';
 import { CreatePayload } from '../../graphql/payloads';
-import { Art } from '../../entities';
+import { Art } from '../../graphql/entities';
 import { GraphQLFormattedError } from 'graphql/error/GraphQLError';
 
 describe('CreateBookGQL', () => {
