@@ -3,21 +3,23 @@ import {
   ApolloTestingController,
   ApolloTestingModule,
 } from 'apollo-angular/testing';
-import { GetBooksGQL } from './get-books.gql';
-import { GraphQLFormattedError } from 'graphql';
+import { GetBookByIdGQL } from './get-book-by-id.gql';
 import { mockBooks } from './books.mock';
+import { GraphQLFormattedError } from 'graphql/error/GraphQLError';
 
-describe('GetBooksGQL', () => {
-  let getBooksGQL: GetBooksGQL;
+describe('GetBookByIdGQL', () => {
+  let getBookByIdGQL: GetBookByIdGQL;
   let controller: ApolloTestingController;
+
+  const mockBook = mockBooks[0];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ApolloTestingModule],
-      providers: [GetBooksGQL],
+      providers: [GetBookByIdGQL],
     });
 
-    getBooksGQL = TestBed.inject(GetBooksGQL);
+    getBookByIdGQL = TestBed.inject(GetBookByIdGQL);
     controller = TestBed.inject(ApolloTestingController);
   });
 
@@ -25,40 +27,34 @@ describe('GetBooksGQL', () => {
     controller.verify();
   });
 
-  it('should fetch books successfully', (done) => {
-    getBooksGQL
-      .watch({
-        suchkriterien: {},
-      })
+  it('should fetch a book by ID successfully', (done) => {
+    getBookByIdGQL
+      .watch({ id: mockBook.id.toString() })
       .valueChanges.subscribe((result) => {
-        expect(result.data.buecher).toEqual(mockBooks);
+        expect(result.data.buch).toEqual(mockBook);
         done();
       });
 
-    const op = controller.expectOne(getBooksGQL.document);
-
+    const op = controller.expectOne(getBookByIdGQL.document);
+    expect(op.operation.variables['id']).toBe(mockBook.id.toString());
     op.flush({
-      data: {
-        buecher: mockBooks,
-      },
+      data: { buch: mockBook },
     });
   });
 
-  it('should handle errors gracefully', (done) => {
-    getBooksGQL.watch({ suchkriterien: {} }).valueChanges.subscribe({
-      next: () => fail('Should have errored'),
+  it('should handle errors gracefully when fetching by ID', (done) => {
+    getBookByIdGQL.watch({ id: 'invalid-id' }).valueChanges.subscribe({
+      next: () => fail('Expected an error response'),
       error: (error) => {
-        expect(error.message).toContain('Test Error');
+        expect(error.message).toContain('Error fetching book');
         done();
       },
     });
 
-    const op = controller.expectOne(getBooksGQL.document);
-
-    // noinspection JSUnusedGlobalSymbols toJSON is a required attribute!
+    const op = controller.expectOne(getBookByIdGQL.document);
     op.graphqlErrors([
       {
-        message: 'Test Error',
+        message: 'Error fetching book',
         locations: undefined,
         path: undefined,
         nodes: undefined,
