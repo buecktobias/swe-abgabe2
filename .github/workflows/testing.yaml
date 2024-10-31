@@ -1,4 +1,4 @@
-name: Build
+name: Testing
 on:
   push:
     branches:
@@ -18,8 +18,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          key: ${{ runner.os }}-buildx-${{ github.ref }}-${{ hashFiles('docker-compose.yml') }}
           restore-keys: |
+            ${{ runner.os }}-buildx-${{ github.ref }}-
             ${{ runner.os }}-buildx-
 
       - name: Set up Docker
