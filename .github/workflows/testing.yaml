@@ -32,7 +32,7 @@ jobs:
 
       - name: Start backend with Docker Compose
         working-directory: ./backend
-        run: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build --wait --wait-timeout 30 --renew-anon-volumes
+        run: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build --wait --wait-timeout 120 --renew-anon-volumes
 
       - name: Cache node_modules
         uses: actions/cache@v3
