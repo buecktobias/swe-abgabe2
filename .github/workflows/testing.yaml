@@ -23,13 +23,13 @@ jobs:
         working-directory: ./backend
         run: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build --wait --wait-timeout 120 --renew-anon-volumes
 
-      - name: Cache node_modules
-        uses: actions/cache@v3
+      - name: Restore cached Primes
+        id: cache-primes-restore
+        uses: actions/cache/restore@v4
         with:
-          path: ./angular-buch-frontend/node_modules
+          path: |
+            path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('angular-buch-frontend/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
 
       - name: Install dependencies and start Angular
         working-directory: ./angular-buch-frontend
@@ -37,6 +37,11 @@ jobs:
           npm install
           npm run start &
 
+      - name: Cache node_modules
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.npm
+          key: ${{ steps.cache-primes-restore.outputs.cache-primary-key }}
       - name: Test Nest Backend Runs Correctly
         run: | 
           sleep 10
