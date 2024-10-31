@@ -39,7 +39,8 @@ services:
       - --import-realm
 
   python-keycloak-manager:
-    build: ./keycloak
+    build: keycloak
+    container_name: python-keycloak-manager
     depends_on:
       - keycloak
     environment:

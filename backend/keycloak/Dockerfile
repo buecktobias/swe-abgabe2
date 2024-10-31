@@ -1,14 +1,13 @@
-# Use an official Python runtime as a parent image
 FROM python:3.10-alpine
 
-# Set the working directory in the container
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY requirements.txt ./
 
-# Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/app/src
 
-COPY . .
+COPY src/ /app/src/
 
-CMD ["python", "./keycloak_manager.py"]
+CMD ["python", "./src/main.py"]
