@@ -3,9 +3,7 @@ name: Dependency Update
 on:
   schedule:
     - cron: '0 0 * * *'
-  push:
-    tags:
-      - "update-deps*"
+  workflow_dispatch:
 
 jobs:
   update-dependencies:
@@ -20,9 +18,11 @@ jobs:
           node-version: '22'
 
       - name: Install dependencies
+        working-directory: ./angular-buch-frontend
         run: npm install
 
       - name: Update dependencies
+        working-directory: ./angular-buch-frontend
         run: npm update
 
       - name: Commit changes
