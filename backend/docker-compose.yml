@@ -44,7 +44,7 @@ services:
       - KEYCLOAK_USERNAME=keycloak-admin
       - KEYCLOAK_PASSWORD=p
       - KEYCLOAK_CLIENT_ID=admin-cli
-    restart: no
+    restart: "no"
     volumes:
       - keycloak_secret:/secrets
   postgres:
