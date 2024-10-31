@@ -1,3 +1,7 @@
+import os
+import signal
+import time
+
 from keycloak.keycloak_admin import KeycloakAdmin
 from tenacity import retry, stop_after_attempt, wait_fixed
 
@@ -11,21 +15,28 @@ NEST_REALM_NAME = "nest"
 NEST_CLIENT_ID = "nest-client"
 ADMIN_ROLE = "admin"
 USER_ROLE = "user"
-
+FILE_PATH = "/secrets/client_secret.txt"
 keycloak_admin = KeycloakAdmin(
     server_url=KEYCLOAK_SERVER_URL,
+    realm_name=NEST_REALM_NAME,
+    user_realm_name="master",
     username=ADMIN_USERNAME,
     password=ADMIN_PASSWORD,
-    realm_name=NEST_REALM_NAME,
     client_id=ADMIN_CLIENT_ID,
     verify=False
 )
 
 
-@retry(stop=stop_after_attempt(30), wait=wait_fixed(2))
 def check_keycloak_is_running():
-    keycloak_admin.get_realms()
-    print("Keycloak is running.")
+    @retry(stop=stop_after_attempt(60), wait=wait_fixed(5))
+    def _check_keycloak_is_running():
+        print(".", end="")
+        keycloak_admin.get_realms()
+        print("Keycloak is running.")
+
+    print("Checking if Keycloak is running")
+    print("Waiting", end="")
+    _check_keycloak_is_running()
 
 
 def get_client_uuid(client_id):
@@ -46,7 +57,7 @@ def save_client_secret(client_id):
     # noinspection PyTypeChecker
     new_client_secret = new_client_secrets["value"]
     print(f"Client secret set for {client_id}.")
-    with open("/secrets/client_secret.txt", "w") as file:
+    with open(FILE_PATH, "w") as file:
         file.write(new_client_secret)
 
 
@@ -100,6 +111,7 @@ def assign_client_role_to_user(user_id, client_id, client_role_name):
 
 
 if __name__ == "__main__":
+    print("Starting Keycloak Manager...")
     check_keycloak_is_running()
     save_client_secret(NEST_CLIENT_ID)
     print(f"Client secret set for {NEST_CLIENT_ID}.")
@@ -111,3 +123,20 @@ if __name__ == "__main__":
     assign_client_role_to_user(admin_id, NEST_CLIENT_ID, ADMIN_ROLE)
     assign_client_role_to_user(user_id, NEST_CLIENT_ID, USER_ROLE)
     print(f"Roles assigned: {ADMIN_ROLE} to admin, {USER_ROLE} to user.")
+
+    def cleanup(signum, frame):
+        print("Cleaning up...")
+        if os.path.exists(FILE_PATH):
+            os.remove(FILE_PATH)
+        print("File deleted. Exiting application...")
+        exit(0)
+
+    # Register the cleanup function to handle SIGTERM (sent on container stop)
+    signal.signal(signal.SIGTERM, cleanup)
+
+    print("Application is running. Press Ctrl+C to exit.")
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        cleanup(None, None)

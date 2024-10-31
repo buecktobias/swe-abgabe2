@@ -12,7 +12,7 @@ services:
     volumes:
       - keycloak_secret:/secrets
     depends_on:
-        - keycloak
+        - python-keycloak-manager
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest
@@ -22,12 +22,11 @@ services:
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=p
       - KC_IMPORT=/opt/keycloak/data/import/nest-realm.json
-      - KC_LOG_LEVEL=DEBUG
+      - KC_LOG_LEVEL=INFO
       - KC_LOG_LEVEL_HTTP=TRACE
     ports:
       - "8080:8080"
     volumes:
-      - keycloak_test:/opt/keycloak/data
       - ./keycloak/nest-realm.json:/opt/keycloak/data/import/nest-realm.json
     mem_limit: 512m
     command:
@@ -41,12 +40,14 @@ services:
     environment:
       - TZ=Europe/Berlin
       - KEYCLOAK_SERVER_URL=http://keycloak:8080
-      - KEYCLOAK_USERNAME=keycloak-admin
+      - KEYCLOAK_USERNAME=admin
       - KEYCLOAK_PASSWORD=p
       - KEYCLOAK_CLIENT_ID=admin-cli
     restart: "no"
     volumes:
       - keycloak_secret:/secrets
+    mem_limit: 128m
+
   postgres:
     image: postgres:16.4-bookworm
     ports:
@@ -66,7 +67,7 @@ services:
     hostname: postgres
     container_name: postgres
     restart: unless-stopped
-    mem_limit: 512m
+    mem_limit: 256m
 
   pgadmin:
     image: dpage/pgadmin4:8.12.0
@@ -83,10 +84,9 @@ services:
     user: 'pgadmin:5050'
     hostname: pgadmin
     container_name: pgadmin
-    mem_limit: 512m
+    mem_limit: 256m
 
 volumes:
   postgres_data:
   pgadmin_data:
-  keycloak_test:
   keycloak_secret:

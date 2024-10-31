@@ -709,12 +709,12 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
       "redirectUris": [
         "http://oauth.pstmn.io/v1/callback",
         "http://buch:3000",
         "https://localhost:3000",
         "https://buch:3000",
+        "*",
         "http://localhost:3000",
         "https://oauth.pstmn.io/v1/callback"
       ],
@@ -723,6 +723,7 @@
         "https://localhost:3000",
         "https://oauth.pstmn.io",
         "https://buch:3000",
+        "*",
         "http://localhost:3000",
         "http://oauth.pstmn.io"
       ],
@@ -739,10 +740,11 @@
       "attributes": {
         "realm_client": "false",
         "oidc.ciba.grant.enabled": "false",
-        "client.secret.creation.time": "1730315383",
+        "client.secret.creation.time": "1730323391",
         "backchannel.logout.session.required": "true",
         "post.logout.redirect.uris": "+",
         "oauth2.device.authorization.grant.enabled": "false",
+        "display.on.consent.screen": "false",
         "backchannel.logout.revoke.offline.tokens": "false"
       },
       "authenticationFlowBindingOverrides": {},
