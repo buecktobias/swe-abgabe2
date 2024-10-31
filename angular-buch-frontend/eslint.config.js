@@ -1,54 +1,53 @@
-// @ts-check
 const eslint = require("@eslint/js");
-const tseslint = require("typescript-eslint");
+const typescriptEslint = require('typescript-eslint');
 const angular = require("angular-eslint");
 
-module.exports = tseslint.config(
+module.exports = typescriptEslint.config(
   {
-    files: ["**/*.ts"],
+    files: ['**/*.ts'],
     plugins: {
-      prettier: require("eslint-plugin-prettier"),
+      prettier: require('eslint-plugin-prettier'),
     },
     extends: [
       eslint.configs.recommended,
-      ...tseslint.configs.recommended,
-      ...tseslint.configs.stylistic,
+      ...typescriptEslint.configs.recommended,
+      ...typescriptEslint.configs.stylistic,
       ...angular.configs.tsRecommended,
     ],
     processor: angular.processInlineTemplates,
     rules: {
-      "prettier/prettier": [
-        "error",
+      'prettier/prettier': [
+        'error',
         {
           singleQuote: true,
-          trailingComma: "all",
+          trailingComma: 'all',
           semi: true,
         },
       ],
-      "@angular-eslint/directive-selector": [
-        "error",
+      '@angular-eslint/directive-selector': [
+        'error',
         {
-          type: "attribute",
-          prefix: "app",
-          style: "camelCase",
+          type: 'attribute',
+          prefix: 'app',
+          style: 'camelCase',
         },
       ],
-      "@angular-eslint/component-selector": [
-        "error",
+      '@angular-eslint/component-selector': [
+        'error',
         {
-          type: "element",
-          prefix: "app",
-          style: "kebab-case",
+          type: 'element',
+          prefix: 'app',
+          style: 'kebab-case',
         },
       ],
     },
   },
   {
-    files: ["**/*.html"],
+    files: ['**/*.html'],
     extends: [
       ...angular.configs.templateRecommended,
       ...angular.configs.templateAccessibility,
     ],
     rules: {},
-  }
+  },
 );
