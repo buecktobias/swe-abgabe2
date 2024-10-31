@@ -30,7 +30,7 @@ jobs:
 
       - name: Start backend with Docker Compose
         working-directory: ./backend
-        run: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+        run: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -47,7 +47,9 @@ jobs:
           npm run start &
 
       - name: Test Nest Backend Runs Correctly
-        run: docker exec nest npm run test
+        run: | 
+          sleep 10
+          docker exec nest npm run test
         continue-on-error: true
 
       - name: Run Angular Tests
