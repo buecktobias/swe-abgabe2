@@ -5,26 +5,31 @@ services:
       - "3000:3000"
     container_name: nest
     environment:
+      - TZ=Europe/Berlin
       - NODE_ENV=development
       - NEST_HOST=localhost
-      - CLIENT_SECRET=tkm7M8wb1C38HMn8e3CDK6U3e4yib5Qt
-    mem_limit: 2g
+    mem_limit: 1g
+    volumes:
+      - keycloak_secret:/secrets
+    depends_on:
+        - keycloak
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak
     environment:
+      - TZ=Europe/Berlin
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=p
       - KC_IMPORT=/opt/keycloak/data/import/nest-realm.json
+      - KC_LOG_LEVEL=DEBUG
+      - KC_LOG_LEVEL_HTTP=TRACE
     ports:
       - "8080:8080"
     volumes:
       - keycloak_test:/opt/keycloak/data
       - ./keycloak/nest-realm.json:/opt/keycloak/data/import/nest-realm.json
     mem_limit: 512m
-    depends_on:
-      - postgres
     command:
       - start-dev
       - --import-realm
@@ -34,14 +39,14 @@ services:
     depends_on:
       - keycloak
     environment:
-      - KEYCLOAK_SERVER_URL=http://keycloak:8080/auth/
-      - KEYCLOAK_USERNAME=admin
+      - TZ=Europe/Berlin
+      - KEYCLOAK_SERVER_URL=http://keycloak:8080
+      - KEYCLOAK_USERNAME=keycloak-admin
       - KEYCLOAK_PASSWORD=p
-      - KEYCLOAK_REALM_NAME=master
       - KEYCLOAK_CLIENT_ID=admin-cli
-    links:
-      - keycloak
-    restart: on-failure
+    restart: no
+    volumes:
+      - keycloak_secret:/secrets
   postgres:
     image: postgres:16.4-bookworm
     ports:
@@ -51,6 +56,7 @@ services:
       - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
       - ./postgres/csv:/csv
     environment:
+      - TZ=Europe/Berlin
       - POSTGRES_DB=buch
       - POSTGRES_HOST_AUTH_METHOD=trust
     user: 'postgres:postgres'
@@ -70,6 +76,7 @@ services:
       - pgadmin_data:/var/lib/pgadmin
       - ./pgadmin/pgadmin-server.json:/pgadmin4/servers.json
     environment:
+      - TZ=Europe/Berlin
       - PGADMIN_DEFAULT_EMAIL=pgadmin@acme.com
       - PGADMIN_DEFAULT_PASSWORD=p
       - PGADMIN_DISABLE_POSTFIX=true
@@ -82,3 +89,4 @@ volumes:
   postgres_data:
   pgadmin_data:
   keycloak_test:
+  keycloak_secret:
