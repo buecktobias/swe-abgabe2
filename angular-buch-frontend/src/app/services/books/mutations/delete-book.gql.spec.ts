@@ -5,7 +5,10 @@ import {
 } from 'apollo-angular/testing';
 import { DeleteBookGQL } from './delete-book.gql';
 import { GraphQLFormattedError } from 'graphql/error/GraphQLError';
+import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
 
+loadDevMessages();
+loadErrorMessages();
 describe('DeleteBookGQL', () => {
   let deleteBookGQL: DeleteBookGQL;
   let controller: ApolloTestingController;

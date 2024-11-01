@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { gql, Mutation } from 'apollo-angular';
-import { CreatePayload } from '../../graphql/payloads';
-import { BuchInput } from '../../graphql/inputs';
+import { CreatePayload } from '../../../graphql/payloads';
+import { BuchInput } from '../../../graphql/inputs';
 
 @Injectable({
   providedIn: 'root',

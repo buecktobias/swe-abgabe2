@@ -5,8 +5,11 @@ import {
 } from 'apollo-angular/testing';
 import { GetBooksGQL } from './get-books.gql';
 import { GraphQLFormattedError } from 'graphql';
-import { mockBooks } from './books.mock';
+import { mockBooks } from '../books.mock';
+import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
 
+loadDevMessages();
+loadErrorMessages();
 describe('GetBooksGQL', () => {
   let getBooksGQL: GetBooksGQL;
   let controller: ApolloTestingController;

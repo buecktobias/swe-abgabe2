@@ -4,9 +4,12 @@ import {
   ApolloTestingModule,
 } from 'apollo-angular/testing';
 import { GetBookByIdGQL } from './get-book-by-id.gql';
-import { mockBooks } from './books.mock';
+import { mockBooks } from '../books.mock';
 import { GraphQLFormattedError } from 'graphql/error/GraphQLError';
+import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
 
+loadDevMessages();
+loadErrorMessages();
 describe('GetBookByIdGQL', () => {
   let getBookByIdGQL: GetBookByIdGQL;
   let controller: ApolloTestingController;
