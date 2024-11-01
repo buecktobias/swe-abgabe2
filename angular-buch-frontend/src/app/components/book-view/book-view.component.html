@@ -1,3 +1,60 @@
-<p>
-  {{ book!.titel.titel }}
-</p>
+@if (book) {
+  <div data-cy="book-details">
+    <h2 data-cy="book-title">
+      {{ book.titel.titel }}
+    </h2>
+    @if (book.titel.untertitel) {
+      <p data-cy="book-subtitle">{{ book.titel.untertitel }}</p>
+    }
+
+    <p data-cy="book-isbn"><strong>ISBN:</strong> {{ book.isbn }}</p>
+    <p data-cy="book-price"><strong>Price:</strong> €{{ book.preis }}</p>
+    <p data-cy="book-discount"><strong>Discount:</strong> {{ book.rabatt }}</p>
+    <p data-cy="book-version"><strong>Version:</strong> {{ book.version }}</p>
+
+    @if (book.rating) {
+      <div data-cy="book-rating">
+        <p><strong>Rating:</strong> {{ book.rating }}/5</p>
+      </div>
+    }
+
+    @if (book.art) {
+      <div data-cy="book-art">
+        <p><strong>Type:</strong> {{ book.art }}</p>
+      </div>
+    }
+
+    @if (book.lieferbar) {
+      <div data-cy="book-availability">
+        <p><strong>Available:</strong> {{ book.lieferbar ? 'Yes' : 'No' }}</p>
+      </div>
+    }
+
+    @if (book.datum) {
+      <div data-cy="book-publication-date">
+        <p><strong>Publication Date:</strong> {{ book.datum }}</p>
+      </div>
+    }
+
+    @if (book.homepage) {
+      <div data-cy="book-homepage">
+        <p><strong>Homepage:</strong>
+          <a [href]="book.homepage" target="_blank" data-cy="book-homepage-link">{{ book.homepage }}</a>
+        </p>
+      </div>
+    }
+
+    @if (book.schlagwoerter?.length) {
+      <div data-cy="book-keywords">
+        <p><strong>Keywords:</strong></p>
+        <ul>
+          @for (keyword of book.schlagwoerter; track keyword) {
+            <li data-cy="book-keyword">{{ keyword }}</li>
+          } @empty {
+            <li aria-hidden="true">No keywords available</li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
+}

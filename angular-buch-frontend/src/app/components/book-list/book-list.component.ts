@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BuchEntity } from '../../graphql/entities';
+import { Art, BuchEntity } from '../../graphql/entities';
 import { BookViewComponent } from '../book-view/book-view.component';
 
 @Component({
@@ -19,5 +19,12 @@ export class BookListComponent {
     schlagwoerter: ['Angular', 'TypeScript', 'JavaScript'],
     lieferbar: true,
     rating: 5,
+    rabatt: '10%',
+    homepage: 'https://angular-buch.com',
+    preis: 39.9,
+    art: Art.HARDCOVER,
+    datum: '2021-06-01',
+    version: 1,
+    id: 1,
   } as BuchEntity;
 }

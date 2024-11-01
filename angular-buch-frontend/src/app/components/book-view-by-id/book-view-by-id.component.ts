@@ -15,17 +15,14 @@ export class BookViewByIdComponent implements OnInit {
 
   constructor(private bookByIdGQL: GetBookByIdGQL) {}
 
-  // Use the service in lifecycle hooks or methods
   ngOnInit(): void {
-    this.bookByIdGQL
-      .watch({ id: this.id }) // Pass the ID variable
-      .valueChanges.subscribe({
-        next: (result) => {
-          this.book = result.data.buch;
-        },
-        error: (error) => {
-          console.error('Error fetching book details:', error);
-        },
-      });
+    this.bookByIdGQL.watch({ id: this.id }).valueChanges.subscribe({
+      next: (result) => {
+        this.book = result.data.buch;
+      },
+      error: (error) => {
+        console.error('Error fetching book details:', error);
+      },
+    });
   }
 }

@@ -1,14 +1,14 @@
 export interface CreatePayload {
-  id?: number | null;
+  id: number | null;
 }
 
 export interface UpdatePayload {
-  version?: number | null;
+  version: number | null;
 }
 
 export interface TokenResult {
-  accessToken?: string;
-  expiresIn?: number;
-  refreshToken?: string;
-  refreshExpiresIn?: number;
+  accessToken: string;
+  expiresIn: number;
+  refreshToken: string;
+  refreshExpiresIn: number;
 }
