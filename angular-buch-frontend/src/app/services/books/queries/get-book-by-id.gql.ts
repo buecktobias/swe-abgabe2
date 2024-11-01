@@ -10,7 +10,7 @@ export interface GetBookByIdResponse {
 @Injectable({
   providedIn: 'root',
 })
-export class GetBookByIdGQL extends Query<GetBookByIdResponse, { id: string }> {
+export class GetBookByIdGQL extends Query<GetBookByIdResponse, { id: number }> {
   document = gql`
     query getBookById($id: ID!) {
       buch(id: $id) {

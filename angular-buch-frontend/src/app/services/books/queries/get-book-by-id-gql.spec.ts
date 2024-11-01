@@ -32,21 +32,21 @@ describe('GetBookByIdGQL', () => {
 
   it('should fetch a book by ID successfully', (done) => {
     getBookByIdGQL
-      .watch({ id: mockBook.id.toString() })
+      .watch({ id: mockBook.id })
       .valueChanges.subscribe((result) => {
         expect(result.data.buch).toEqual(mockBook);
         done();
       });
 
     const op = controller.expectOne(getBookByIdGQL.document);
-    expect(op.operation.variables['id']).toBe(mockBook.id.toString());
+    expect(op.operation.variables['id']).toBe(mockBook.id);
     op.flush({
       data: { buch: mockBook },
     });
   });
 
   it('should handle errors gracefully when fetching by ID', (done) => {
-    getBookByIdGQL.watch({ id: 'invalid-id' }).valueChanges.subscribe({
+    getBookByIdGQL.watch({ id: -1 }).valueChanges.subscribe({
       next: () => fail('Expected an error response'),
       error: (error) => {
         expect(error.message).toContain('Error fetching book');
