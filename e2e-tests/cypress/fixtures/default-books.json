@@ -1,0 +1,127 @@
+[
+  {
+    "id": 1,
+    "version": 0,
+    "isbn": "978-3-897-22583-1",
+    "rating": 4,
+    "art": "EPUB",
+    "preis": 11.1,
+    "rabatt": 0.011,
+    "lieferbar": true,
+    "datum": "2022-02-01",
+    "homepage": "https://acme.at",
+    "schlagwoerter": [
+      "JAVASCRIPT"
+    ],
+    "erzeugt": "2022-02-01 00:00:00",
+    "aktualisiert": "2022-02-01 00:00:00",
+    "title": {
+      "titel": "Alpha",
+      "untertitel": "alpha"
+    }
+  },
+  {
+    "id": 20,
+    "version": 0,
+    "isbn": "978-3-827-31552-6",
+    "rating": 2,
+    "art": "HARDCOVER",
+    "preis": 22.2,
+    "rabatt": 0.022,
+    "lieferbar": true,
+    "datum": "2022-02-02",
+    "homepage": "https://acme.biz",
+    "schlagwoerter": [
+      "TYPESCRIPT"
+    ],
+    "erzeugt": "2022-02-02 00:00:00",
+    "aktualisiert": "2022-02-02 00:00:00",
+    "title": {
+      "titel": "Beta",
+      "untertitel": null
+    }
+  },
+  {
+    "id": 30,
+    "version": 0,
+    "isbn": "978-0-201-63361-0",
+    "rating": 3,
+    "art": "PAPERBACK",
+    "preis": 33.3,
+    "rabatt": 0.033,
+    "lieferbar": true,
+    "datum": "2022-02-03",
+    "homepage": "https://acme.com",
+    "schlagwoerter": [
+      "JAVASCRIPT",
+      "TYPESCRIPT"
+    ],
+    "erzeugt": "2022-02-03 00:00:00",
+    "aktualisiert": "2022-02-03 00:00:00",
+    "title": {
+      "titel": "Gamma",
+      "untertitel": "gamma"
+    }
+  },
+  {
+    "id": 40,
+    "version": 0,
+    "isbn": "978-0-007-09732-6",
+    "rating": 4,
+    "art": "EPUB",
+    "preis": 44.4,
+    "rabatt": 0.044,
+    "lieferbar": true,
+    "datum": "2022-02-04",
+    "homepage": "https://acme.de",
+    "schlagwoerter": [],
+    "erzeugt": "2022-02-04 00:00:00",
+    "aktualisiert": "2022-02-04 00:00:00",
+    "title": {
+      "titel": "Delta",
+      "untertitel": "delta"
+    }
+  },
+  {
+    "id": 50,
+    "version": 0,
+    "isbn": "978-3-824-40481-0",
+    "rating": 2,
+    "art": "HARDCOVER",
+    "preis": 55.5,
+    "rabatt": 0.055,
+    "lieferbar": true,
+    "datum": "2022-02-05",
+    "homepage": "https://acme.es",
+    "schlagwoerter": [
+      "JAVA"
+    ],
+    "erzeugt": "2022-02-05 00:00:00",
+    "aktualisiert": "2022-02-05 00:00:00",
+    "title": {
+      "titel": "Epsilon",
+      "untertitel": "epsilon"
+    }
+  },
+  {
+    "id": 60,
+    "version": 0,
+    "isbn": "978-3-540-43081-0",
+    "rating": 1,
+    "art": "PAPERBACK",
+    "preis": 66.6,
+    "rabatt": 0.066,
+    "lieferbar": true,
+    "datum": "2022-02-06",
+    "homepage": "https://acme.it",
+    "schlagwoerter": [
+      "PYTHON"
+    ],
+    "erzeugt": "2022-02-06 00:00:00",
+    "aktualisiert": "2022-02-06 00:00:00",
+    "title": {
+      "titel": "Phi",
+      "untertitel": "phi"
+    }
+  }
+]

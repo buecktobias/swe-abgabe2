@@ -1,5 +1,5 @@
 @if (book) {
-  <div data-test="book-details">
+  <div data-test="book-details" [attr.data-book-id]="book.id" [attr.data-isbn]="book.isbn">
     <h2 data-test="book-title">
       {{ book.titel.titel }}
     </h2>
