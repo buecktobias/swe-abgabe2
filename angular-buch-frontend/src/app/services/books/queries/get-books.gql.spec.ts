@@ -31,7 +31,13 @@ describe('GetBooksGQL', () => {
   it('should fetch books successfully', (done) => {
     getBooksGQL
       .watch({
-        suchkriterien: {},
+        suchkriterien: {
+          titel: null,
+          isbn: null,
+          rating: null,
+          art: null,
+          lieferbar: null,
+        },
       })
       .valueChanges.subscribe((result) => {
         expect(result.data.buecher).toEqual(mockBooks);
@@ -48,13 +54,23 @@ describe('GetBooksGQL', () => {
   });
 
   it('should handle errors gracefully', (done) => {
-    getBooksGQL.watch({ suchkriterien: {} }).valueChanges.subscribe({
-      next: () => fail('Should have errored'),
-      error: (error) => {
-        expect(error.message).toContain('Test Error');
-        done();
-      },
-    });
+    getBooksGQL
+      .watch({
+        suchkriterien: {
+          titel: null,
+          isbn: null,
+          rating: null,
+          art: null,
+          lieferbar: null,
+        },
+      })
+      .valueChanges.subscribe({
+        next: () => fail('Should have errored'),
+        error: (error) => {
+          expect(error.message).toContain('Test Error');
+          done();
+        },
+      });
 
     const op = controller.expectOne(getBooksGQL.document);
 
