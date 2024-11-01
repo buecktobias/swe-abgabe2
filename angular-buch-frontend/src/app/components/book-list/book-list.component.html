@@ -1,2 +1,3 @@
-<p>book-list works!</p>
-<app-book-view [book]="myBook"></app-book-view>
+@for (book of books; track book.id) {
+  <app-book-view [book]="book"></app-book-view>
+}

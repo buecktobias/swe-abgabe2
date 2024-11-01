@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { Art, BuchEntity } from '../../graphql/entities';
+import { Component, OnInit } from '@angular/core';
+import { BuchEntity } from '../../graphql/entities';
 import { BookViewComponent } from '../book-view/book-view.component';
+import { BookService } from '../../services/books/book.service';
 
 @Component({
   selector: 'app-book-list',
@@ -9,22 +10,16 @@ import { BookViewComponent } from '../book-view/book-view.component';
   templateUrl: './book-list.component.html',
   styleUrl: './book-list.component.scss',
 })
-export class BookListComponent {
-  myBook = {
-    titel: {
-      titel: 'Angular-Buch',
-      untertitel: 'Grundlagen und fortgeschrittene Themen',
-    },
-    isbn: '978-3-8362-7272-8',
-    schlagwoerter: ['Angular', 'TypeScript', 'JavaScript'],
-    lieferbar: true,
-    rating: 5,
-    rabatt: '10%',
-    homepage: 'https://angular-buch.com',
-    preis: 39.9,
-    art: Art.HARDCOVER,
-    datum: '2021-06-01',
-    version: 1,
-    id: 1,
-  } as BuchEntity;
+export class BookListComponent implements OnInit {
+  books: BuchEntity[] = [];
+
+  constructor(private bookService: BookService) {}
+
+  ngOnInit(): void {
+    this.bookService
+      .getAllBooks()
+      .subscribe((result: { data: { buecher: BuchEntity[] } }) => {
+        this.books = result.data.buecher;
+      });
+  }
 }

@@ -36,7 +36,7 @@ describe('BookService', () => {
       done();
     });
 
-    const op = controller.expectOne(TestBed.inject(GetBooksGQL).document); // Access document via DI
+    const op = controller.expectOne(TestBed.inject(GetBooksGQL).document);
     op.flush({
       data: {
         buecher: mockBooks,

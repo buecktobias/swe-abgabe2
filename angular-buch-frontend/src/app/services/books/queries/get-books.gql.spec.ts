@@ -31,13 +31,7 @@ describe('GetBooksGQL', () => {
   it('should fetch books successfully', (done) => {
     getBooksGQL
       .watch({
-        suchkriterien: {
-          titel: null,
-          isbn: null,
-          rating: null,
-          art: null,
-          lieferbar: null,
-        },
+        suchkriterien: {},
       })
       .valueChanges.subscribe((result) => {
         expect(result.data.buecher).toEqual(mockBooks);
@@ -56,13 +50,7 @@ describe('GetBooksGQL', () => {
   it('should handle errors gracefully', (done) => {
     getBooksGQL
       .watch({
-        suchkriterien: {
-          titel: null,
-          isbn: null,
-          rating: null,
-          art: null,
-          lieferbar: null,
-        },
+        suchkriterien: {},
       })
       .valueChanges.subscribe({
         next: () => fail('Should have errored'),

@@ -12,13 +12,7 @@ export class BookService {
 
   getAllBooks(): Observable<ApolloQueryResult<GetBooksResponse>> {
     return this.getBooksGQL.watch({
-      suchkriterien: {
-        titel: null,
-        isbn: null,
-        rating: null,
-        art: null,
-        lieferbar: null,
-      },
+      suchkriterien: {},
     }).valueChanges;
   }
 
