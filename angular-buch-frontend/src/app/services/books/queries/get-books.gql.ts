@@ -11,10 +11,7 @@ export interface GetBooksResponse {
 @Injectable({
   providedIn: 'root',
 })
-export class GetBooksGQL extends Query<
-  GetBooksResponse,
-  { suchkriterien: SuchkriterienInput }
-> {
+export class GetBooksGQL extends Query<GetBooksResponse, { suchkriterien: SuchkriterienInput }> {
   document = gql`
     query getBooks($suchkriterien: SuchkriterienInput) {
       buecher(suchkriterien: $suchkriterien) {

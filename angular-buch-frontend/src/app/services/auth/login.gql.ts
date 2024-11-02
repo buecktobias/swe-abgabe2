@@ -5,10 +5,7 @@ import { TokenResult } from '../../graphql/payloads';
 @Injectable({
   providedIn: 'root',
 })
-export class LoginGQL extends Mutation<
-  { token: TokenResult },
-  { username: string; password: string }
-> {
+export class LoginGQL extends Mutation<{ token: TokenResult }, { username: string; password: string }> {
   document = gql`
     mutation login($username: String!, $password: String!) {
       token(username: $username, password: $password) {

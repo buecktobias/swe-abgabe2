@@ -23,38 +23,24 @@ describe('BookViewComponent', () => {
     expect(component).toBeTruthy();
   });
   it('should display book title and subtitle if available', () => {
-    const titleElement = fixture.nativeElement.querySelector(
-      '[data-test="book-title"]',
-    );
-    const subtitleElement = fixture.nativeElement.querySelector(
-      '[data-test="book-subtitle"]',
-    );
+    const titleElement = fixture.nativeElement.querySelector('[data-test="book-title"]');
+    const subtitleElement = fixture.nativeElement.querySelector('[data-test="book-subtitle"]');
     expect(titleElement.textContent).toContain(MOCK_BOOK.titel.titel);
     expect(subtitleElement.textContent).toContain(MOCK_BOOK.titel.untertitel);
   });
 
   it('should display book ISBN, price, and discount', () => {
-    const isbnElement = fixture.nativeElement.querySelector(
-      '[data-test="book-isbn"]',
-    );
-    const priceElement = fixture.nativeElement.querySelector(
-      '[data-test="book-price"]',
-    );
-    const discountElement = fixture.nativeElement.querySelector(
-      '[data-test="book-discount"]',
-    );
+    const isbnElement = fixture.nativeElement.querySelector('[data-test="book-isbn"]');
+    const priceElement = fixture.nativeElement.querySelector('[data-test="book-price"]');
+    const discountElement = fixture.nativeElement.querySelector('[data-test="book-discount"]');
     expect(isbnElement.textContent).toContain(MOCK_BOOK.isbn);
     expect(priceElement.textContent).toContain(`€${MOCK_BOOK.preis}`);
     expect(discountElement.textContent).toContain(MOCK_BOOK.rabatt);
   });
 
   it('should display keywords list or fallback message', () => {
-    const keywordsContainer = fixture.nativeElement.querySelector(
-      '[data-test="book-keywords"]',
-    );
-    const keywordElements = fixture.nativeElement.querySelectorAll(
-      '[data-test="book-keyword"]',
-    );
+    const keywordsContainer = fixture.nativeElement.querySelector('[data-test="book-keywords"]');
+    const keywordElements = fixture.nativeElement.querySelectorAll('[data-test="book-keyword"]');
     if (MOCK_BOOK.schlagwoerter && MOCK_BOOK.schlagwoerter.length > 0) {
       expect(keywordElements.length).toBe(MOCK_BOOK.schlagwoerter.length);
       MOCK_BOOK.schlagwoerter.forEach((keyword, index) => {
@@ -66,26 +52,16 @@ describe('BookViewComponent', () => {
   });
 
   it('should render book details sections conditionally', () => {
-    const ratingElement = fixture.nativeElement.querySelector(
-      '[data-test="book-rating"]',
-    );
-    const availabilityElement = fixture.nativeElement.querySelector(
-      '[data-test="is-book-available"]',
-    );
-    const publicationDateElement = fixture.nativeElement.querySelector(
-      '[data-test="book-publication-date"]',
-    );
-    const homepageLink = fixture.nativeElement.querySelector(
-      '[data-test="book-homepage-link"]',
-    );
+    const ratingElement = fixture.nativeElement.querySelector('[data-test="book-rating"]');
+    const availabilityElement = fixture.nativeElement.querySelector('[data-test="is-book-available"]');
+    const publicationDateElement = fixture.nativeElement.querySelector('[data-test="book-publication-date"]');
+    const homepageLink = fixture.nativeElement.querySelector('[data-test="book-homepage-link"]');
 
     if (MOCK_BOOK.rating) {
       expect(ratingElement.textContent).toContain(MOCK_BOOK.rating);
     }
     if (MOCK_BOOK.lieferbar) {
-      expect(availabilityElement.getAttribute('data-is-available')).toBe(
-        MOCK_BOOK.lieferbar.toString(),
-      );
+      expect(availabilityElement.getAttribute('data-is-available')).toBe(MOCK_BOOK.lieferbar.toString());
     }
     if (MOCK_BOOK.datum) {
       expect(publicationDateElement.textContent).toContain(MOCK_BOOK.datum);

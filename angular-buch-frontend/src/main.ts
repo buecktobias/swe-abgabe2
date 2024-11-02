@@ -7,6 +7,4 @@ import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
 
 loadDevMessages();
 loadErrorMessages();
-bootstrapApplication(AppComponent, appConfig).catch((err) =>
-  console.error(err),
-);
+bootstrapApplication(AppComponent, appConfig).catch((err) => console.error(err));

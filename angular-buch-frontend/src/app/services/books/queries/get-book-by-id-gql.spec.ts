@@ -1,8 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  ApolloTestingController,
-  ApolloTestingModule,
-} from 'apollo-angular/testing';
+import { ApolloTestingController, ApolloTestingModule } from 'apollo-angular/testing';
 import { GetBookByIdGQL } from './get-book-by-id.gql';
 import { mockBooks } from '../books.mock';
 import { GraphQLFormattedError } from 'graphql/error/GraphQLError';
@@ -31,12 +28,10 @@ describe('GetBookByIdGQL', () => {
   });
 
   it('should fetch a book by ID successfully', (done) => {
-    getBookByIdGQL
-      .watch({ id: mockBook.id })
-      .valueChanges.subscribe((result) => {
-        expect(result.data.buch).toEqual(mockBook);
-        done();
-      });
+    getBookByIdGQL.watch({ id: mockBook.id }).valueChanges.subscribe((result) => {
+      expect(result.data.buch).toEqual(mockBook);
+      done();
+    });
 
     const op = controller.expectOne(getBookByIdGQL.document);
     expect(op.operation.variables['id']).toBe(mockBook.id);

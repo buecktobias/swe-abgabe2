@@ -1,9 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { BookService } from './book.service';
-import {
-  ApolloTestingController,
-  ApolloTestingModule,
-} from 'apollo-angular/testing';
+import { ApolloTestingController, ApolloTestingModule } from 'apollo-angular/testing';
 import { GetBooksGQL } from './queries/get-books.gql';
 import { mockBooks } from './books.mock';
 import { Art } from '../../graphql/entities';

@@ -7,10 +7,7 @@ import { BuchUpdateInput } from '../../../graphql/inputs';
 @Injectable({
   providedIn: 'root',
 })
-export class UpdateBookGQL extends Mutation<
-  { update: UpdatePayload },
-  { input: BuchUpdateInput }
-> {
+export class UpdateBookGQL extends Mutation<{ update: UpdatePayload }, { input: BuchUpdateInput }> {
   document = gql`
     mutation updateBook($input: BuchUpdateInput!) {
       update(input: $input) {

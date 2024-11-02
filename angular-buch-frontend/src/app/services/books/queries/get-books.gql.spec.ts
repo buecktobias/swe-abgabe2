@@ -1,8 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  ApolloTestingController,
-  ApolloTestingModule,
-} from 'apollo-angular/testing';
+import { ApolloTestingController, ApolloTestingModule } from 'apollo-angular/testing';
 import { GetBooksGQL } from './get-books.gql';
 import { GraphQLFormattedError } from 'graphql';
 import { mockBooks } from '../books.mock';

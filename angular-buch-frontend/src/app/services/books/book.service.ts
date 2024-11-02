@@ -16,9 +16,7 @@ export class BookService {
     }).valueChanges;
   }
 
-  getBooksBy(
-    suchkriterien: SuchkriterienInput,
-  ): Observable<ApolloQueryResult<GetBooksResponse>> {
+  getBooksBy(suchkriterien: SuchkriterienInput): Observable<ApolloQueryResult<GetBooksResponse>> {
     return this.getBooksGQL.watch({ suchkriterien }).valueChanges;
   }
 }

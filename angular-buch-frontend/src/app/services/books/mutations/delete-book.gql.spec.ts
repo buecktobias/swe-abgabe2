@@ -1,8 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  ApolloTestingController,
-  ApolloTestingModule,
-} from 'apollo-angular/testing';
+import { ApolloTestingController, ApolloTestingModule } from 'apollo-angular/testing';
 import { DeleteBookGQL } from './delete-book.gql';
 import { GraphQLFormattedError } from 'graphql/error/GraphQLError';
 import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';

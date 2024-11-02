@@ -6,10 +6,7 @@ import { TokenResult } from '../../graphql/payloads';
 @Injectable({
   providedIn: 'root',
 })
-export class RefreshTokenGQL extends Mutation<
-  { refresh: TokenResult },
-  { refresh_token: string }
-> {
+export class RefreshTokenGQL extends Mutation<{ refresh: TokenResult }, { refresh_token: string }> {
   document = gql`
     mutation refreshToken($refresh_token: String!) {
       refresh(refresh_token: $refresh_token) {

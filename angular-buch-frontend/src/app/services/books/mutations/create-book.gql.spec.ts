@@ -1,8 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  ApolloTestingController,
-  ApolloTestingModule,
-} from 'apollo-angular/testing';
+import { ApolloTestingController, ApolloTestingModule } from 'apollo-angular/testing';
 import { CreateBookGQL } from './create-book.gql';
 import { BuchInput } from '../../../graphql/inputs';
 import { CreatePayload } from '../../../graphql/payloads';
