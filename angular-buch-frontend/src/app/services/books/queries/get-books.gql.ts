@@ -1,4 +1,4 @@
-// services/get-books.gql.ts
+//services/get-books.gql.ts
 import { Injectable } from '@angular/core';
 import { gql, Query } from 'apollo-angular';
 import { BuchEntity } from '../../../graphql/entities';

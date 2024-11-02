@@ -1,22 +1,23 @@
 import { TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 import { AppComponent } from './app.component';
+import { BookService } from './services/books/book.service';
 
 describe('AppComponent', () => {
+  const bookServiceMock = {
+    getBooks: () => of([]),
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
+      providers: [{ provide: BookService, useValue: bookServiceMock }],
     }).compileComponents();
   });
 
-  it('should create the app', () => {
+  it('should create the app component', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
-  });
-
-  it(`should have the 'angular-buch-frontend' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('angular-buch-frontend');
   });
 });

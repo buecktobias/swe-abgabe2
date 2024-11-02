@@ -62,7 +62,7 @@ describe('GetBooksGQL', () => {
 
     const op = controller.expectOne(getBooksGQL.document);
 
-    // noinspection JSUnusedGlobalSymbols toJSON is a required attribute!
+    //noinspection JSUnusedGlobalSymbols toJSON is a required attribute!
     op.graphqlErrors([
       {
         message: 'Test Error',

@@ -16,6 +16,12 @@ module.exports = tseslint.config(
     ],
     processor: angular.processInlineTemplates,
     rules: {
+      'no-inline-comments': 'error',
+      'no-warning-comments': [
+        'error',
+        { terms: ['todo', 'fixme'], location: 'anywhere' },
+      ],
+      'spaced-comment': ['error', 'never'],
       'prettier/prettier': [
         'error',
         {
