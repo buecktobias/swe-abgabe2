@@ -1,0 +1,29 @@
+@startuml
+interface User<<ValueObject>>{
+    + id: string
+    + username: string
+    + password: string
+    + email: string
+    + role: string
+}
+interface AuthService{
+    + login(username: string, password: string): User
+    + logout(token: string): void
+}
+
+
+interface TokenService{
+    + login(username: string, password: string): string
+    + logout(token: string): void
+    + validate(token: string): boolean
+    + refresh(token: string): string
+}
+
+node Backend{
+
+}
+
+TokenService ..> Backend: <<use>>
+AuthService ..> TokenService: <<use>>
+AuthService --> User: create
+@enduml
