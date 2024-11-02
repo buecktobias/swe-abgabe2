@@ -27,7 +27,7 @@ module.exports = function (config) {
                 istanbul: { includeUntested: true },
             },
         },
-        reporters: ['progress', 'spec', 'kjhtml', 'sabarivka', 'coverage'],
+        reporters: ['progress', 'spec', 'sabarivka', 'coverage'],
         browsers: ['Chrome'],
         restartOnFileChange: true,
     });

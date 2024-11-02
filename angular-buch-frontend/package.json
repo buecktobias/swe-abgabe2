@@ -11,7 +11,7 @@
         "build": "ng build",
         "test": "ng test",
         "test:headless": "ng test --no-watch --browsers=ChromeHeadless --code-coverage",
-        "test:headless-dev": "ng test --no-watch --browsers=ChromeHeadless --reporters spec",
+        "test:headless-dev": "ng test --browsers=ChromeHeadless --reporters spec",
         "lint": "ng lint",
         "lint:fix": "ng lint --fix"
     },

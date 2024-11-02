@@ -8,7 +8,6 @@ import { Buch } from '../../graphql/buch.model';
   standalone: true,
   imports: [BookViewComponent],
   templateUrl: './book-list.component.html',
-  styleUrl: './book-list.component.scss',
 })
 export class BookListComponent implements OnInit {
   books: Buch[] = [];
