@@ -1,0 +1,44 @@
+name: Dependency Update
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        working-directory: ./angular-buch-frontend
+        run: npm install
+
+      - name: Update dependencies
+        working-directory: ./angular-buch-frontend
+        run: npx npm-check-updates -u --minimal
+
+      - name: Install updated dependencies
+        working-directory: ./angular-buch-frontend
+        run: npm install
+
+      - name: Run Angular Tests
+        working-directory: ./angular-buch-frontend
+        run: npm run test:headless
+
+      - name: Commit changes
+        if: success()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore: update dependencies [skip ci]" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
