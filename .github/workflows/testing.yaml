@@ -4,6 +4,39 @@ on:
     branches:
       - main
 jobs:
+  test-angular:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+
+    - name: Restore cached Primes
+      id: cache-primes-restore
+      uses: actions/cache/restore@v4
+      with:
+        path: |
+          path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('angular-buch-frontend/package-lock.json') }}
+
+    - name: Install dependencies and start Angular
+      working-directory: ./angular-buch-frontend
+      run: |
+        npm install
+        npm run start &
+
+    - name: Run Angular Tests
+      working-directory: ./angular-buch-frontend
+      run: npm run test:headless
+
+    - name: Upload Coverage to Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: angular-buch-frontend/coverage/angular-buch-frontend/lcov.info
+
   build-and-test:
     runs-on: ubuntu-latest
 
@@ -56,26 +89,15 @@ jobs:
         run: |
           docker exec nest npm run test
 
-      - name: Run Angular Tests
-        working-directory: ./angular-buch-frontend
-        run: npm run test:headless
-
       - name: Run Cypress Tests
         working-directory: ./e2e-tests
         run: |
           npm install
           npx cypress run --headless
 
-      - name: Upload Coverage to Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: angular-buch-frontend/coverage/angular-buch-frontend/lcov.info
-
-
   sonarcloud:
     name: SonarCloud
-    needs: build-and-test
+    needs: test-angular
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
