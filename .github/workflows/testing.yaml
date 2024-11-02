@@ -122,6 +122,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
+            -Dsonar.projectKey=buecktobias_swe-buch-frontend
+            -Dsonar.organization=swe-awp-buch-frontend
             -Dsonar.typescript.lcov.reportPaths=coverage/lcov.info
             -Dsonar.sources=angular-buch-frontend/src
             -Dsonar.tests=angular-buch-frontend/src

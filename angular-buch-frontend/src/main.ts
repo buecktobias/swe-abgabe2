@@ -1,7 +1,9 @@
+/// <reference types="@angular/localize" />
+
 import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
-import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
+import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
 
 loadDevMessages();
 loadErrorMessages();
