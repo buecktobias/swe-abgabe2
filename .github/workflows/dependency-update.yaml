@@ -23,7 +23,7 @@ jobs:
 
       - name: Update dependencies
         working-directory: ./angular-buch-frontend
-        run: npm update
+        run: npx npm-check-updates -u --target minor
 
       - name: Commit changes
         run: |
