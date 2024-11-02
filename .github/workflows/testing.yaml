@@ -95,7 +95,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.typescript.lcov.reportPaths=angular-buch-frontend/coverage/angular-buch-frontend/lcov.info
+            -Dsonar.typescript.lcov.reportPaths=coverage/lcov.info
             -Dsonar.sources=angular-buch-frontend/src
             -Dsonar.tests=angular-buch-frontend/src
             -Dsonar.test.inclusions=angular-buch-frontend/src/**/*.spec.ts
