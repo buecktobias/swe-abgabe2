@@ -11,7 +11,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "test:headless": "ng test --no-watch --browsers=ChromeHeadless --reporters=spec --code-coverage",
+    "test:headless": "ng test --no-watch --browsers=ChromeHeadless --code-coverage",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix"
   },
@@ -48,6 +48,7 @@
     "karma-coverage": "~2.2.1",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "karma-sabarivka-reporter": "^3.3.1",
     "karma-spec-reporter": "^0.0.36",
     "npm-check-updates": "^17.1.9",
     "prettier": "^3.3.3",

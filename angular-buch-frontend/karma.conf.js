@@ -8,6 +8,7 @@ module.exports = function (config) {
       require('karma-jasmine-html-reporter'),
       require('karma-spec-reporter'),
       require('karma-coverage'),
+      require('karma-sabarivka-reporter'),
       require('@angular-devkit/build-angular/plugins/karma'),
     ],
     client: {
@@ -18,6 +19,7 @@ module.exports = function (config) {
     },
     coverageReporter: {
       dir: require('path').join(__dirname, './coverage/angular-buch-frontend'),
+      include: ['src/**/*.ts'],
       subdir: '.',
       includeAllSources: true,
       reporters: [{ type: 'html' }, { type: 'text-summary' }, { type: 'lcov' }],
@@ -25,7 +27,7 @@ module.exports = function (config) {
         istanbul: { includeUntested: true },
       },
     },
-    reporters: ['progress', 'spec', 'kjhtml'],
+    reporters: ['progress', 'spec', 'kjhtml', 'sabarivka', 'coverage'],
     browsers: ['Chrome'],
     restartOnFileChange: true,
   });
