@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { BuchEntity } from '../../graphql/entities';
+
+import { Buch } from '../../graphql/buch.model';
 
 @Component({
   selector: 'app-book-view',
@@ -9,5 +10,5 @@ import { BuchEntity } from '../../graphql/entities';
   styleUrl: './book-view.component.scss',
 })
 export class BookViewComponent {
-  @Input({ required: true }) book: BuchEntity | undefined;
+  @Input({ required: true }) book: Buch | undefined;
 }

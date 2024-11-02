@@ -1,10 +1,10 @@
-//services/get-book-by-id.gql.ts
 import { Injectable } from '@angular/core';
 import { gql, Query } from 'apollo-angular';
-import { BuchEntity } from '../../../graphql/entities';
+
+import { Buch } from '../../../graphql/buch.model';
 
 export interface GetBookByIdResponse {
-  buch: BuchEntity;
+  buch: Buch;
 }
 
 @Injectable({

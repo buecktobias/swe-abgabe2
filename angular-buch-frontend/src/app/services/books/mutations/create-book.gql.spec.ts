@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { ApolloTestingController, ApolloTestingModule } from 'apollo-angular/testing';
 import { CreateBookGQL } from './create-book.gql';
-import { BuchInput } from '../../../graphql/inputs';
-import { CreatePayload } from '../../../graphql/payloads';
-import { Art } from '../../../graphql/entities';
+import { BuchInput } from '../../../graphql/inputs.model';
+import { CreatePayload } from '../../../graphql/payloads.model';
 import { GraphQLFormattedError } from 'graphql/error/GraphQLError';
 import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
+import { Art } from '../../../graphql/art.model';
 
 loadDevMessages();
 loadErrorMessages();

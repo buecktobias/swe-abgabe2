@@ -1,11 +1,10 @@
-//services/get-books.gql.ts
 import { Injectable } from '@angular/core';
 import { gql, Query } from 'apollo-angular';
-import { BuchEntity } from '../../../graphql/entities';
-import { SuchkriterienInput } from '../../../graphql/inputs';
+import { SuchkriterienInput } from '../../../graphql/inputs.model';
+import { Buch } from '../../../graphql/buch.model';
 
 export interface GetBooksResponse {
-  buecher: BuchEntity[];
+  buecher: Buch[];
 }
 
 @Injectable({

@@ -1,6 +1,7 @@
-import { Art, BuchEntity } from '../../graphql/entities';
+import { Buch } from '../../graphql/buch.model';
+import { Art } from '../../graphql/art.model';
 
-export const mockBooks: BuchEntity[] = [
+export const mockBooks: Buch[] = [
   {
     id: 1,
     datum: '2023-01-01',
