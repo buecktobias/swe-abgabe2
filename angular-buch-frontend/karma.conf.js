@@ -19,6 +19,7 @@ module.exports = function (config) {
     coverageReporter: {
       dir: require('path').join(__dirname, './coverage/angular-buch-frontend'),
       subdir: '.',
+      includeAllSources: true,
       reporters: [{ type: 'html' }, { type: 'text-summary' }, { type: 'lcov' }],
     },
     reporters: ['progress', 'spec', 'kjhtml'],

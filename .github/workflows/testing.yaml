@@ -70,6 +70,8 @@ jobs:
           path: |
             path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('angular-buch-frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install dependencies and start Angular
         working-directory: ./angular-buch-frontend
@@ -85,7 +87,8 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: ~/.npm
-          key: ${{ steps.cache-primes-restore.outputs.cache-primary-key }}
+          key: ${{ runner.os }}-node-${{ hashFiles('angular-buch-frontend/package-lock.json') }}-${{ github.run_id }}
+
 
       - name: Test Nest Backend Runs Correctly
         run: |
