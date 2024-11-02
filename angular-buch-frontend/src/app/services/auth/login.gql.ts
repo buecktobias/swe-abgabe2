@@ -1,4 +1,3 @@
-// services/login.gql.ts
 import { Injectable } from '@angular/core';
 import { gql, Mutation } from 'apollo-angular';
 import { TokenResult } from '../../graphql/payloads';
