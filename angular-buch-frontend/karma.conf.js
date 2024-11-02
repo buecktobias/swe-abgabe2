@@ -21,6 +21,9 @@ module.exports = function (config) {
       subdir: '.',
       includeAllSources: true,
       reporters: [{ type: 'html' }, { type: 'text-summary' }, { type: 'lcov' }],
+      instrumenterOptions: {
+        istanbul: { includeUntested: true },
+      },
     },
     reporters: ['progress', 'spec', 'kjhtml'],
     browsers: ['Chrome'],
