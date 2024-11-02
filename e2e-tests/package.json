@@ -3,13 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "engines": {
-    "node": "^22.0.0",
-    "npm": "^10.0.0"
-  },
   "scripts": {
-    "test": "cypress run",
-    "test:open": "cypress open"
+    "cypress-test": "cypress run",
+    "cypress-test:open": "cypress open"
   },
   "keywords": [],
   "author": "",
