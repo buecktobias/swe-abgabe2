@@ -26,6 +26,7 @@ if __name__ == "__main__":
     print("User passwords created/reset and additional details set.")
 
     keycloak_manager.assign_client_role_to_user(admin_id, NEST_CLIENT_ID, ADMIN_ROLE)
+    keycloak_manager.assign_client_role_to_user(admin_id, NEST_CLIENT_ID, USER_ROLE)
     keycloak_manager.assign_client_role_to_user(user_id, NEST_CLIENT_ID, USER_ROLE)
     print(f"Roles assigned: {ADMIN_ROLE} to admin, {USER_ROLE} to user.")
 

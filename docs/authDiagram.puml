@@ -1,29 +1,59 @@
 @startuml
-interface User<<ValueObject>>{
-    + id: string
-    + username: string
-    + password: string
-    + email: string
-    + role: string
+node Frontend{
+skinparam packageStyle rectangle
+skinparam class {
+    BackgroundColor<<Service>> LightBlue
+    BorderColor<<Service>> DarkBlue
 }
-interface AuthService{
+
+skinparam class {
+    BackgroundColor<<ValueObject>> LightYellow
+    BorderColor<<ValueObject>> DarkOrange
+}
+
+
+class User<<ValueObject>>{
+
+    + <<readonly>> firstName
+    + <<readonly>> lastName
+    + <<readonly>> email
+    + roles: string[]
+    + hasRole(role: string): bool
+}
+
+class SessionTokens <<ValueObject>>{
+    + <<readonly>> accessToken: str
+    + <<readonly>> accessTokenExpiresIn: int
+    + <<readonly>> refreshToken: str
+    + <<readonly>> refreshTokenExpiresIn: int
+    + getAccessTokenExpirationDate()
+    + getRefreshTokenExpirationDate()
+    + isAccessTokenExpired()
+    + isRefreshTokenExpired()
+}
+
+interface AuthService<<Service>>{
+    + currentSession: SessionTokens?
+    + currentUser: User?
     + login(username: string, password: string): User
-    + logout(token: string): void
+    + logout(): void
 }
 
-
-interface TokenService{
-    + login(username: string, password: string): string
-    + logout(token: string): void
-    + validate(token: string): boolean
-    + refresh(token: string): string
+interface TokenService<<Service>>{
+    + login(username, password): SessionTokens
+    + refresh(token: SessionTokens): SessionTokens
 }
-
+}
 node Backend{
-
+    class RESTController{
+        + token(username, password): TokensJSON
+        + refresh(refresh_token: string): TokensJSON
+    }
 }
 
-TokenService ..> Backend: <<use>>
+TokenService .down.> Backend.RESTController: <<use>>
+TokenService ..> SessionTokens: manages
 AuthService ..> TokenService: <<use>>
-AuthService --> User: create
+AuthService "1" o--> "?" User
+AuthService "1" o--> "?" SessionTokens
 @enduml

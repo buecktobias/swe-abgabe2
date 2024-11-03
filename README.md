@@ -1,15 +1,20 @@
-## Buch SWE Projektt
+# Buch SWE Project
 
-Um das Projekt zu installieren:
+## Requirements
 
-docker-compose up --build
+- Docker Desktop 4+
+    - Docker Compose 2+
+- WSL2 (Windows only)
+- node v22+
+- npm v10+
+- Git 2.23+
 
 ## Docker Compose Setup
 
 This project uses Docker Compose to manage services such as the NestJS application, Keycloak for user authentication and authorization, and
-PostgreSQL for database management. There are two configurations available: one for development and one for production.
+Postgres for database management.
 
-### Development (`docker-compose.yml`)
+## Development (`docker-compose.yml`)
 
 In the development environment, the following services are set up:
 
@@ -26,43 +31,29 @@ In the development environment, the following services are set up:
     - Runs on port `8888` for web access.
     - Admin credentials are configured via environment variables.
 
-### Production (`docker-compose.prod.yml`)
+To Start the Angular Frontend:
 
-In the production environment, the setup is optimized and certain services are removed or disabled:
+```bash
+cd angular-buch-frontend
+npm install
+npm start
+```
 
-- **NestJS**: Runs in production mode.
-    - Runs on port `3000`.
-    - No volume mounting (no hot reload).
-- **Keycloak**:
-    - Admin console is disabled.
-    - Key features for client authorization with roles enabled:
-        - Authorization
-        - Login (for user authentication)
-        - Client policies
-        - Persistent user sessions
-    - Runs on port `8080`.
-    - Imports the realm configuration from `keycloak/nest-realm.json`.
-- **PostgreSQL**: Same as in development, with persistent storage.
+Visit at `http://localhost:4200` in your browser.
 
-#### Removed Services:
-
-- **pgAdmin**: Not included in the production setup.
-- **Keycloak Admin Console**: Disabled for security reasons.
-
-### Commands
+## Commands
 
 To start the application in development:
 
 ```bash
 cd backend
-docker-compose up -d
+docker compose up -d
 ```
 
-To start the application in production:
+To start the application in production (currently the same):
 
 ```bash
 cd backend
-docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+docker compose up -d
 ```
 
-This will run the production configuration, optimized for performance and security.
