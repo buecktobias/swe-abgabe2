@@ -3,6 +3,7 @@ import { ApolloTestingController, ApolloTestingModule } from 'apollo-angular/tes
 import { DeleteBookGQL } from './delete-book.gql';
 import { GraphQLFormattedError } from 'graphql/error/GraphQLError';
 import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
+import { ApolloError } from '@apollo/client/errors';
 
 loadDevMessages();
 loadErrorMessages();
@@ -38,8 +39,10 @@ describe('DeleteBookGQL', () => {
 
   it('should handle errors gracefully when deletion fails', (done) => {
     deleteBookGQL.mutate({ id: 'invalid-id' }).subscribe({
-      next: () => fail('Expected an error response'),
-      error: (error) => {
+      next: () => {
+        fail('Expected an error response');
+      },
+      error: (error: ApolloError) => {
         expect(error.message).toContain('Failed to delete book');
         done();
       },

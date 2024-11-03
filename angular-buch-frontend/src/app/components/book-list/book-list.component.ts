@@ -12,7 +12,7 @@ import { Buch } from '../../graphql/buch.model';
 export class BookListComponent implements OnInit {
   books: Buch[] = [];
 
-  constructor(private bookService: BookService) {}
+  constructor(private readonly bookService: BookService) {}
 
   ngOnInit(): void {
     this.bookService.getAllBooks().subscribe((result: { data: { buecher: Buch[] } }) => {

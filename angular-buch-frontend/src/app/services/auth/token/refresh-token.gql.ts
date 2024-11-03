@@ -4,7 +4,7 @@ import { TokenResult } from '../../../graphql/payloads.model';
 
 @Injectable({
   providedIn: 'root',
-})
+}) // eslint-disable-next-line @typescript-eslint/naming-convention
 export class RefreshTokenGQL extends Mutation<{ refresh: TokenResult }, { refresh_token: string }> {
   document = gql`
     mutation refreshToken($refresh_token: String!) {

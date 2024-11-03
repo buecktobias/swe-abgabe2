@@ -6,6 +6,7 @@ import { CreatePayload } from '../../../graphql/payloads.model';
 import { GraphQLFormattedError } from 'graphql/error/GraphQLError';
 import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
 import { Art } from '../../../graphql/art.model';
+import { ApolloError } from '@apollo/client/errors';
 
 loadDevMessages();
 loadErrorMessages();
@@ -63,8 +64,10 @@ describe('CreateBookGQL', () => {
 
   it('should handle errors gracefully when creation fails', (done) => {
     createBookGQL.mutate({ input: mockInput }).subscribe({
-      next: () => fail('Expected an error response'),
-      error: (error) => {
+      next: () => {
+        fail('Expected an error response');
+      },
+      error: (error: ApolloError) => {
         expect(error.message).toContain('Failed to create book');
         done();
       },

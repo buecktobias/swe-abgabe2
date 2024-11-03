@@ -4,6 +4,7 @@ import { GetBookByIdGQL } from './get-book-by-id.gql';
 import { mockBooks } from '../books.mock';
 import { GraphQLFormattedError } from 'graphql/error/GraphQLError';
 import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
+import { ApolloError } from '@apollo/client/errors';
 
 loadDevMessages();
 loadErrorMessages();
@@ -42,8 +43,10 @@ describe('GetBookByIdGQL', () => {
 
   it('should handle errors gracefully when fetching by ID', (done) => {
     getBookByIdGQL.watch({ id: -1 }).valueChanges.subscribe({
-      next: () => fail('Expected an error response'),
-      error: (error) => {
+      next: () => {
+        fail('Expected an error response');
+      },
+      error: (error: ApolloError) => {
         expect(error.message).toContain('Error fetching book');
         done();
       },

@@ -4,6 +4,7 @@ import { GetBooksGQL } from './get-books.gql';
 import { GraphQLFormattedError } from 'graphql';
 import { mockBooks } from '../books.mock';
 import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
+import { ApolloError } from '@apollo/client/errors';
 
 loadDevMessages();
 loadErrorMessages();
@@ -50,8 +51,10 @@ describe('GetBooksGQL', () => {
         suchkriterien: {},
       })
       .valueChanges.subscribe({
-        next: () => fail('Should have errored'),
-        error: (error) => {
+        next: () => {
+          fail('Should have errored');
+        },
+        error: (error: ApolloError) => {
           expect(error.message).toContain('Test Error');
           done();
         },

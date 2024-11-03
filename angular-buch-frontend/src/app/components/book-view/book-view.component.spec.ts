@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { DebugElement } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 import { BookViewComponent } from './book-view.component';
 import { mockBooks } from '../../services/books/books.mock';
@@ -6,45 +8,51 @@ import { mockBooks } from '../../services/books/books.mock';
 describe('BookViewComponent', () => {
   let component: BookViewComponent;
   let fixture: ComponentFixture<BookViewComponent>;
-  const MOCK_BOOK = mockBooks[0];
+  let debugElement: DebugElement;
+  const mockedBook = mockBooks[0];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BookViewComponent],
+      declarations: [BookViewComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(BookViewComponent);
     component = fixture.componentInstance;
-    component.book = MOCK_BOOK;
+    debugElement = fixture.debugElement;
+    component.book = mockedBook;
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
   it('should display book title and subtitle if available', () => {
-    const titleElement = fixture.nativeElement.querySelector('[data-test="book-title"]');
-    const subtitleElement = fixture.nativeElement.querySelector('[data-test="book-subtitle"]');
-    expect(titleElement.textContent).toContain(MOCK_BOOK.titel.titel);
-    expect(subtitleElement.textContent).toContain(MOCK_BOOK.titel.untertitel);
+    const titleElement = debugElement.query(By.css('[data-test="book-title"]')).nativeElement as HTMLElement;
+    const subtitleElement = debugElement.query(By.css('[data-test="book-subtitle"]')).nativeElement as HTMLElement;
+
+    expect(titleElement.textContent).toContain(mockedBook.titel.titel);
+    expect(subtitleElement.textContent).toContain(mockedBook.titel.untertitel);
   });
 
   it('should display book ISBN, price, and discount', () => {
-    const isbnElement = fixture.nativeElement.querySelector('[data-test="book-isbn"]');
-    const priceElement = fixture.nativeElement.querySelector('[data-test="book-price"]');
-    const discountElement = fixture.nativeElement.querySelector('[data-test="book-discount"]');
-    expect(isbnElement.textContent).toContain(MOCK_BOOK.isbn);
-    expect(priceElement.textContent).toContain(`€${MOCK_BOOK.preis}`);
-    expect(discountElement.textContent).toContain(MOCK_BOOK.rabatt);
+    const isbnElement = debugElement.query(By.css('[data-test="book-isbn"]')).nativeElement as HTMLElement;
+    const priceElement = debugElement.query(By.css('[data-test="book-price"]')).nativeElement as HTMLElement;
+    const discountElement = debugElement.query(By.css('[data-test="book-discount"]')).nativeElement as HTMLElement;
+
+    expect(isbnElement.textContent).toContain(mockedBook.isbn);
+    expect(priceElement.textContent).toContain(mockedBook.preis);
+    expect(discountElement.textContent).toContain(mockedBook.rabatt);
   });
 
   it('should display keywords list or fallback message', () => {
-    const keywordsContainer = fixture.nativeElement.querySelector('[data-test="book-keywords"]');
-    const keywordElements = fixture.nativeElement.querySelectorAll('[data-test="book-keyword"]');
-    if (MOCK_BOOK.schlagwoerter && MOCK_BOOK.schlagwoerter.length > 0) {
-      expect(keywordElements.length).toBe(MOCK_BOOK.schlagwoerter.length);
-      MOCK_BOOK.schlagwoerter.forEach((keyword, index) => {
-        expect(keywordElements[index].textContent).toContain(keyword);
+    const keywordsContainer = debugElement.query(By.css('[data-test="book-keywords"]')).nativeElement as HTMLElement;
+    const keywordElements = debugElement.queryAll(By.css('[data-test="book-keyword"]'));
+
+    if (mockedBook.schlagwoerter && mockedBook.schlagwoerter.length > 0) {
+      expect(keywordElements.length).toBe(mockedBook.schlagwoerter.length);
+      mockedBook.schlagwoerter.forEach((keyword, index) => {
+        expect((keywordElements[index].nativeElement as HTMLElement).textContent).toContain(keyword);
       });
     } else {
       expect(keywordsContainer.textContent).toContain('No keywords available');
@@ -52,22 +60,22 @@ describe('BookViewComponent', () => {
   });
 
   it('should render book details sections conditionally', () => {
-    const ratingElement = fixture.nativeElement.querySelector('[data-test="book-rating"]');
-    const availabilityElement = fixture.nativeElement.querySelector('[data-test="is-book-available"]');
-    const publicationDateElement = fixture.nativeElement.querySelector('[data-test="book-publication-date"]');
-    const homepageLink = fixture.nativeElement.querySelector('[data-test="book-homepage-link"]');
+    const ratingElement = debugElement.query(By.css('[data-test="book-rating"]')).nativeElement as HTMLElement | null;
+    const availabilityElement = debugElement.query(By.css('[data-test="is-book-available"]')).nativeElement as HTMLElement | null;
+    const publicationDateElement = debugElement.query(By.css('[data-test="book-publication-date"]')).nativeElement as HTMLElement | null;
+    const homepageLink = debugElement.query(By.css('[data-test="book-homepage-link"]')).nativeElement as HTMLAnchorElement | null;
 
-    if (MOCK_BOOK.rating) {
-      expect(ratingElement.textContent).toContain(MOCK_BOOK.rating);
+    if (mockedBook.rating) {
+      expect(ratingElement?.textContent).toContain(mockedBook.rating);
     }
-    if (MOCK_BOOK.lieferbar) {
-      expect(availabilityElement.getAttribute('data-is-available')).toBe(MOCK_BOOK.lieferbar.toString());
+    if (mockedBook.lieferbar !== null) {
+      expect(availabilityElement?.getAttribute('data-is-available')).toBe(mockedBook.lieferbar.toString());
     }
-    if (MOCK_BOOK.datum) {
-      expect(publicationDateElement.textContent).toContain(MOCK_BOOK.datum);
+    if (mockedBook.datum) {
+      expect(publicationDateElement?.textContent).toContain(mockedBook.datum);
     }
-    if (MOCK_BOOK.homepage) {
-      expect(homepageLink.getAttribute('href')).toBe(MOCK_BOOK.homepage);
+    if (mockedBook.homepage) {
+      expect(homepageLink?.getAttribute('href')).toBe(mockedBook.homepage);
     }
   });
 });

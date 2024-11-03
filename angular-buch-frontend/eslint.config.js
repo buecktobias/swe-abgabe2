@@ -41,6 +41,10 @@ export default tseslint.config(
                     selector: 'property',
                     format: ['camelCase'],
                 },
+                {
+                    selector: 'enumMember',
+                    format: ['UPPER_CASE'],
+                },
             ],
             'no-inline-comments': 'warn',
             'no-warning-comments': ['warn', { terms: ['todo', 'fixme'], location: 'anywhere' }],

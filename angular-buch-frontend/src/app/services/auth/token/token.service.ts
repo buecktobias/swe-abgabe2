@@ -23,13 +23,9 @@ export class TokenService {
         if (!response.data?.token) {
           throw new ApplicationError('No token data received.');
         }
-        const tokenResult: TokenResult = response.data.token;
-        return new SessionTokens(
-          tokenResult.access_token,
-          tokenResult.expires_in,
-          tokenResult.refresh_token,
-          tokenResult.refresh_expires_in,
-        );
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        const { access_token, refresh_token, refresh_expires_in, expires_in } = response.data.token;
+        return new SessionTokens(access_token, expires_in, refresh_token, refresh_expires_in);
       }),
       catchError((error: ApolloError) => {
         console.error('Login failed:', error);
@@ -38,14 +34,15 @@ export class TokenService {
 
         if (badUserInputError) {
           return throwError(() => new WrongInputError('The provided username or password is incorrect.'));
-        } else if (error.graphQLErrors.length > 0) {
+        }
+        if (error.graphQLErrors.length > 0) {
           const message = error.graphQLErrors.map((e) => e.message).join('\n');
           return throwError(() => new ApplicationError('Following errors occurred during login:\n' + message));
-        } else if (error.networkError) {
-          return throwError(() => new ApplicationError('Network error:'));
-        } else {
-          return throwError(() => new ApplicationError('Unknown error occurred during login.'));
         }
+        if (error.networkError) {
+          return throwError(() => new ApplicationError('Network error'));
+        }
+        return throwError(() => new ApplicationError('Unknown error occurred during login.'));
       }),
     );
   }

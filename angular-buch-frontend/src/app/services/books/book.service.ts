@@ -8,7 +8,7 @@ import { SuchkriterienInput } from '../../graphql/inputs.model';
   providedIn: 'root',
 })
 export class BookService {
-  constructor(private getBooksGQL: GetBooksGQL) {}
+  constructor(private readonly getBooksGQL: GetBooksGQL) {}
 
   getAllBooks(): Observable<ApolloQueryResult<GetBooksResponse>> {
     return this.getBooksGQL.watch({
