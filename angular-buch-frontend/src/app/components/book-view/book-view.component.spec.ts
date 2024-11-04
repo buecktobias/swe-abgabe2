@@ -13,7 +13,7 @@ describe('BookViewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BookViewComponent],
+      imports: [BookViewComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(BookViewComponent);
