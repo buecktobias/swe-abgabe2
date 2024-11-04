@@ -7,7 +7,6 @@ import { Buch } from '../../graphql/buch.model';
   standalone: true,
   imports: [],
   templateUrl: './book-view.component.html',
-  styleUrl: './book-view.component.scss',
 })
 export class BookViewComponent {
   @Input({ required: true }) book: Buch | undefined;
