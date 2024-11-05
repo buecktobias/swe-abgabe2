@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { BookListComponent } from '../../components/book-list/book-list.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [BookListComponent],
   templateUrl: './home.component.html',
 })
 export class HomeComponent {}

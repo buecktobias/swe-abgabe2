@@ -12,9 +12,6 @@ describe('Books Page Tests', () => {
   });
 
   it('checks that each displayed book exists in the database and displays correct details', () => {
-    cy.request('http://localhost:4200')
-      .its('status')
-      .should('eq', 200);
     cy.visit('/');
     cy.get('[data-test="book-details"]').should('exist').and('have.length.at.least', 1);
 
