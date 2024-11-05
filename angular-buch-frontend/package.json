@@ -37,7 +37,7 @@
         "jwt-decode": "^4.0.0",
         "rxjs": "~7.8.1",
         "tslib": "^2.8.1",
-        "zone.js": "~0.14.0"
+        "zone.js": "~0.15.0"
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "^18.2.11",
@@ -61,7 +61,7 @@
         "karma-spec-reporter": "^0.0.36",
         "npm-check-updates": "^17.1.9",
         "prettier": "^3.3.3",
-        "typescript": "~5.4.3",
+        "typescript": "~5.6.3",
         "typescript-eslint": "^8.12.2"
     }
 }
