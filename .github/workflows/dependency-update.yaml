@@ -27,7 +27,9 @@ jobs:
 
       - name: Install updated dependencies
         working-directory: ./angular-buch-frontend
-        run: npm install
+        run: |
+          npm install 2>&1 | tee install.log
+          grep "ERESOLVE" install.log && exit 1 || true
 
       - name: Run Angular Tests
         working-directory: ./angular-buch-frontend

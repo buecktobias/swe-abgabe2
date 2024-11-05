@@ -22,8 +22,6 @@
         "@angular/common": "^18.2.10",
         "@angular/compiler": "^18.2.10",
         "@angular/core": "^18.2.10",
-        "@angular/forms": "^18.2.10",
-        "@angular/language-service": "^18.2.10",
         "@angular/platform-browser": "^18.2.10",
         "@angular/platform-browser-dynamic": "^18.2.10",
         "@angular/router": "^18.2.10",
@@ -37,7 +35,7 @@
         "jwt-decode": "^4.0.0",
         "rxjs": "~7.8.1",
         "tslib": "^2.8.1",
-        "zone.js": "~0.15.0"
+        "zone.js": "0.14.10"
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "^18.2.11",
@@ -61,7 +59,7 @@
         "karma-spec-reporter": "^0.0.36",
         "npm-check-updates": "^17.1.9",
         "prettier": "^3.3.3",
-        "typescript": "~5.6.3",
+        "typescript": "5.5.4",
         "typescript-eslint": "^8.12.2"
     }
 }
