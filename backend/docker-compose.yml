@@ -9,10 +9,11 @@ services:
       - NODE_ENV=development
       - NEST_HOST=localhost
     mem_limit: 1g
+    cpus: '0.5'
     volumes:
       - keycloak_secret:/secrets
     depends_on:
-        - python-keycloak-manager
+      - keycloak-setup
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:3000/health/liveness" ]
       interval: 30s
@@ -34,11 +35,12 @@ services:
     volumes:
       - ./keycloak/nest-realm.json:/opt/keycloak/data/import/nest-realm.json
     mem_limit: 512m
+    cpus: '0.5'
     command:
       - start-dev
       - --import-realm
 
-  python-keycloak-manager:
+  keycloak-setup:
     build: keycloak
     container_name: python-keycloak-manager
     depends_on:
@@ -53,6 +55,7 @@ services:
     volumes:
       - keycloak_secret:/secrets
     mem_limit: 128m
+    cpus: '0.25'
 
   postgres:
     image: postgres:16.4-bookworm
@@ -74,6 +77,7 @@ services:
     container_name: postgres
     restart: unless-stopped
     mem_limit: 256m
+    cpus: '0.25'
 
   pgadmin:
     image: dpage/pgadmin4:8.12.0
@@ -91,6 +95,8 @@ services:
     hostname: pgadmin
     container_name: pgadmin
     mem_limit: 256m
+    cpus: '0.25'
+    profiles: [ debug ]
 
 volumes:
   postgres_data:
