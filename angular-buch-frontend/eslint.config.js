@@ -2,6 +2,7 @@ import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import angular from 'angular-eslint';
 import prettier from 'eslint-plugin-prettier';
+import checkFile from 'eslint-plugin-check-file';
 
 export default tseslint.config(
     {
@@ -14,6 +15,7 @@ export default tseslint.config(
         files: ['**/*.ts'],
         plugins: {
             prettier,
+            'check-file': checkFile,
         },
         extends: [
             eslint.configs.recommended,
@@ -46,6 +48,40 @@ export default tseslint.config(
                     format: ['UPPER_CASE'],
                 },
             ],
+            'check-file/no-index': 'error',
+            'check-file/folder-match-with-fex': [
+                'warn',
+                {
+                    '*.component.ts': '**/{components,pages}/**',
+                    '*.service.ts': '**/services/',
+                    '*.model.ts': '**/models/',
+                },
+            ],
+            'check-file/filename-naming-convention': [
+                'error',
+                {
+                    '**/*.{ts,js}': 'KEBAB_CASE',
+                    '**/*.component.ts': 'KEBAB_CASE',
+                    '**/*.service.ts': 'KEBAB_CASE',
+                    '**/*.module.ts': 'KEBAB_CASE',
+                    '**/*.gql.ts': 'KEBAB_CASE',
+                },
+                {
+                    ignoreMiddleExtensions: true,
+                },
+            ],
+            'check-file/filename-blocklist': [
+                'error',
+                {
+                    '**/models/!(*.model).ts': '*.model.ts',
+                },
+            ],
+            'check-file/folder-naming-convention': [
+                'error',
+                {
+                    'src/**/': 'KEBAB_CASE',
+                },
+            ],
             'no-inline-comments': 'warn',
             'no-warning-comments': ['warn', { terms: ['todo', 'fixme'], location: 'anywhere' }],
             '@typescript-eslint/prefer-readonly': 'warn',
@@ -75,6 +111,12 @@ export default tseslint.config(
                     style: 'kebab-case',
                 },
             ],
+        },
+    },
+    {
+        files: ['src/app/app.component.ts'],
+        rules: {
+            'check-file/folder-match-with-fex': 'off', // Disable this rule for app.component.ts
         },
     },
     {

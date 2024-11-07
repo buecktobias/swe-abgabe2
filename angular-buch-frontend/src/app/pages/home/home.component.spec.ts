@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HomeComponent } from './home.component';
-import { BookService } from '../../services/books/book.service';
+import { BookService } from '../../books/services/book.service';
 import { ApolloTestingModule } from 'apollo-angular/testing';
 
 describe('HomeComponent', () => {

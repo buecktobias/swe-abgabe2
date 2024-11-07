@@ -71,11 +71,7 @@
               "buildTarget": "angular-buch-frontend:build:development"
             }
           },
-            "defaultConfiguration": "development",
-            "options": {
-                "host": "0.0.0.0",
-                "port": 4200
-            }
+            "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"

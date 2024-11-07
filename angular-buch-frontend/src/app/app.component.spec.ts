@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { AppComponent } from './app.component';
-import { BookService } from './services/books/book.service';
+import { BookService } from './books/services/book.service';
 import { ActivatedRoute } from '@angular/router';
 
 describe('AppComponent', () => {
