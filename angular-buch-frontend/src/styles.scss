@@ -1,24 +1,23 @@
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
 
-$primary: #1ABC9C;
-$secondary: #A5A5A5;
-$success: #43A047;
-$danger: #D32F2F;
-
-$body-bg: #121212;
-$body-color: #E0E0E0;
-$card-bg: #1E1E1E;
+$primary: #07bed9;
+$secondary: #a5a5a5;
+$success: #43a047;
+$danger: #d32f2f;
+$dark: #2b3741;
+$body-bg: #ddd6d5;
+$body-color: #000000;
+$card-bg: #1e1e1e;
 $card-border-color: darken($card-bg, 5%);
-$text-muted: #B3B3B3;
+$text-muted: #b3b3b3;
 
 $theme-colors: (
-        "primary": $primary,
-        "secondary": $secondary,
-        "success": $success,
-        "danger": $danger,
-        "light": $body-color,
-        "dark": $body-bg
+        'primary': $primary,
+        'secondary': $secondary,
+        'success': $success,
+        'danger': $danger,
+        'light': $body-bg,
+        'dark': $dark,
 );
-@import "bootstrap/scss/bootstrap";
-
+@import 'bootstrap/scss/bootstrap';

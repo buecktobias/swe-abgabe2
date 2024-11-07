@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { gql, Mutation } from 'apollo-angular';
-import { TokenResult } from '../models/payloads.model';
+
+import { TokenResult } from '../models/session-tokens.model';
 
 @Injectable({
   providedIn: 'root',

@@ -27,8 +27,12 @@
     @if (book.lieferbar) {
       <div data-test="book-availability">
         <p><strong>Available:</strong> {{ book.lieferbar ? 'Yes' : 'No' }}</p>
-        <p data-test="is-book-available" aria-hidden="true" [attr.aria-checked]="book.lieferbar"
-           [attr.data-is-available]="book.lieferbar"></p>
+        <p
+          data-test="is-book-available"
+          aria-hidden="true"
+          [attr.aria-checked]="book.lieferbar"
+          [attr.data-is-available]="book.lieferbar"
+        ></p>
       </div>
     }
 
@@ -40,7 +44,8 @@
 
     @if (book.homepage) {
       <div data-test="book-homepage">
-        <p><strong>Homepage:</strong>
+        <p>
+          <strong>Homepage:</strong>
           <a [href]="book.homepage" target="_blank" data-test="book-homepage-link">{{ book.homepage }}</a>
         </p>
       </div>

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LoginGQL } from '../graphql/login.gql';
 import { ApolloError } from '@apollo/client/errors';
-import { SessionTokens } from '../models/session-tokens.model';
-import { TokenResult } from '../models/payloads.model';
+import { SessionTokens, TokenResult } from '../models/session-tokens.model';
 import { MutationResult } from 'apollo-angular';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -31,10 +30,10 @@ export class TokenService {
   }
 
   private extractTokens(response: MutationResult<{ token: TokenResult }>): SessionTokens {
-    const tokenData = response.data?.token;
-    if (!tokenData) {
-      throw new ApplicationError('No token data received.');
+    if (!response.data) {
+      throw new ApplicationError('No data received.');
     }
+    const tokenData = response.data.token;
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     const { access_token, refresh_token, refresh_expires_in, expires_in } = tokenData;
