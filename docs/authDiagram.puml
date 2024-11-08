@@ -13,35 +13,34 @@ skinparam class {
 
 
 class User<<ValueObject>>{
-
-    + <<readonly>> firstName
-    + <<readonly>> lastName
-    + <<readonly>> email
+    + firstName
+    + lastName
+    + email
     + roles: string[]
-    + hasRole(role: string): bool
+}
+
+class LoginResult<<ValueObject>>{
+    + meta
+    + tokens: SessionTokens
 }
 
 class SessionTokens <<ValueObject>>{
-    + <<readonly>> accessToken: str
-    + <<readonly>> accessTokenExpiresIn: int
-    + <<readonly>> refreshToken: str
-    + <<readonly>> refreshTokenExpiresIn: int
-    + getAccessTokenExpirationDate()
-    + getRefreshTokenExpirationDate()
-    + isAccessTokenExpired()
-    + isRefreshTokenExpired()
+    + accessToken: str
+    + accessTokenExpiresIn: int
+    + refreshToken: str
+    + refreshTokenExpiresIn: int
 }
 
 interface AuthService<<Service>>{
     + currentSession: SessionTokens?
     + currentUser: User?
-    + login(username: string, password: string): User
+    + login(username: string, password: string): void
     + logout(): void
 }
 
 interface TokenService<<Service>>{
-    + login(username, password): SessionTokens
-    + refresh(token: SessionTokens): SessionTokens
+    + login(username, password): LoginResult
+    + refresh(token: SessionTokens): LoginResult
 }
 }
 node Backend{
@@ -56,4 +55,5 @@ TokenService ..> SessionTokens: manages
 AuthService ..> TokenService: <<use>>
 AuthService "1" o--> "?" User
 AuthService "1" o--> "?" SessionTokens
+LoginResult o-> SessionTokens: contains
 @enduml

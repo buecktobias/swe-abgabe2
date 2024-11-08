@@ -1,14 +1,12 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Injectable } from '@angular/core';
 import { LoginGQL } from '../graphql/login.gql';
 import { ApolloError } from '@apollo/client/errors';
 import { SessionTokens, TokenResult } from '../models/session-tokens.model';
 import { MutationResult } from 'apollo-angular';
-import { Observable, throwError } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-
-export class WrongInputError extends Error {}
-
-export class ApplicationError extends Error {}
+import { LoginErrorType, LoginResult } from '../models/login-token.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,44 +14,72 @@ export class ApplicationError extends Error {}
 export class TokenService {
   constructor(private readonly loginGQL: LoginGQL) {}
 
-  login(username: string, password: string): Observable<SessionTokens> {
+  login(username: string, password: string): Observable<LoginResult> {
     return this.loginGQL.mutate({ username, password }).pipe(
-      map(
-        (
-          response: MutationResult<{
-            token: TokenResult;
-          }>,
-        ) => this.extractTokens(response),
-      ),
-      catchError((error: ApolloError) => this.handleError(error)),
+      map((response: MutationResult<{ token: TokenResult }>) => {
+        if (!response.data?.token) {
+          return new LoginResult(null, {
+            success: false,
+            message: 'An unknown error occurred during login.',
+            errorType: LoginErrorType.UNKNOWN,
+          });
+        }
+        const sessionTokens = this.extractTokens(response);
+        return new LoginResult(sessionTokens, {
+          success: true,
+          message: 'Login successful',
+          errorType: LoginErrorType.NONE,
+        });
+      }),
+      catchError((error: ApolloError) => {
+        if (this.isBadUserInputError(error)) {
+          return of(
+            new LoginResult(null, {
+              success: false,
+              message: 'The provided username or password is incorrect.',
+              errorType: LoginErrorType.WRONG_INPUT,
+            }),
+          );
+        }
+
+        if (error.graphQLErrors.length > 0) {
+          const messages = error.graphQLErrors.map((e) => e.message).join('\n');
+          return of(
+            new LoginResult(null, {
+              success: false,
+              message: `GraphQL errors during login:\n${messages}`,
+              errorType: LoginErrorType.GRAPH_QL,
+            }),
+          );
+        }
+
+        if (error.networkError) {
+          return of(
+            new LoginResult(null, {
+              success: false,
+              message: 'Network error occurred.',
+              errorType: LoginErrorType.NETWORK,
+            }),
+          );
+        }
+
+        return of(
+          new LoginResult(null, {
+            success: false,
+            message: 'An unknown error occurred during login.',
+            errorType: LoginErrorType.UNKNOWN,
+          }),
+        );
+      }),
     );
   }
 
   private extractTokens(response: MutationResult<{ token: TokenResult }>): SessionTokens {
-    if (!response.data) {
-      throw new ApplicationError('No data received.');
+    if (!response.data?.token) {
+      throw new Error('No token data received.');
     }
-    const tokenData = response.data.token;
-
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const { access_token, refresh_token, refresh_expires_in, expires_in } = tokenData;
+    const { access_token, refresh_token, refresh_expires_in, expires_in } = response.data.token;
     return new SessionTokens(access_token, expires_in, refresh_token, refresh_expires_in);
-  }
-
-  private handleError(error: ApolloError): Observable<never> {
-    console.error('Login failed:', error);
-
-    if (this.isBadUserInputError(error)) {
-      return throwError(() => new WrongInputError('The provided username or password is incorrect.'));
-    }
-    if (error.graphQLErrors.length > 0) {
-      const messages = error.graphQLErrors.map((error) => error.message).join('\n');
-      return throwError(() => new ApplicationError(`GraphQL errors during login:\n${messages}`));
-    }
-    if (error.networkError) {
-      return throwError(() => new ApplicationError('Network error occurred.'));
-    }
-    return throwError(() => new ApplicationError('An unknown error occurred during login.'));
   }
 
   private isBadUserInputError(error: ApolloError): boolean {
