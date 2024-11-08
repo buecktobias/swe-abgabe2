@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       const { username, password } = this.loginForm.value;
       console.log('Login attempt:', username, password);
-      this.tokenService.login(username ?? '', password ?? '').subscribe({
+      this.tokenService.login({ username: username ?? '', password: password ?? '' }).subscribe({
         next: () => {
           this.loginMessage = 'Login successful';
           console.log('Login successful');

@@ -6,10 +6,14 @@ import { LoginGQL } from '../graphql/login.gql';
 import { SessionTokens, TokenResult } from '../models/session-tokens.model';
 import { createGraphQLError } from '../../shared/test-helpers';
 import { LoginErrorType } from '../models/login-token.model';
+import { UserLoginInformation } from '../models/user-login-information.model';
 
 describe('TokenService', () => {
   let tokenService: TokenService;
   let controller: ApolloTestingController;
+  const validUser: UserLoginInformation = { username: 'validUser', password: 'validPassword' };
+  const wrongUser: UserLoginInformation = { username: 'wrongUser', password: 'wrongPassword' };
+  const normalUser: UserLoginInformation = { username: 'normalUser', password: 'normalPassword' };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -41,7 +45,7 @@ describe('TokenService', () => {
       mockTokenResponse.token.refresh_expires_in,
     );
 
-    tokenService.login('admin', '1234').subscribe({
+    tokenService.login(validUser).subscribe({
       next: (result) => {
         expect(result.meta.success).toBe(true);
         expect(result.meta.errorType).toBe(LoginErrorType.NONE);
@@ -59,7 +63,7 @@ describe('TokenService', () => {
   });
 
   it('should return WrongInputError metadata on BAD_USER_INPUT GraphQL error', (done) => {
-    tokenService.login('user', 'wrong-password').subscribe({
+    tokenService.login(wrongUser).subscribe({
       next: (result) => {
         expect(result.meta.success).toBe(false);
         expect(result.meta.errorType).toBe(LoginErrorType.WRONG_INPUT);
@@ -77,7 +81,7 @@ describe('TokenService', () => {
   });
 
   it('should return GraphQL error metadata for other GraphQL errors', (done) => {
-    tokenService.login('user', 'password').subscribe({
+    tokenService.login(normalUser).subscribe({
       next: (result) => {
         expect(result.meta.success).toBe(false);
         expect(result.meta.errorType).toBe(LoginErrorType.GRAPH_QL);
@@ -95,7 +99,7 @@ describe('TokenService', () => {
   });
 
   it('should return Network error metadata for network errors', (done) => {
-    tokenService.login('user', 'password').subscribe({
+    tokenService.login(normalUser).subscribe({
       next: (result) => {
         expect(result.meta.success).toBe(false);
         expect(result.meta.errorType).toBe(LoginErrorType.NETWORK);
@@ -113,7 +117,7 @@ describe('TokenService', () => {
   });
 
   it('should return Unknown error metadata for unknown errors', (done) => {
-    tokenService.login('user', 'password').subscribe({
+    tokenService.login(normalUser).subscribe({
       next: (result) => {
         expect(result.meta.success).toBe(false);
         expect(result.meta.errorType).toBe(LoginErrorType.UNKNOWN);

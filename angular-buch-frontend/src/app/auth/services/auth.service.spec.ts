@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { TestBed } from '@angular/core/testing';
 import { AuthService } from './auth.service';
 import { TokenService } from './token.service';
 import { of, throwError } from 'rxjs';
 import { SessionTokens } from '../models/session-tokens.model';
-import { LoginErrorType, LoginResult } from '../models/login-token.model';
+import { LoginResultFactory } from '../models/login-token.model';
 import { ApolloError } from '@apollo/client/errors';
+import { UserLoginInformation } from '../models/user-login-information.model';
 
 class MockTokenService {
   login = jasmine.createSpy();
@@ -13,6 +15,27 @@ class MockTokenService {
 describe('AuthService', () => {
   let authService: AuthService;
   let tokenService: MockTokenService;
+  const loginResultFactory = new LoginResultFactory();
+  const validUser: UserLoginInformation = { username: 'validUser', password: 'validPassword' };
+  const normalUser: UserLoginInformation = { username: 'normalUser', password: 'normalPassword' };
+
+  const mockTokens = new SessionTokens('access', 3600, 'refresh', 7200);
+  const successLoginResult = loginResultFactory.createSuccessfulLoginResult(mockTokens);
+  const unknownError = new ApolloError({ errorMessage: 'Unexpected error' });
+  const jwtPayload = {
+    preferred_username: 'admin',
+    given_name: 'Admin',
+    family_name: 'Nest',
+    email: 'admin@acme.com',
+    resource_access: {
+      'nest-client': {
+        roles: ['admin', 'user'],
+      },
+    },
+  };
+
+  const base64JwtPayload = btoa(JSON.stringify(jwtPayload));
+  const mockJwt = `header.${base64JwtPayload}.signature`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -28,50 +51,47 @@ describe('AuthService', () => {
   });
 
   describe('#login', () => {
-    xit('should call TokenService login and set sessionTokens and currentUser on success', () => {
-      const mockTokens = new SessionTokens('access', 3600, 'refresh', 7200);
-      const loginResult = new LoginResult(mockTokens, {
-        success: true,
-        message: 'Login successful',
-        errorType: LoginErrorType.NONE,
-      });
+    it('should call TokenService.login and set session tokens when credentials are valid', () => {
+      tokenService.login.and.returnValue(of(successLoginResult));
 
-      tokenService.login.and.returnValue(of(loginResult));
-      authService.login('validUser', 'validPassword');
+      authService.login(validUser);
 
-      expect(tokenService.login).toHaveBeenCalledWith('validUser', 'validPassword');
-      // Additional expectations could verify if authService sets currentUser and sessionTokens
+      expect(tokenService.login).toHaveBeenCalledWith(validUser);
     });
 
-    xit('should handle WrongInputError without setting sessionTokens and currentUser', () => {
-      const loginResult = new LoginResult(null, {
-        success: false,
-        message: 'The provided username or password is incorrect.',
-        errorType: LoginErrorType.WRONG_INPUT,
-      });
+    it('should decode JWT and set the User correctly when credentials are valid', () => {
+      const decodedTokens = new SessionTokens(mockJwt, 3600, 'refresh', 7200);
+      tokenService.login.and.returnValue(of(loginResultFactory.createSuccessfulLoginResult(decodedTokens)));
 
-      tokenService.login.and.returnValue(of(loginResult));
-      authService.login('invalidUser', 'wrongPassword');
+      authService.login(validUser);
 
-      expect(tokenService.login).toHaveBeenCalledWith('invalidUser', 'wrongPassword');
-      // Verify that sessionTokens and currentUser remain null on error
+      expect(tokenService.login).toHaveBeenCalledWith(validUser);
+
+      const user = authService.user;
+
+      expect(user).toBeTruthy();
+      expect(user?.username).toBe('admin');
+      expect(user?.firstName).toBe('Admin');
+      expect(user?.lastName).toBe('Nest');
+      expect(user?.email).toBe('admin@acme.com');
+      expect(user?.roles).toContain('admin');
+      expect(user?.roles).toContain('user');
     });
 
-    xit('should handle unknown errors without setting sessionTokens and currentUser', () => {
-      const error = new ApolloError({ errorMessage: 'Unexpected error' });
-      tokenService.login.and.returnValue(throwError(() => error));
+    it('should handle unexpected errors without setting session tokens', () => {
+      tokenService.login.and.returnValue(throwError(() => unknownError));
 
-      authService.login('user', 'password');
+      authService.login(normalUser);
 
-      expect(tokenService.login).toHaveBeenCalledWith('user', 'password');
-      // Verify that sessionTokens and currentUser remain null on error
+      expect(tokenService.login).toHaveBeenCalledWith(normalUser);
     });
   });
 
   describe('#isValidLogin', () => {
-    xit('should call TokenService login to check if credentials are valid', () => {
-      authService.isValidLogin('testUser', 'testPassword');
-      expect(tokenService.login).toHaveBeenCalledWith('testUser', 'testPassword');
+    it('should call TokenService.login to validate credentials', () => {
+      authService.isValidLogin(normalUser);
+
+      expect(tokenService.login).toHaveBeenCalledWith(normalUser);
     });
   });
 });

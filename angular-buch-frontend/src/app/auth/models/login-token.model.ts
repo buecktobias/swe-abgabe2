@@ -1,22 +1,44 @@
 import { SessionTokens } from '../models/session-tokens.model';
 
 export enum LoginErrorType {
-  NONE = 'None',
-  WRONG_INPUT = 'WrongInput',
-  GRAPH_QL = 'GraphQL',
-  NETWORK = 'Network',
-  UNKNOWN = 'Unknown',
+  NONE,
+  WRONG_INPUT,
+  GRAPH_QL,
+  NETWORK,
+  UNKNOWN,
 }
 
 export interface LoginMeta {
-  success: boolean;
-  message: string;
-  errorType: LoginErrorType;
+  readonly success: boolean;
+  readonly message: string;
+  readonly errorType: LoginErrorType;
 }
 
-export class LoginResult {
-  constructor(
-    public sessionTokens: SessionTokens | null,
-    public meta: LoginMeta,
-  ) {}
+export interface LoginResult {
+  readonly sessionTokens: SessionTokens | null;
+  readonly meta: LoginMeta;
+}
+
+export class LoginResultFactory {
+  createSuccessfulLoginResult(sessionTokens: SessionTokens): LoginResult {
+    return {
+      sessionTokens,
+      meta: {
+        success: true,
+        errorType: LoginErrorType.NONE,
+        message: '',
+      },
+    };
+  }
+
+  createUnSuccessfulLoginResult(errorType: LoginErrorType, message = ''): LoginResult {
+    return {
+      sessionTokens: null,
+      meta: {
+        success: false,
+        errorType,
+        message,
+      },
+    };
+  }
 }
