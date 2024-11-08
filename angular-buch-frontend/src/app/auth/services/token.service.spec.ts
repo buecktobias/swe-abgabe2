@@ -5,7 +5,7 @@ import { ApolloTestingController, ApolloTestingModule } from 'apollo-angular/tes
 import { LoginGQL } from '../graphql/login.gql';
 import { SessionTokens, TokenResult } from '../models/session-tokens.model';
 import { createGraphQLError } from '../../shared/test-helpers';
-import { LoginErrorType } from '../models/login-token.model';
+import { LoginErrorType } from '../models/login-result.model';
 import { UserLoginInformation } from '../models/user-login-information.model';
 
 describe('TokenService', () => {

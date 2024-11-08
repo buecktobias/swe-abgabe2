@@ -4,9 +4,11 @@ import { AuthService } from './auth.service';
 import { TokenService } from './token.service';
 import { of, throwError } from 'rxjs';
 import { SessionTokens } from '../models/session-tokens.model';
-import { LoginResultFactory } from '../models/login-token.model';
 import { ApolloError } from '@apollo/client/errors';
 import { UserLoginInformation } from '../models/user-login-information.model';
+import { LoginResultFactory } from './login-result-factory.service';
+import { JwtService } from './jwt.service';
+import { JwtPayload } from '../models/jwt-payload.model';
 
 class MockTokenService {
   login = jasmine.createSpy();
@@ -15,14 +17,13 @@ class MockTokenService {
 describe('AuthService', () => {
   let authService: AuthService;
   let tokenService: MockTokenService;
+  const jwtService = new JwtService();
   const loginResultFactory = new LoginResultFactory();
   const validUser: UserLoginInformation = { username: 'validUser', password: 'validPassword' };
   const normalUser: UserLoginInformation = { username: 'normalUser', password: 'normalPassword' };
 
-  const mockTokens = new SessionTokens('access', 3600, 'refresh', 7200);
-  const successLoginResult = loginResultFactory.createSuccessfulLoginResult(mockTokens);
   const unknownError = new ApolloError({ errorMessage: 'Unexpected error' });
-  const jwtPayload = {
+  const jwtPayload: JwtPayload = {
     preferred_username: 'admin',
     given_name: 'Admin',
     family_name: 'Nest',
@@ -34,8 +35,7 @@ describe('AuthService', () => {
     },
   };
 
-  const base64JwtPayload = btoa(JSON.stringify(jwtPayload));
-  const mockJwt = `header.${base64JwtPayload}.signature`;
+  const mockJwt = jwtService.encode(jwtPayload);
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -50,15 +50,12 @@ describe('AuthService', () => {
     expect(authService).toBeTruthy();
   });
 
+  it('token can be decoded', () => {
+    const decoded = jwtService.decode(mockJwt);
+    expect(decoded).toEqual(jwtPayload);
+  });
+
   describe('#login', () => {
-    it('should call TokenService.login and set session tokens when credentials are valid', () => {
-      tokenService.login.and.returnValue(of(successLoginResult));
-
-      authService.login(validUser);
-
-      expect(tokenService.login).toHaveBeenCalledWith(validUser);
-    });
-
     it('should decode JWT and set the User correctly when credentials are valid', () => {
       const decodedTokens = new SessionTokens(mockJwt, 3600, 'refresh', 7200);
       tokenService.login.and.returnValue(of(loginResultFactory.createSuccessfulLoginResult(decodedTokens)));

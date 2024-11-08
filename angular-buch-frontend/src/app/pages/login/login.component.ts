@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { TokenService } from '../../auth/services/token.service';
+import { AuthService } from '../../auth/services/auth.service';
 
 interface LoginForm {
   username: FormControl<string>;
@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup<LoginForm>;
   loginMessage = 'Please log in';
 
-  constructor(private readonly tokenService: TokenService) {}
+  constructor(private readonly authService: AuthService) {}
 
   ngOnInit(): void {
     this.loginForm = new FormGroup<LoginForm>({
@@ -30,10 +30,10 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       const { username, password } = this.loginForm.value;
       console.log('Login attempt:', username, password);
-      this.tokenService.login({ username: username ?? '', password: password ?? '' }).subscribe({
+      this.authService.login({ username: username ?? '', password: password ?? '' }).subscribe({
         next: () => {
           this.loginMessage = 'Login successful';
-          console.log('Login successful');
+          console.log(`Login successful for ${username ?? ''}, email:  ${this.authService.user?.email ?? ''}`);
         },
         error: () => {
           this.loginMessage = 'Login failed';

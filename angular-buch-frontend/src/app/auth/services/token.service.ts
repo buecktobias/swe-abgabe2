@@ -5,16 +5,18 @@ import { SessionTokens, TokenResult } from '../models/session-tokens.model';
 import { MutationResult } from 'apollo-angular';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { LoginErrorType, LoginResult, LoginResultFactory } from '../models/login-token.model';
+import { LoginErrorType, LoginResult } from '../models/login-result.model';
 import { UserLoginInformation } from '../models/user-login-information.model';
+import { LoginResultFactory } from './login-result-factory.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TokenService {
-  private readonly loginResultFactory = new LoginResultFactory();
-
-  constructor(private readonly loginGQL: LoginGQL) {}
+  constructor(
+    private readonly loginResultFactory: LoginResultFactory,
+    private readonly loginGQL: LoginGQL,
+  ) {}
 
   login(userLoginInformation: UserLoginInformation): Observable<LoginResult> {
     const { username, password } = userLoginInformation;
