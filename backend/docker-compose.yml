@@ -35,14 +35,14 @@ services:
     volumes:
       - ./keycloak/nest-realm.json:/opt/keycloak/data/import/nest-realm.json
     mem_limit: 512m
-    cpus: '0.5'
+    cpus: '2'
     command:
       - start-dev
       - --import-realm
 
   keycloak-setup:
     build: keycloak
-    container_name: python-keycloak-manager
+    container_name: keycloak-setup
     depends_on:
       - keycloak
     environment:
