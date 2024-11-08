@@ -73,7 +73,7 @@ export default tseslint.config(
       'check-file/filename-blocklist': [
         'error',
         {
-          '**/models/!(*.model).ts': '*.model.ts',
+          '**/models/!(*.model*).ts': '*.model.ts',
         },
       ],
       'check-file/folder-naming-convention': [

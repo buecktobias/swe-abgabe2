@@ -12,6 +12,10 @@ export class AuthService {
 
   constructor(private readonly tokenService: TokenService) {}
 
+  get user(): User | null {
+    return this.currentUser;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   login(username: string, password: string): void {
     throw new Error('Method not implemented.');
