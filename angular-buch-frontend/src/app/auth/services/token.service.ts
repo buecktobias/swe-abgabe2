@@ -29,7 +29,7 @@ export class TokenService {
       }),
       catchError((error: ApolloError) => {
         if (this.isBadUserInputError(error)) {
-          return of(this.loginResultFactory.createUnSuccessfulLoginResult(LoginErrorType.WRONG_INPUT));
+          return of(this.loginResultFactory.createUnSuccessfulLoginResult(LoginErrorType.WRONG_INPUT, 'Wrong username or password'));
         }
         return this.handleApplicationErrors(error);
       }),

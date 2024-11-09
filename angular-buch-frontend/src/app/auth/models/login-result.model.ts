@@ -1,11 +1,11 @@
 import { SessionTokens } from '../models/session-tokens.model';
 
 export enum LoginErrorType {
-  NONE,
-  WRONG_INPUT,
-  GRAPH_QL,
-  NETWORK,
-  UNKNOWN,
+  NONE = 'NONE',
+  WRONG_INPUT = 'WRONG_INPUT',
+  GRAPH_QL = 'GRAPH_QL',
+  NETWORK = 'NETWORK',
+  UNKNOWN = 'UNKNOWN',
 }
 
 export interface LoginMeta {

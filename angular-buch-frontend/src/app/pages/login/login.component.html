@@ -1,7 +1,15 @@
-<div class="container d-flex justify-content-center align-items-center">
-  <div class="col-12 col-md-6 col-lg-4">
-    <h1 class="mt-4 text-center">Login</h1>
-    <form (ngSubmit)="onSubmit()" [formGroup]="loginForm" class="p-3 mt-4">
+<div class="container mt-5 d-flex justify-content-center align-items-center">
+  <div class="col-12 col-md-8 col-lg-6 col-xl-4">
+    <h1 class="mb-4 text-center">Login</h1>
+
+    @if (loginMessage) {
+      <div class="alert alert-danger text-center" role="alert">
+        {{ loginMessage }}
+      </div>
+    }
+
+    <!--suppress AngularUndefinedBinding -->
+    <form (ngSubmit)="onSubmit()" [formGroup]="loginForm" class="p-4 border rounded shadow-sm">
       <div class="mb-3">
         <label class="form-label" for="username">Username</label>
         <input
@@ -12,6 +20,9 @@
           placeholder="Enter your username"
           type="text"
         />
+        @if (username.invalid && username.touched) {
+          <div class="text-danger mt-1">Username is required.</div>
+        }
       </div>
 
       <div class="mb-3">
@@ -24,12 +35,12 @@
           placeholder="Enter your password"
           type="password"
         />
+        @if (password.invalid && password.touched) {
+          <div class="text-danger mt-1">Password is required.</div>
+        }
       </div>
 
       <button class="btn btn-primary w-100" type="submit">Login</button>
     </form>
-    @if (loginMessage) {
-      <p>{{ loginMessage }}</p>
-    }
   </div>
 </div>

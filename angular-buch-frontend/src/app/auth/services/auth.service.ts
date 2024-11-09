@@ -36,7 +36,7 @@ export class AuthService {
             firstName: jwtPayload.given_name,
             lastName: jwtPayload.family_name,
             email: jwtPayload.email,
-            roles: jwtPayload.resource_access['nest-client'].roles as Role[],
+            roles: new Set(jwtPayload.resource_access['nest-client'].roles as Role[]),
           };
         }
         return result.meta;

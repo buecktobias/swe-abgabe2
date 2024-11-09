@@ -5,5 +5,5 @@ export interface User {
   readonly firstName: string;
   readonly lastName: string;
   readonly email: string;
-  readonly roles: Role[];
+  readonly roles: Set<Role>;
 }
