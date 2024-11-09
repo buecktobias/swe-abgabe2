@@ -15,11 +15,14 @@ import { JwtService } from './jwt.service';
 export class AuthService {
   private sessionTokens: SessionTokens | null = null;
   private currentUser: User | null = null;
+  private readonly refreshBufferTime = 5;
 
   constructor(
     private readonly tokenService: TokenService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) {
+    this.tryToRestoreSession();
+  }
 
   get user(): User | null {
     return this.currentUser;
@@ -34,6 +37,8 @@ export class AuthService {
       map((result) => {
         if (result.meta.success && result.sessionTokens) {
           this.sessionTokens = result.sessionTokens;
+          console.log('Login successful', this.sessionTokens);
+          this.saveRefreshToken();
           this.setupAutoRefresh();
           const jwtPayload = this.jwtService.decode(this.sessionTokens.accessToken);
           this.currentUser = {
@@ -56,16 +61,64 @@ export class AuthService {
   logout(): void {
     this.sessionTokens = null;
     this.currentUser = null;
+    this.deleteRefreshToken();
+  }
+
+  private tryToRestoreSession(): void {
+    console.log('Restoring session');
+    console.log('Session tokens:', this.sessionTokens);
+    const refreshToken = this.loadRefreshToken();
+    if (!refreshToken) return;
+
+    this.tokenService.refresh(refreshToken).subscribe({
+      next: (newTokens) => {
+        if (newTokens) {
+          this.sessionTokens = newTokens;
+          this.setupAutoRefresh();
+          const jwtPayload = this.jwtService.decode(this.sessionTokens.accessToken);
+          this.currentUser = {
+            username: jwtPayload.preferred_username,
+            firstName: jwtPayload.given_name,
+            lastName: jwtPayload.family_name,
+            email: jwtPayload.email,
+            roles: new Set(jwtPayload.resource_access['nest-client'].roles as Role[]),
+          };
+        } else {
+          this.logout();
+        }
+      },
+      error: () => {
+        this.logout();
+      },
+    });
+  }
+
+  private saveRefreshToken(): void {
+    if (!this.sessionTokens) return;
+    localStorage.setItem('refreshToken', this.sessionTokens.refreshToken);
+  }
+
+  private deleteRefreshToken(): void {
+    localStorage.removeItem('refreshToken');
+  }
+
+  private loadRefreshToken(): string | null {
+    return localStorage.getItem('refreshToken');
   }
 
   private setupAutoRefresh(): void {
-    if (!this.sessionTokens) return;
+    if (!this.sessionTokens?.refreshToken) return;
 
-    const timeUntilExpiry = this.sessionTokens.accessTokenExpiresInSeconds * 1000 - Date.now() - 5000;
+    const timeUntilRefreshInMs = (this.sessionTokens.accessTokenExpiresInSeconds - this.refreshBufferTime) * 1000;
 
-    timer(timeUntilExpiry)
+    timer(timeUntilRefreshInMs)
       .pipe(
-        switchMap(() => this.tokenService.refresh()),
+        switchMap(() => {
+          console.log('Refreshing session');
+          console.log('Session tokens:', this.sessionTokens);
+          // @ts-expect-error sessionTokens is not null
+          return this.tokenService.refresh(this.sessionTokens.refreshToken);
+        }),
         tap((newTokens) => {
           if (newTokens) {
             this.sessionTokens = newTokens;

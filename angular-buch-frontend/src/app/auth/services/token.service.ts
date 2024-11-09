@@ -38,8 +38,9 @@ export class TokenService {
     );
   }
 
-  refresh(): Observable<SessionTokens | null> {
-    return this.refreshTokenGQL.mutate().pipe(
+  refresh(refreshToken: string): Observable<SessionTokens | null> {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    return this.refreshTokenGQL.mutate({ refresh_token: refreshToken }).pipe(
       map((response: MutationResult<{ refresh: TokenResult }>) => {
         if (!response.data?.refresh) {
           return null;

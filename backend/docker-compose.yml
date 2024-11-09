@@ -35,7 +35,7 @@ services:
     volumes:
       - ./keycloak/nest-realm.json:/opt/keycloak/data/import/nest-realm.json
     mem_limit: 512m
-    cpus: '2'
+    cpus: '4'
     command:
       - start-dev
       - --import-realm
