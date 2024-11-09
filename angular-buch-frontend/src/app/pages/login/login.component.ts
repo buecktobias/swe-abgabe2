@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../auth/services/auth.service';
+import { Router } from '@angular/router';
+import { LoginMeta } from '../../auth/models/login-result.model';
 
 interface LoginForm {
   username: FormControl<string>;
@@ -17,7 +19,10 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup<LoginForm>;
   loginMessage = 'Please log in';
 
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = new FormGroup<LoginForm>({
@@ -31,9 +36,11 @@ export class LoginComponent implements OnInit {
       const { username, password } = this.loginForm.value;
       console.log('Login attempt:', username, password);
       this.authService.login({ username: username ?? '', password: password ?? '' }).subscribe({
-        next: () => {
-          this.loginMessage = 'Login successful';
-          console.log(`Login successful for ${username ?? ''}, email:  ${this.authService.user?.email ?? ''}`);
+        next: (loginMeta: LoginMeta) => {
+          if (loginMeta.success) {
+            void this.router.navigate(['/']);
+          }
+          this.loginMessage = loginMeta.message;
         },
         error: () => {
           this.loginMessage = 'Login failed';

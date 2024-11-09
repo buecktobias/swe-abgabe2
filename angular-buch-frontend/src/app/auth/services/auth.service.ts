@@ -7,6 +7,7 @@ import { Role } from '../models/role.model';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { LoginErrorType, LoginMeta } from '../models/login-result.model';
+import { JwtService } from './jwt.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,7 @@ export class AuthService {
 
   constructor(
     private readonly tokenService: TokenService,
-    private readonly jwtService: JtService,
+    private readonly jwtService: JwtService,
   ) {}
 
   get user(): User | null {
