@@ -4,8 +4,8 @@ import { SessionTokens } from '../models/session-tokens.model';
 import { User } from '../models/user.model';
 import { UserLoginInformation } from '../models/user-login-information.model';
 import { Role } from '../models/role.model';
-import { catchError, map } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { EMPTY, Observable, of, timer } from 'rxjs';
 import { LoginErrorType, LoginMeta } from '../models/login-result.model';
 import { JwtService } from './jwt.service';
 
@@ -25,11 +25,16 @@ export class AuthService {
     return this.currentUser;
   }
 
+  get isLoggedIn(): boolean {
+    return this.sessionTokens !== null;
+  }
+
   login(userLoginInformation: UserLoginInformation): Observable<LoginMeta> {
     return this.tokenService.login(userLoginInformation).pipe(
       map((result) => {
         if (result.meta.success && result.sessionTokens) {
           this.sessionTokens = result.sessionTokens;
+          this.setupAutoRefresh();
           const jwtPayload = this.jwtService.decode(this.sessionTokens.accessToken);
           this.currentUser = {
             username: jwtPayload.preferred_username,
@@ -53,7 +58,27 @@ export class AuthService {
     this.currentUser = null;
   }
 
-  isValidLogin(userLoginInformation: UserLoginInformation): void {
-    this.tokenService.login(userLoginInformation);
+  private setupAutoRefresh(): void {
+    if (!this.sessionTokens) return;
+
+    const timeUntilExpiry = this.sessionTokens.accessTokenExpiresInSeconds * 1000 - Date.now() - 5000;
+
+    timer(timeUntilExpiry)
+      .pipe(
+        switchMap(() => this.tokenService.refresh()),
+        tap((newTokens) => {
+          if (newTokens) {
+            this.sessionTokens = newTokens;
+            this.setupAutoRefresh();
+          } else {
+            this.logout();
+          }
+        }),
+        catchError(() => {
+          this.logout();
+          return EMPTY;
+        }),
+      )
+      .subscribe();
   }
 }

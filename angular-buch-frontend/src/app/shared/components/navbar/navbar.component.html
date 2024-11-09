@@ -2,13 +2,13 @@
   <div class="container">
     <a class="navbar-brand" routerLink="/">Book App</a>
     <button
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-      class="navbar-toggler"
-      data-bs-target="#navbarNav"
-      data-bs-toggle="collapse"
-      type="button"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="navbar-toggler"
+            data-bs-target="#navbarNav"
+            data-bs-toggle="collapse"
+            type="button"
     >
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -21,10 +21,16 @@
       </ul>
       <ul class="navbar-nav">
         <li class="nav-item my-auto me-2">
-          <span class="text-white">Current User: {{ currentUser }}</span>
+          @if (isLoggedIn) {
+            <span class="text-white">Current User: {{ username }}</span>
+          }
         </li>
         <li class="nav-item">
-          <a class="btn btn-primary" routerLink="/login">Login</a>
+          @if (isLoggedIn) {
+            <button class="btn btn-primary" (click)="logout()">Logout</button>
+          } @else {
+            <a class="btn btn-primary" routerLink="/login">Login</a>
+          }
         </li>
       </ul>
     </div>

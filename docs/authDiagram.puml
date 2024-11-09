@@ -44,13 +44,13 @@ interface TokenService<<Service>>{
 }
 }
 node Backend{
-    class RESTController{
+    class GraphQLController{
         + token(username, password): TokensJSON
         + refresh(refresh_token: string): TokensJSON
     }
 }
 
-TokenService .down.> Backend.RESTController: <<use>>
+TokenService .down.> Backend.GraphQLController: <<use>>
 TokenService ..> SessionTokens: manages
 AuthService ..> TokenService: <<use>>
 AuthService "1" o--> "?" User

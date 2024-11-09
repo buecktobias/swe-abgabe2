@@ -4,7 +4,6 @@ import { AuthService } from './auth.service';
 import { TokenService } from './token.service';
 import { of } from 'rxjs';
 import { SessionTokens } from '../models/session-tokens.model';
-import { ApolloError } from '@apollo/client/errors';
 import { UserLoginInformation } from '../models/user-login-information.model';
 import { LoginResultFactory } from './login-result-factory.service';
 import { JwtService } from './jwt.service';
@@ -25,7 +24,6 @@ describe('AuthService', () => {
   const validUser: UserLoginInformation = { username: 'validUser', password: 'validPassword' };
   const normalUser: UserLoginInformation = { username: 'normalUser', password: 'normalPassword' };
 
-  const unknownError = new ApolloError({ errorMessage: 'Unexpected error' });
   const jwtPayload: JwtPayload = {
     preferred_username: 'admin',
     given_name: 'Admin',
@@ -83,14 +81,6 @@ describe('AuthService', () => {
         expect(authService.user).toBeNull();
         expect(tokenService.login).toHaveBeenCalledWith(normalUser);
       });
-    });
-  });
-
-  describe('#isValidLogin', () => {
-    it('should call TokenService.login to validate credentials', () => {
-      authService.isValidLogin(normalUser);
-
-      expect(tokenService.login).toHaveBeenCalledWith(normalUser);
     });
   });
 });

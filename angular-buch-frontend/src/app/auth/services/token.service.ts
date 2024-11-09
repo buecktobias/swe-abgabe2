@@ -8,6 +8,7 @@ import { catchError, map } from 'rxjs/operators';
 import { LoginErrorType, LoginResult } from '../models/login-result.model';
 import { UserLoginInformation } from '../models/user-login-information.model';
 import { LoginResultFactory } from './login-result-factory.service';
+import { RefreshTokenGQL } from '../graphql/refresh-token.gql';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,7 @@ export class TokenService {
   constructor(
     private readonly loginResultFactory: LoginResultFactory,
     private readonly loginGQL: LoginGQL,
+    private readonly refreshTokenGQL: RefreshTokenGQL,
   ) {}
 
   login(userLoginInformation: UserLoginInformation): Observable<LoginResult> {
@@ -32,6 +34,17 @@ export class TokenService {
           return of(this.loginResultFactory.createUnSuccessfulLoginResult(LoginErrorType.WRONG_INPUT, 'Wrong username or password'));
         }
         return this.handleApplicationErrors(error);
+      }),
+    );
+  }
+
+  refresh(): Observable<SessionTokens | null> {
+    return this.refreshTokenGQL.mutate().pipe(
+      map((response: MutationResult<{ refresh: TokenResult }>) => {
+        if (!response.data?.refresh) {
+          return null;
+        }
+        return SessionTokens.fromTokenResult(response.data.refresh);
       }),
     );
   }
