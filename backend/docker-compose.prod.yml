@@ -1,4 +1,37 @@
 services:
+  nestjs:
+    environment:
+      - NODE_ENV=production
+    mem_limit: 4g
+    cpus: '4'
+
   keycloak:
+    ports: [ ]
+    mem_limit: 2g
     environment:
       - KC_FEATURES=admin-fine-grained-authz,authorization,login,client-policies,persistent-user-sessions
+    cpus: '4'
+    volumes:
+      - ./keycloak/nest-realm.prod.json:/opt/keycloak/data/import/nest-realm.json
+      - keycloak_data:/opt/keycloak/data
+    command:
+      - start-dev
+      - --import-realm
+
+  keycloak-setup:
+    restart: "no"
+    mem_limit: 128m
+    cpus: '1'
+
+  postgres:
+    ports: [ ]
+    mem_limit: 2g
+    cpus: '4'
+
+  pgadmin:
+    mem_limit: 1g
+    cpus: '2'
+    profiles: [ ]
+
+volumes:
+  keycloak_data:
