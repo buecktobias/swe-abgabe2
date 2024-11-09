@@ -3,27 +3,36 @@ import { TokenService } from './token.service';
 import { SessionTokens } from '../models/session-tokens.model';
 import { User } from '../models/user.model';
 import { UserLoginInformation } from '../models/user-login-information.model';
-import { Role } from '../models/role.model';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { EMPTY, Observable, of, timer } from 'rxjs';
 import { LoginErrorType, LoginMeta } from '../models/login-result.model';
 import { JwtService } from './jwt.service';
-import { LoggerService } from '../../shared/services/logging.service';
+import { Logger } from '../../shared/services/logger.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   public readonly refreshBufferSeconds = 5;
-  private sessionTokens: SessionTokens | null = null;
   private currentUser: User | null = null;
 
   constructor(
     private readonly tokenService: TokenService,
     private readonly jwtService: JwtService,
-    private readonly loggerService: LoggerService,
+    private readonly logger: Logger,
   ) {
     this.tryToRestoreSession();
+  }
+
+  private _sessionTokens: SessionTokens | null = null;
+
+  set sessionTokens(value: SessionTokens | null) {
+    this._sessionTokens = value;
+    if (value) {
+      localStorage.setItem('refreshToken', value.refreshToken);
+    } else {
+      localStorage.removeItem('refreshToken');
+    }
   }
 
   get user(): User | null {
@@ -31,25 +40,18 @@ export class AuthService {
   }
 
   get isLoggedIn(): boolean {
-    return this.sessionTokens !== null;
+    return this._sessionTokens !== null;
   }
 
   login(userLoginInformation: UserLoginInformation): Observable<LoginMeta> {
     return this.tokenService.login(userLoginInformation).pipe(
       map((result) => {
         if (result.meta.success && result.sessionTokens) {
-          this.sessionTokens = result.sessionTokens;
-          console.log('Login successful', this.sessionTokens);
-          this.saveRefreshToken();
+          this.logger.debug('Login successful');
+          this._sessionTokens = result.sessionTokens;
           this.setupAutoRefresh();
-          const jwtPayload = this.jwtService.decode(this.sessionTokens.accessToken);
-          this.currentUser = {
-            username: jwtPayload.preferred_username,
-            firstName: jwtPayload.given_name,
-            lastName: jwtPayload.family_name,
-            email: jwtPayload.email,
-            roles: new Set(jwtPayload.resource_access['nest-client'].roles as Role[]),
-          };
+          const jwtPayload = this.jwtService.decode(result.sessionTokens.accessToken);
+          this.currentUser = User.fromJWTPayload(jwtPayload);
         }
         return result.meta;
       }),
@@ -61,30 +63,23 @@ export class AuthService {
   }
 
   logout(): void {
-    this.loggerService.debug('Logging out');
-    this.sessionTokens = null;
+    this.logger.debug('Logging out');
+    this._sessionTokens = null;
     this.currentUser = null;
-    this.deleteRefreshToken();
   }
 
   private tryToRestoreSession(): void {
-    this.loggerService.debug('Restoring session');
+    this.logger.debug('Restoring session');
     const refreshToken = this.loadRefreshToken();
     if (!refreshToken) return;
 
     this.tokenService.refresh(refreshToken).subscribe({
       next: (newTokens) => {
         if (newTokens) {
-          this.sessionTokens = newTokens;
+          this._sessionTokens = newTokens;
           this.setupAutoRefresh();
-          const jwtPayload = this.jwtService.decode(this.sessionTokens.accessToken);
-          this.currentUser = {
-            username: jwtPayload.preferred_username,
-            firstName: jwtPayload.given_name,
-            lastName: jwtPayload.family_name,
-            email: jwtPayload.email,
-            roles: new Set(jwtPayload.resource_access['nest-client'].roles as Role[]),
-          };
+          const jwtPayload = this.jwtService.decode(this._sessionTokens.accessToken);
+          this.currentUser = User.fromJWTPayload(jwtPayload);
         } else {
           this.logout();
         }
@@ -95,34 +90,25 @@ export class AuthService {
     });
   }
 
-  private saveRefreshToken(): void {
-    if (!this.sessionTokens) return;
-    localStorage.setItem('refreshToken', this.sessionTokens.refreshToken);
-  }
-
-  private deleteRefreshToken(): void {
-    localStorage.removeItem('refreshToken');
-  }
-
   private loadRefreshToken(): string | null {
     return localStorage.getItem('refreshToken');
   }
 
   private setupAutoRefresh(): void {
-    if (!this.sessionTokens?.refreshToken) return;
+    if (!this._sessionTokens?.refreshToken) return;
 
-    const timeUntilRefreshInMs = (this.sessionTokens.accessTokenExpiresInSeconds - this.refreshBufferSeconds) * 1000;
+    const timeUntilRefreshInMs = (this._sessionTokens.accessTokenExpiresInSeconds - this.refreshBufferSeconds) * 1000;
 
     timer(timeUntilRefreshInMs)
       .pipe(
         switchMap(() => {
-          this.loggerService.debug('Auto Refreshing token');
+          this.logger.debug('Auto Refreshing token');
           // @ts-expect-error sessionTokens is not null
-          return this.tokenService.refresh(this.sessionTokens.refreshToken);
+          return this.tokenService.refresh(this._sessionTokens.refreshToken);
         }),
         tap((newTokens) => {
           if (newTokens) {
-            this.sessionTokens = newTokens;
+            this._sessionTokens = newTokens;
             this.setupAutoRefresh();
           } else {
             this.logout();

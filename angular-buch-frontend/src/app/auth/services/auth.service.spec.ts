@@ -7,7 +7,7 @@ import { SessionTokens } from '../models/session-tokens.model';
 import { UserLoginInformation } from '../models/user-login-information.model';
 import { LoginResultFactory } from './login-result-factory.service';
 import { JwtService } from './jwt.service';
-import { JwtPayload } from '../models/jwt-payload.model';
+import { JWTPayload } from '../models/jwt-payload.model';
 import { User } from '../models/user.model';
 import { Role } from '../models/role.model';
 import { LoginErrorType, LoginResult } from '../models/login-result.model';
@@ -27,7 +27,7 @@ describe('AuthService', () => {
   const normalUser: UserLoginInformation = { username: 'normalUser', password: 'normalPassword' };
   const accessTokenExpirationSeconds = 3600;
   const refreshTokenExpirationSeconds = 7200;
-  const jwtPayload: JwtPayload = {
+  const jwtPayload: JWTPayload = {
     preferred_username: 'admin',
     given_name: 'Admin',
     family_name: 'Nest',

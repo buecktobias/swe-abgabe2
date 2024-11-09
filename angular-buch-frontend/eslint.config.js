@@ -54,7 +54,7 @@ export default tseslint.config(
               { selector: 'default', format: ['camelCase'] },
               { selector: 'variableLike', format: ['camelCase'] },
               { selector: 'typeLike', format: ['PascalCase'] },
-              { selector: 'property', format: ['camelCase'] },
+              { selector: 'property', format: ['camelCase'], leadingUnderscore: 'allow' },
               { selector: 'enumMember', format: ['UPPER_CASE'] },
             ],
             'check-file/filename-naming-convention': [

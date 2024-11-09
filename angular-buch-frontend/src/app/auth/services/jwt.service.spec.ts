@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { JwtService } from './jwt.service';
-import { JwtPayload } from '../models/jwt-payload.model';
+import { JWTPayload } from '../models/jwt-payload.model';
 import { TestBed } from '@angular/core/testing';
 
 describe('JwtService', () => {
@@ -19,7 +19,7 @@ describe('JwtService', () => {
   });
 
   it('should encode and decode JWT', () => {
-    const jwtPayload: JwtPayload = {
+    const jwtPayload: JWTPayload = {
       preferred_username: 'admin',
       given_name: 'Admin',
       family_name: 'Nest',

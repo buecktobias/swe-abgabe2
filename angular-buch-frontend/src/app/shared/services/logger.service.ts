@@ -4,7 +4,7 @@ import { ENV_CONFIG, EnvironmentConfig, LogLevel } from '../../../environments/e
 @Injectable({
   providedIn: 'root',
 })
-export class LoggerService {
+export class Logger {
   constructor(@Inject(ENV_CONFIG) private readonly config: EnvironmentConfig) {}
 
   debug(message: string, ...optionalParams: never[]): void {
