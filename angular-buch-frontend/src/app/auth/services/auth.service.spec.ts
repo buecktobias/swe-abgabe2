@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { AuthService } from './auth.service';
 import { TokenService } from './token.service';
 import { of } from 'rxjs';
@@ -10,10 +10,12 @@ import { JwtService } from './jwt.service';
 import { JwtPayload } from '../models/jwt-payload.model';
 import { User } from '../models/user.model';
 import { Role } from '../models/role.model';
-import { LoginErrorType } from '../models/login-result.model';
+import { LoginErrorType, LoginResult } from '../models/login-result.model';
+import { ENV_CONFIG, LogLevel } from '../../../environments/environment.config';
 
 class MockTokenService {
   login = jasmine.createSpy();
+  refresh = jasmine.createSpy();
 }
 
 describe('AuthService', () => {
@@ -23,7 +25,8 @@ describe('AuthService', () => {
   const loginResultFactory = new LoginResultFactory();
   const validUser: UserLoginInformation = { username: 'validUser', password: 'validPassword' };
   const normalUser: UserLoginInformation = { username: 'normalUser', password: 'normalPassword' };
-
+  const accessTokenExpirationSeconds = 3600;
+  const refreshTokenExpirationSeconds = 7200;
   const jwtPayload: JwtPayload = {
     preferred_username: 'admin',
     given_name: 'Admin',
@@ -43,16 +46,29 @@ describe('AuthService', () => {
     roles: new Set(jwtPayload.resource_access['nest-client'].roles as Role[]),
   };
   let mockJwt: string;
+  let successfulLoginResult: LoginResult;
+  const refreshedSessionTokens: SessionTokens = new SessionTokens('', accessTokenExpirationSeconds, '', refreshTokenExpirationSeconds);
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [AuthService, { provide: TokenService, useClass: MockTokenService }, JwtService],
+      providers: [
+        AuthService,
+        { provide: TokenService, useClass: MockTokenService },
+        JwtService,
+        {
+          provide: ENV_CONFIG,
+          useValue: { logLevel: LogLevel.DEBUG },
+        },
+      ],
     });
-
+    spyOn(localStorage, 'getItem').and.returnValue(null);
     authService = TestBed.inject(AuthService);
     jwtService = TestBed.inject(JwtService);
     tokenService = TestBed.inject(TokenService) as unknown as MockTokenService;
     mockJwt = jwtService.encode(jwtPayload);
+    successfulLoginResult = loginResultFactory.success(
+      new SessionTokens(mockJwt, accessTokenExpirationSeconds, 'refreshToken', refreshTokenExpirationSeconds),
+    );
   });
 
   it('should be created', () => {
@@ -61,8 +77,7 @@ describe('AuthService', () => {
 
   describe('#login', () => {
     it('should decode JWT and set the User correctly when credentials are valid', () => {
-      const decodedTokens = new SessionTokens(mockJwt, 3600, '', 7200);
-      tokenService.login.and.returnValue(of(loginResultFactory.createSuccessfulLoginResult(decodedTokens)));
+      tokenService.login.and.returnValue(of(successfulLoginResult));
 
       authService.login(validUser).subscribe((result) => {
         expect(result.success).toBeTrue();
@@ -73,7 +88,7 @@ describe('AuthService', () => {
     });
 
     it('should handle unexpected errors without setting session tokens', () => {
-      tokenService.login.and.returnValue(of(loginResultFactory.createUnSuccessfulLoginResult(LoginErrorType.GRAPH_QL, 'graphql error')));
+      tokenService.login.and.returnValue(of(loginResultFactory.failure(LoginErrorType.GRAPH_QL, 'graphql error')));
 
       authService.login(normalUser).subscribe((result) => {
         expect(result.success).toBeFalse();
@@ -82,5 +97,32 @@ describe('AuthService', () => {
         expect(tokenService.login).toHaveBeenCalledWith(normalUser);
       });
     });
+  });
+
+  describe('#setupAutoRefresh', () => {
+    it('should refresh the token before it expires', fakeAsync(() => {
+      tokenService.login.and.returnValue(of(successfulLoginResult));
+      tokenService.refresh.and.returnValue(of(refreshedSessionTokens));
+
+      authService.login(validUser).subscribe();
+
+      tick((accessTokenExpirationSeconds - authService.refreshBufferSeconds) * 1000);
+
+      expect(tokenService.refresh).toHaveBeenCalledWith('refreshToken');
+      expect(authService.isLoggedIn).toBeTrue();
+    }));
+
+    it('should log out if token refresh fails', fakeAsync(() => {
+      tokenService.login.and.returnValue(of(successfulLoginResult));
+      tokenService.refresh.and.returnValue(of(null));
+
+      authService.login(validUser).subscribe();
+
+      tick((accessTokenExpirationSeconds - authService.refreshBufferSeconds) * 1000);
+      tick(1000);
+
+      expect(authService.isLoggedIn).toBeFalse();
+      expect(authService.user).toBeNull();
+    }));
   });
 });

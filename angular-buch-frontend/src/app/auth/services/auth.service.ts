@@ -8,18 +8,20 @@ import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { EMPTY, Observable, of, timer } from 'rxjs';
 import { LoginErrorType, LoginMeta } from '../models/login-result.model';
 import { JwtService } from './jwt.service';
+import { LoggerService } from '../../shared/services/logging.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  public readonly refreshBufferSeconds = 5;
   private sessionTokens: SessionTokens | null = null;
   private currentUser: User | null = null;
-  private readonly refreshBufferTime = 5;
 
   constructor(
     private readonly tokenService: TokenService,
     private readonly jwtService: JwtService,
+    private readonly loggerService: LoggerService,
   ) {
     this.tryToRestoreSession();
   }
@@ -59,14 +61,14 @@ export class AuthService {
   }
 
   logout(): void {
+    this.loggerService.debug('Logging out');
     this.sessionTokens = null;
     this.currentUser = null;
     this.deleteRefreshToken();
   }
 
   private tryToRestoreSession(): void {
-    console.log('Restoring session');
-    console.log('Session tokens:', this.sessionTokens);
+    this.loggerService.debug('Restoring session');
     const refreshToken = this.loadRefreshToken();
     if (!refreshToken) return;
 
@@ -109,13 +111,12 @@ export class AuthService {
   private setupAutoRefresh(): void {
     if (!this.sessionTokens?.refreshToken) return;
 
-    const timeUntilRefreshInMs = (this.sessionTokens.accessTokenExpiresInSeconds - this.refreshBufferTime) * 1000;
+    const timeUntilRefreshInMs = (this.sessionTokens.accessTokenExpiresInSeconds - this.refreshBufferSeconds) * 1000;
 
     timer(timeUntilRefreshInMs)
       .pipe(
         switchMap(() => {
-          console.log('Refreshing session');
-          console.log('Session tokens:', this.sessionTokens);
+          this.loggerService.debug('Auto Refreshing token');
           // @ts-expect-error sessionTokens is not null
           return this.tokenService.refresh(this.sessionTokens.refreshToken);
         }),

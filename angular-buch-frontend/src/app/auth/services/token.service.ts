@@ -25,13 +25,13 @@ export class TokenService {
     return this.loginGQL.mutate({ username, password }).pipe(
       map((response: MutationResult<{ token: TokenResult }>) => {
         if (!response.data?.token) {
-          return this.loginResultFactory.createUnSuccessfulLoginResult(LoginErrorType.UNKNOWN);
+          return this.loginResultFactory.failure(LoginErrorType.UNKNOWN);
         }
-        return this.loginResultFactory.createSuccessfulLoginResult(SessionTokens.fromTokenResult(response.data.token));
+        return this.loginResultFactory.success(SessionTokens.fromTokenResult(response.data.token));
       }),
       catchError((error: ApolloError) => {
         if (this.isBadUserInputError(error)) {
-          return of(this.loginResultFactory.createUnSuccessfulLoginResult(LoginErrorType.WRONG_INPUT, 'Wrong username or password'));
+          return of(this.loginResultFactory.failure(LoginErrorType.WRONG_INPUT, 'Wrong username or password'));
         }
         return this.handleApplicationErrors(error);
       }),
@@ -57,13 +57,13 @@ export class TokenService {
   private handleApplicationErrors(error: ApolloError): Observable<LoginResult> {
     if (error.graphQLErrors.length > 0) {
       const messages = error.graphQLErrors.map((e) => e.message).join('\n');
-      return of(this.loginResultFactory.createUnSuccessfulLoginResult(LoginErrorType.GRAPH_QL, messages));
+      return of(this.loginResultFactory.failure(LoginErrorType.GRAPH_QL, messages));
     }
 
     if (error.networkError) {
-      return of(this.loginResultFactory.createUnSuccessfulLoginResult(LoginErrorType.NETWORK, error.message));
+      return of(this.loginResultFactory.failure(LoginErrorType.NETWORK, error.message));
     }
 
-    return of(this.loginResultFactory.createUnSuccessfulLoginResult(LoginErrorType.UNKNOWN, error.message));
+    return of(this.loginResultFactory.failure(LoginErrorType.UNKNOWN, error.message));
   }
 }

@@ -3,6 +3,7 @@ import { of } from 'rxjs';
 import { AppComponent } from './app.component';
 import { BookService } from './books/services/book.service';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from './auth/services/auth.service';
 
 describe('AppComponent', () => {
   const bookServiceMock = {
@@ -18,6 +19,14 @@ describe('AppComponent', () => {
           provide: ActivatedRoute,
           useValue: {
             snapshot: { params: {} },
+          },
+        },
+        {
+          provide: AuthService,
+          useValue: {
+            isLoggedIn: true,
+            user: { username: 'testUser' },
+            logout: jasmine.createSpy(),
           },
         },
       ],

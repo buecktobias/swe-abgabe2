@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { NavbarComponent } from './navbar.component';
+import { AuthService } from '../../../auth/services/auth.service';
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent;
@@ -14,6 +15,14 @@ describe('NavbarComponent', () => {
           provide: ActivatedRoute,
           useValue: {
             snapshot: { params: {} },
+          },
+        },
+        {
+          provide: AuthService,
+          useValue: {
+            isLoggedIn: true,
+            user: { username: 'testUser' },
+            logout: jasmine.createSpy(),
           },
         },
       ],

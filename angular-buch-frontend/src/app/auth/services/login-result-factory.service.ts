@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class LoginResultFactory {
-  createSuccessfulLoginResult(sessionTokens: SessionTokens): LoginResult {
+  success(sessionTokens: SessionTokens): LoginResult {
     return {
       sessionTokens,
       meta: {
@@ -17,7 +17,7 @@ export class LoginResultFactory {
     };
   }
 
-  createUnSuccessfulLoginResult(errorType: LoginErrorType, message = ''): LoginResult {
+  failure(errorType: LoginErrorType, message = ''): LoginResult {
     return {
       sessionTokens: null,
       meta: {
