@@ -36,7 +36,6 @@ export default tseslint.config(
               { type: 'element', prefix: 'app', style: 'kebab-case' },
             ],
 
-            // Formatting Rules (Prettier)
             'prettier/prettier': [
               'error',
               {
@@ -48,7 +47,6 @@ export default tseslint.config(
             'no-inline-comments': 'warn',
             'no-warning-comments': ['warn', { terms: ['todo', 'fixme'], location: 'anywhere' }],
 
-            // Naming Conventions
             '@typescript-eslint/naming-convention': [
               'warn',
               { selector: 'default', format: ['camelCase'] },
@@ -77,7 +75,16 @@ export default tseslint.config(
               { '**/models/!(*.model*).ts': '*.model.ts' },
             ],
 
-            // Code Structure and Complexity Constraints
+            'no-magic-numbers': [
+              'warn',
+              {
+                ignore: [0],
+                ignoreArrayIndexes: true,
+                ignoreClassFieldInitialValues: true,
+                enforceConst: true,
+                detectObjects: false,
+              },
+            ],
             'max-lines': [
               'warn',
               { max: 300, skipBlankLines: true, skipComments: true },
@@ -92,7 +99,6 @@ export default tseslint.config(
             '@typescript-eslint/no-extraneous-class': 'warn',
             '@typescript-eslint/no-explicit-any': 'error',
 
-            // File and Folder Structure Rules
             'check-file/no-index': 'error',
             'check-file/folder-match-with-fex': [
               'warn',
@@ -105,7 +111,6 @@ export default tseslint.config(
           },
         },
 
-        // File-specific overrides
         {
           files: ['src/app/app.component.ts'],
           rules: {
@@ -116,10 +121,10 @@ export default tseslint.config(
           files: ['**/*.spec.ts'],
           rules: {
             'max-lines-per-function': 'off',
+            'no-magic-numbers': 'off',
           },
         },
 
-        // HTML-specific rules
         {
           files: ['**/*.html'],
           extends: [

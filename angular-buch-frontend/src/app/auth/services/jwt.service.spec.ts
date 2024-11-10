@@ -2,13 +2,14 @@
 import { JwtService } from './jwt.service';
 import { JWTPayload } from '../models/jwt-payload.model';
 import { TestBed } from '@angular/core/testing';
+import { ENV_CONFIG, LogLevel } from '../../../environments/environment.config';
 
 describe('JwtService', () => {
   let jwtService: JwtService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [JwtService],
+      providers: [JwtService, { provide: ENV_CONFIG, useValue: { logLevel: LogLevel.DEBUG } }],
     });
 
     jwtService = TestBed.inject(JwtService);

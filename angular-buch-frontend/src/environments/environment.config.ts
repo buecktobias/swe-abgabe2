@@ -1,9 +1,9 @@
 import { InjectionToken } from '@angular/core';
 
 export enum LogLevel {
-  DEBUG = 1,
-  WARN = 2,
-  ERROR = 3,
+  DEBUG = 'DEBUG',
+  WARN = 'WARN',
+  ERROR = 'ERROR',
 }
 
 export interface EnvironmentConfig {

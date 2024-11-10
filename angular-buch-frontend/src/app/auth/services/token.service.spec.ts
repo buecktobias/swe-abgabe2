@@ -38,12 +38,7 @@ describe('TokenService', () => {
         refresh_expires_in: 7200,
       },
     };
-    const sessionTokens = new SessionTokens(
-      mockTokenResponse.token.access_token,
-      mockTokenResponse.token.expires_in,
-      mockTokenResponse.token.refresh_token,
-      mockTokenResponse.token.refresh_expires_in,
-    );
+    const sessionTokens = SessionTokens.fromTokenResult(mockTokenResponse.token);
 
     tokenService.login(validUser).subscribe({
       next: (result) => {

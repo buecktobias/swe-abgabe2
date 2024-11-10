@@ -1,6 +1,7 @@
 import { LoginResultFactory } from './login-result-factory.service';
 import { SessionTokens } from '../models/session-tokens.model';
 import { LoginErrorType, LoginResult } from '../models/login-result.model';
+import { TimeDifference } from '../../shared/models/time-difference.model';
 
 describe('LoginResultFactory', () => {
   let factory: LoginResultFactory;
@@ -11,7 +12,12 @@ describe('LoginResultFactory', () => {
 
   describe('success', () => {
     it('should create a successful LoginResult with the provided session tokens', () => {
-      const mockSessionTokens: SessionTokens = new SessionTokens('', 0, '', 0);
+      const mockSessionTokens: SessionTokens = new SessionTokens(
+        '',
+        TimeDifference.fromMilliseconds(0),
+        '',
+        TimeDifference.fromMilliseconds(0),
+      );
 
       const result: LoginResult = factory.success(mockSessionTokens);
 

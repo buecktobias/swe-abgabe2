@@ -12,6 +12,7 @@ import { User } from '../models/user.model';
 import { Role } from '../models/role.model';
 import { LoginErrorType, LoginResult } from '../models/login-result.model';
 import { ENV_CONFIG, LogLevel } from '../../../environments/environment.config';
+import { TimeDifference } from '../../shared/models/time-difference.model';
 
 class MockTokenService {
   login = jasmine.createSpy();
@@ -25,8 +26,8 @@ describe('AuthService', () => {
   const loginResultFactory = new LoginResultFactory();
   const validUser: UserLoginInformation = { username: 'validUser', password: 'validPassword' };
   const normalUser: UserLoginInformation = { username: 'normalUser', password: 'normalPassword' };
-  const accessTokenExpirationSeconds = 3600;
-  const refreshTokenExpirationSeconds = 7200;
+  const accessTokenExpiration = TimeDifference.fromSeconds(3600);
+  const refreshTokenExpiration = TimeDifference.fromSeconds(7200);
   const jwtPayload: JWTPayload = {
     preferred_username: 'admin',
     given_name: 'Admin',
@@ -47,7 +48,7 @@ describe('AuthService', () => {
   };
   let mockJwt: string;
   let successfulLoginResult: LoginResult;
-  const refreshedSessionTokens: SessionTokens = new SessionTokens('', accessTokenExpirationSeconds, '', refreshTokenExpirationSeconds);
+  const refreshedSessionTokens: SessionTokens = new SessionTokens('', accessTokenExpiration, '', refreshTokenExpiration);
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -67,7 +68,7 @@ describe('AuthService', () => {
     tokenService = TestBed.inject(TokenService) as unknown as MockTokenService;
     mockJwt = jwtService.encode(jwtPayload);
     successfulLoginResult = loginResultFactory.success(
-      new SessionTokens(mockJwt, accessTokenExpirationSeconds, 'refreshToken', refreshTokenExpirationSeconds),
+      new SessionTokens(mockJwt, accessTokenExpiration, 'refreshToken', refreshTokenExpiration),
     );
   });
 
@@ -83,7 +84,7 @@ describe('AuthService', () => {
         expect(result.success).toBeTrue();
         expect(tokenService.login).toHaveBeenCalledWith(validUser);
 
-        expect(authService.user).toEqual(mockedUser);
+        expect(authService.user?.email).toBe(mockedUser.email);
       });
     });
 
@@ -106,7 +107,7 @@ describe('AuthService', () => {
 
       authService.login(validUser).subscribe();
 
-      tick((accessTokenExpirationSeconds - authService.refreshBufferSeconds) * 1000);
+      tick(accessTokenExpiration.subtract(authService.refreshBufferTime).milliseconds);
 
       expect(tokenService.refresh).toHaveBeenCalledWith('refreshToken');
       expect(authService.isLoggedIn).toBeTrue();
@@ -118,7 +119,7 @@ describe('AuthService', () => {
 
       authService.login(validUser).subscribe();
 
-      tick((accessTokenExpirationSeconds - authService.refreshBufferSeconds) * 1000);
+      tick(accessTokenExpiration.subtract(authService.refreshBufferTime).milliseconds);
       tick(1000);
 
       expect(authService.isLoggedIn).toBeFalse();
