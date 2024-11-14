@@ -57,3 +57,6 @@ cd backend
 docker compose up -d
 ```
 
+## Typescript Documentation
+
+[TSDocs](docs/tsdoc/index.html)
