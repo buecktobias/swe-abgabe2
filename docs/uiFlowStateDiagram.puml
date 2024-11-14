@@ -1,0 +1,33 @@
+@startuml
+
+[*] --> Guest : Start
+
+state User as "User" {
+  [*] --> BookGrid
+  BookGrid --> BookDetails : Click on Book
+  BookDetails --> BookEdit : Click on Edit
+  BookEdit --> BookGrid : Save or Cancel
+
+}
+
+state Admin as "Admin" {
+  [*] --> ABookGrid
+  ABookGrid --> ABookCreate : Click on Create Book
+  ABookGrid --> ABookDetails : Click on Book
+  ABookDetails --> ABookEdit : Click on Edit
+  ABookDetails --> ABookCreate : Click on Create
+  ABookEdit --> ABookGrid : Save or Cancel
+  ABookCreate --> ABookGrid : Save or Cancel
+}
+
+state Guest as "Guest" {
+  [*] --> GBookGrid
+  GBookGrid --> GBookDetails : Click on Book
+}
+
+Admin --> Guest : Logout
+User --> Guest : Logout
+
+Guest --> User : Login
+Guest --> Admin : Login
+@enduml

@@ -65,6 +65,7 @@
         "karma-spec-reporter": "^0.0.36",
         "npm-check-updates": "^17.1.9",
         "prettier": "^3.3.3",
+        "typedoc": "^0.26.11",
         "typescript": "5.5.4",
         "typescript-eslint": "^8.12.2"
     }
