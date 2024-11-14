@@ -1,23 +1,32 @@
 @import 'bootstrap/scss/functions';
 @import 'bootstrap/scss/variables';
 
-$primary: #07bed9;
+$primary: #93f5f8;
 $secondary: #a5a5a5;
 $success: #43a047;
+$warning: #fbc02d;
 $danger: #d32f2f;
 $dark: #2b3741;
 $body-bg: #ddd6d5;
 $body-color: #000000;
-$card-bg: #1e1e1e;
-$card-border-color: darken($card-bg, 5%);
 $text-muted: #b3b3b3;
 
+$star-rating-color: #de7921;
 $theme-colors: (
         'primary': $primary,
         'secondary': $secondary,
         'success': $success,
+        'warning': $warning,
         'danger': $danger,
         'light': $body-bg,
         'dark': $dark,
 );
+
+.filled-star {
+  color: $star-rating-color;
+}
+
+.empty-star {
+  color: $star-rating-color;
+}
 @import 'bootstrap/scss/bootstrap';

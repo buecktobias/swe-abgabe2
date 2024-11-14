@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { BookListComponent } from '../../books/components/book-list/book-list.component';
+import { BookGridComponent } from '../../books/components/book-grid/book-grid.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [BookListComponent],
+  imports: [BookGridComponent],
   templateUrl: './home.component.html',
 }) // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class HomeComponent {}

@@ -7,9 +7,9 @@ import { Buch } from '../../models/buch.model';
   selector: 'app-book-list',
   standalone: true,
   imports: [BookViewComponent],
-  templateUrl: './book-list.component.html',
+  templateUrl: './book-grid.component.html',
 })
-export class BookListComponent implements OnInit {
+export class BookGridComponent implements OnInit {
   books: Buch[] = [];
 
   constructor(private readonly bookService: BookService) {}

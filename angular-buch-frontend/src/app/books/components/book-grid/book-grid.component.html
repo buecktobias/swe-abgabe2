@@ -1,0 +1,7 @@
+<div class="container">
+  <div class="row gy-4 row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4">
+    @for (book of books; track book.id) {
+      <app-book-view [book]="book"></app-book-view>
+    }
+  </div>
+</div>

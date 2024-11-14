@@ -1,0 +1,9 @@
+<div class="d-inline-flex align-items-center">
+  @for (starIndex of starIndexes; track starIndex) {
+    @if (starIndex < rating) {
+      <fa-icon [icon]="faStarSolid" class="filled-star"></fa-icon>
+    } @else {
+      <fa-icon [icon]="faStarRegular" class="empty-star"></fa-icon>
+    }
+  }
+</div>

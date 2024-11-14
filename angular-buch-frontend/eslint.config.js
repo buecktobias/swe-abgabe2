@@ -54,6 +54,12 @@ export default tseslint.config(
               { selector: 'typeLike', format: ['PascalCase'] },
               { selector: 'property', format: ['camelCase'], leadingUnderscore: 'allow' },
               { selector: 'enumMember', format: ['UPPER_CASE'] },
+              {
+                selector: 'parameter',
+                modifiers: ['unused'],
+                format: null,
+                custom: { regex: '^_.*$', match: true },
+              },
             ],
             'check-file/filename-naming-convention': [
               'error',
