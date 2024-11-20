@@ -9,6 +9,7 @@ import { LoginErrorType, LoginMeta } from '../models/login-result.model';
 import { JwtService } from './jwt.service';
 import { Logger } from '../../shared/services/logger.service';
 import { TimeDifference } from '../../shared/models/time-difference.model';
+import { Role } from '../models/role.model';
 
 @Injectable({
   providedIn: 'root',
@@ -51,6 +52,14 @@ export class AuthService {
     }
   }
 
+  public hasUserAccess(): boolean {
+    return this.hasRole(Role.USER) || this.hasRole(Role.ADMIN);
+  }
+
+  public hasAdminAccess(): boolean {
+    return this.hasRole(Role.ADMIN);
+  }
+
   login(userLoginInformation: UserLoginInformation): Observable<LoginMeta> {
     return this.tokenService.login(userLoginInformation).pipe(
       map((result) => {
@@ -73,6 +82,10 @@ export class AuthService {
     this.logger.debug('Logging out');
     this._sessionTokens = null;
     this.currentUser = null;
+  }
+
+  private hasRole(role: Role): boolean {
+    return this.user?.roles.has(role) ?? false;
   }
 
   private tryToRestoreSession(): void {

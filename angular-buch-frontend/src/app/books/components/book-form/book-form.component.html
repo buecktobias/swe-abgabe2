@@ -1,1 +1,128 @@
-<p>book-form works!</p>
+<div class="container my-4">
+  <!--suppress AngularUndefinedBinding -->
+  <form (ngSubmit)="onSubmit()" [formGroup]="bookForm">
+
+    <div class="mb-3">
+      <label class="form-label" for="titel">Title</label>
+      <input
+              [class]="{ 'is-invalid': bookForm.get('titel')?.invalid && bookForm.get('titel')?.touched }"
+              class="form-control"
+              formControlName="titel"
+              id="titel"
+              type="text"
+      />
+      @if (bookForm.get('titel')?.invalid && bookForm.get('titel')?.touched) {
+        <div class="invalid-feedback">Title is required.</div>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="isbn">ISBN</label>
+      <input
+              [class]="{ 'is-invalid': bookForm.get('isbn')?.invalid && bookForm.get('isbn')?.touched }"
+              class="form-control"
+              formControlName="isbn"
+              id="isbn"
+              type="text"
+      />
+      @if (bookForm.get('isbn')?.invalid && bookForm.get('isbn')?.touched) {
+        <div class="invalid-feedback">ISBN is required and must be at least 10 characters.</div>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="rating">Rating</label>
+      <input class="form-control" formControlName="rating" id="rating" max="5" type="number">
+      @if (bookForm.get('rating')?.invalid && bookForm.get('rating')?.touched) {
+        <div class="invalid-feedback">Rating must be between 0 and 5.</div>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="preis">Price (€)</label>
+      <input
+              [class]="{ 'is-invalid': bookForm.get('preis')?.invalid && bookForm.get('preis')?.touched }"
+              class="form-control"
+              formControlName="preis"
+              id="preis"
+              type="number"
+      />
+      @if (bookForm.get('preis')?.invalid && bookForm.get('preis')?.touched) {
+        <div class="invalid-feedback">Price must be a positive number.</div>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="art">Type</label>
+      <select class="form-select" formControlName="art" id="art">
+        <option value="">Select Type</option>
+      </select>
+    </div>
+
+    <div class="form-check mb-3">
+      <input class="form-check-input" formControlName="lieferbar" id="lieferbar" type="checkbox" />
+      <label class="form-check-label" for="lieferbar">Available</label>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="datum">Publication Date</label>
+      <input
+              [class]="{ 'is-invalid': bookForm.get('datum')?.invalid && bookForm.get('datum')?.touched }"
+              class="form-control"
+              formControlName="datum"
+              id="datum"
+              type="date"
+      />
+      @if (bookForm.get('datum')?.invalid && bookForm.get('datum')?.touched) {
+        <div class="invalid-feedback">Date is required.</div>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="homepage">Homepage</label>
+      <input
+              [class]="{ 'is-invalid': bookForm.get('homepage')?.invalid && bookForm.get('homepage')?.touched }"
+              class="form-control"
+              formControlName="homepage"
+              id="homepage"
+              type="url"
+      />
+      @if (bookForm.get('homepage')?.invalid && bookForm.get('homepage')?.touched) {
+        <div class="invalid-feedback">Must be a valid URL.</div>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="schlagwoerter">Keywords</label>
+      <input
+              class="form-control"
+              formControlName="schlagwoerter"
+              id="schlagwoerter"
+              placeholder="Comma-separated keywords"
+              type="text"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="version">Version</label>
+      <input
+              class="form-control"
+              formControlName="version"
+              id="version"
+              type="number"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="rabatt">Discount</label>
+      <input
+              class="form-control"
+              formControlName="rabatt"
+              id="rabatt"
+              type="text"
+      />
+    </div>
+
+    <button class="btn btn-primary" type="submit">Save</button>
+  </form>
+</div>

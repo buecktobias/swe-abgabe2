@@ -14,7 +14,8 @@
         "test:headless-dev": "ng test --browsers=ChromeHeadless --reporters spec",
         "lint": "ng lint",
         "lint:fix": "ng lint --fix",
-        "docs:html": "typedoc --tsconfig tsconfig.docs.json --entryPoints src --entryPointStrategy expand --out ../docs/tsdoc"
+        "docs:html": "typedoc --tsconfig tsconfig.docs.json --exclude \"**/*+(index|.spec|.e2e).ts\" --entryPoints src --entryPointStrategy expand --out ../docs/tsdoc",
+        "zip": "node zipProject.js"
     },
     "private": true,
     "dependencies": {
@@ -51,6 +52,7 @@
         "@typescript-eslint/eslint-plugin": "^8.12.2",
         "@typescript-eslint/parser": "^8.12.2",
         "angular-eslint": "18.4.0",
+        "archiver": "^7.0.1",
         "eslint": "^9.14.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-check-file": "^2.8.0",

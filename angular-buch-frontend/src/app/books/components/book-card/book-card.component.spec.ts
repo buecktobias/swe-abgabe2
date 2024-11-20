@@ -2,21 +2,21 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-import { BookViewComponent } from './book-view.component';
+import { BookCardComponent } from './book-card.component';
 import { mockBooks } from '../../mocks/books.mock';
 
-describe('BookViewComponent', () => {
-  let component: BookViewComponent;
-  let fixture: ComponentFixture<BookViewComponent>;
+describe('BookCardComponent', () => {
+  let component: BookCardComponent;
+  let fixture: ComponentFixture<BookCardComponent>;
   let debugElement: DebugElement;
   const mockedBook = mockBooks[0];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BookViewComponent],
+      imports: [BookCardComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(BookViewComponent);
+    fixture = TestBed.createComponent(BookCardComponent);
     component = fixture.componentInstance;
     debugElement = fixture.debugElement;
     component.book = mockedBook;

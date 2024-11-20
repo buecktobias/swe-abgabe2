@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FontAwesomeModule, SizeProp } from '@fortawesome/angular-fontawesome';
 import { faStar as faStarSolid } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 
@@ -11,6 +11,7 @@ import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 })
 export class StarRatingComponent implements OnInit {
   @Input({ required: true }) rating = 0;
+  @Input() size: SizeProp = 'lg';
   protected faStarSolid = faStarSolid;
   protected faStarRegular = faStarRegular;
 

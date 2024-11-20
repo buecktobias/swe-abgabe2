@@ -9,10 +9,9 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
 @Component({
   selector: 'app-book-view',
   standalone: true,
-  imports: [FontAwesomeModule, StarRatingComponent, RouterLink],
-  templateUrl: './book-view.component.html',
+  imports: [FontAwesomeModule, StarRatingComponent, RouterLink], templateUrl: './book-card.component.html',
 })
-export class BookViewComponent {
+export class BookCardComponent {
   @Input({ required: true }) book: Buch | undefined;
   faBook = faBook;
   faBarcode = faBarcode;

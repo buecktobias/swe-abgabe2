@@ -1,0 +1,75 @@
+@startuml
+skinparam class {
+    BackgroundColor<<Service>> LightBlue
+    BorderColor<<Service>> DarkBlue
+}
+
+skinparam class {
+    BackgroundColor<<ValueObject>> LightYellow
+    BorderColor<<ValueObject>> DarkOrange
+}
+
+component AppComponent{
+}
+
+component BookFormComponent {
+}
+component BookGridComponent{
+}
+component BookViewComponent {
+}
+
+component BookDetailComponent{
+}
+
+component BookDetailViewComponent{
+}
+
+component BookEditComponent{
+}
+
+component BookCreateComponent{
+}
+
+component HomeComponent{
+}
+component LoginComponent{
+}
+component NavbarComponent{
+}
+
+interface AuthService{
+}
+interface JWTService
+interface TokenService
+interface BookService
+
+class User{
+}
+class SessionTokens{
+}
+class Book {
+}
+
+AppComponent *-- NavbarComponent
+AppComponent *-- HomeComponent
+HomeComponent *-- BookGridComponent
+BookGridComponent *-- BookViewComponent
+BookDetailComponent *-- BookDetailViewComponent
+BookDetailComponent *-- BookEditComponent
+BookDetailComponent *-- BookCreateComponent
+
+BookEditComponent *-- BookFormComponent
+BookCreateComponent *-- BookFormComponent
+
+LoginComponent ..> AuthService : "Uses for Auth"
+NavbarComponent ..> AuthService : "Login Status"
+BookGridComponent ..> BookService : "Fetches Book Data"
+AuthService ..> JWTService
+AuthService ..> TokenService
+AuthService -- User
+TokenService -- SessionTokens
+JWTService -- SessionTokens
+BookService -- Book
+
+@enduml
