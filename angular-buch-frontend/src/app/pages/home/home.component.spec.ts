@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HomeComponent } from './home.component';
 import { BookService } from '../../books/services/book.service';
 import { ApolloTestingModule } from 'apollo-angular/testing';
+import { ActivatedRoute } from '@angular/router';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -11,7 +12,7 @@ describe('HomeComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HomeComponent, ApolloTestingModule],
-      providers: [BookService],
+      providers: [BookService, { provide: ActivatedRoute, useValue: { snapshot: { params: {} } } }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HomeComponent);

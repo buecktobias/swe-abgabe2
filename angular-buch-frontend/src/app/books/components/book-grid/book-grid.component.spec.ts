@@ -4,8 +4,9 @@ import { BookGridComponent } from './book-grid.component';
 import { BookService } from '../../services/book.service';
 import { of } from 'rxjs';
 import { mockBooks } from '../../mocks/books.mock';
+import { ActivatedRoute } from '@angular/router';
 
-describe('BookListComponent', () => {
+describe('BookGridComponent', () => {
   let component: BookGridComponent;
   let fixture: ComponentFixture<BookGridComponent>;
   const bookServiceMock = {
@@ -15,7 +16,13 @@ describe('BookListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [BookGridComponent],
-      providers: [{ provide: BookService, useValue: bookServiceMock }],
+      providers: [
+        { provide: BookService, useValue: bookServiceMock },
+        {
+          provide: ActivatedRoute,
+          useValue: { snapshot: { params: {} } },
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(BookGridComponent);

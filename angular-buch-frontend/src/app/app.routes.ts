@@ -7,8 +7,14 @@ import { BookCreateComponent } from './pages/book-create/book-create.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'login', component: LoginComponent }, { path: 'book/:id/view', component: BookDetailViewComponent }, {
+  { path: 'login', component: LoginComponent },
+  {
+    path: 'book/:id/view',
+    component: BookDetailViewComponent,
+  },
+  {
     path: 'book/:id/edit',
     component: BookEditComponent,
-  }, { path: 'book/create', component: BookCreateComponent },
+  },
+  { path: 'book/create', component: BookCreateComponent },
 ];

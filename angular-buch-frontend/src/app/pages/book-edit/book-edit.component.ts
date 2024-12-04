@@ -6,13 +6,19 @@ import { BookFormComponent } from '../../books/components/book-form/book-form.co
 import { Logger } from '../../shared/services/logger.service';
 
 @Component({
-  selector: 'app-book-edit', standalone: true, imports: [BookFormComponent], templateUrl: './book-edit.component.html',
+  selector: 'app-book-edit',
+  standalone: true,
+  imports: [BookFormComponent],
+  templateUrl: './book-edit.component.html',
 })
 export class BookEditComponent {
   protected book: Buch | undefined;
 
-  constructor(private readonly bookService: BookService, protected readonly authService: AuthService, private readonly logger: Logger) {
-  }
+  constructor(
+    private readonly bookService: BookService,
+    protected readonly authService: AuthService,
+    private readonly logger: Logger,
+  ) {}
 
   @Input() set id(bookId: string) {
     this.fetchBookDetails(+bookId);

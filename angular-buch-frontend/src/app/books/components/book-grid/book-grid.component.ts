@@ -5,8 +5,9 @@ import { Buch } from '../../models/buch.model';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-book-list',
-  standalone: true, imports: [BookCardComponent, RouterLink],
+  selector: 'app-book-grid',
+  standalone: true,
+  imports: [BookCardComponent, RouterLink],
   templateUrl: './book-grid.component.html',
 })
 export class BookGridComponent implements OnInit {

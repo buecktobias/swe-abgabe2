@@ -5,7 +5,9 @@ import { Art } from '../../models/art.model';
 
 @Component({
   selector: 'app-book-form',
-  templateUrl: './book-form.component.html', imports: [ReactiveFormsModule], standalone: true,
+  templateUrl: './book-form.component.html',
+  imports: [ReactiveFormsModule],
+  standalone: true,
 })
 export class BookFormComponent implements OnInit {
   @Input() book: Buch | null = null;

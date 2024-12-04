@@ -3,19 +3,21 @@ import { Buch } from '../../books/models/buch.model';
 import { BookService } from '../../books/services/book.service';
 import { StarRatingComponent } from '../../books/components/star-rating/star-rating.component';
 import { AuthService } from '../../auth/services/auth.service';
-import { Role } from '../../auth/models/role.model';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-book-detail-view',
-  standalone: true, imports: [StarRatingComponent, RouterLink], templateUrl: './book-detail-view.component.html',
+  standalone: true,
+  imports: [StarRatingComponent, RouterLink],
+  templateUrl: './book-detail-view.component.html',
 })
 export class BookDetailViewComponent {
-  Role = Role;
-  protected book: Buch | undefined;
+  book: Buch | undefined;
 
-  constructor(private readonly bookService: BookService, protected readonly authService: AuthService) {
-  }
+  constructor(
+    private readonly bookService: BookService,
+    protected readonly authService: AuthService,
+  ) {}
 
   @Input() set id(bookId: string) {
     this.fetchBookDetails(+bookId);
