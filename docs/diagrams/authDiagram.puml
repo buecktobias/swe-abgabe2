@@ -54,6 +54,5 @@ TokenService .down.> Backend.GraphQLController: <<use>>
 TokenService ..> SessionTokens: manages
 AuthService ..> TokenService: <<use>>
 AuthService "1" o--> "?" User
-AuthService "1" o--> "?" SessionTokens
 LoginResult o-> SessionTokens: contains
 @enduml

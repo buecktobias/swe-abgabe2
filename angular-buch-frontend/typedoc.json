@@ -1,0 +1,13 @@
+{
+    "tsconfig": "tsconfig.docs.json",
+    "json": "../docs/tsdoc.json",
+    "exclude": [
+        "**/*spec.ts"
+    ],
+    "entryPoints": [
+        "src"
+    ],
+    "entryPointStrategy": "expand",
+    "out": "../docs/tsdoc",
+    "categorizeByGroup": true
+}

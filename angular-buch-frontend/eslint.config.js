@@ -76,10 +76,6 @@ export default tseslint.config(
               'error',
               { 'src/**/': 'KEBAB_CASE' },
             ],
-            'check-file/filename-blocklist': [
-              'error',
-              { '**/models/!(*.model*).ts': '*.model.ts' },
-            ],
 
             'no-magic-numbers': [
               'warn',

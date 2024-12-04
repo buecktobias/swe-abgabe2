@@ -59,4 +59,16 @@ docker compose up -d
 
 ## Typescript Documentation
 
-[TSDocs](docs/tsdoc/index.html)
+> docs/tsdoc/index.html
+
+### UI Flow
+
+![](docs/diagrams/uiFlowStateDiagram.png)
+
+### Component Diagram
+
+![](docs/diagrams/compontsServicesModels.puml)
+
+### Auth UML Diagram
+
+![](docs/diagrams/authDiagram.png)

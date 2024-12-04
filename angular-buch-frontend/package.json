@@ -14,7 +14,7 @@
         "test:headless-dev": "ng test --browsers=ChromeHeadless --reporters spec",
         "lint": "ng lint",
         "lint:fix": "ng lint --fix",
-        "docs:html": "typedoc --tsconfig tsconfig.docs.json --exclude \"**/*+(index|.spec|.e2e).ts\" --entryPoints src --entryPointStrategy expand --out ../docs/tsdoc",
+        "docs:html": "typedoc",
         "zip": "node zipProject.js"
     },
     "private": true,
