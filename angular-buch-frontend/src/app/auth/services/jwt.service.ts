@@ -9,12 +9,13 @@ import { Logger } from '../../shared/services/logger.service';
 export class JwtService {
   constructor(private readonly logger: Logger) {}
   encode(jwtPayload: JWTPayload): string {
-    this.logger.debug('Only use JwtService.encode for testing purposes!');
+    this.logger.error('Only use JwtService.encode for testing purposes!');
     const base64JwtPayload = btoa(JSON.stringify(jwtPayload));
     return `header.${base64JwtPayload}.signature`;
   }
 
   decode(token: string): JWTPayload {
+    this.logger.debug(token);
     return jwtDecode<JWTPayload>(token);
   }
 }

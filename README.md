@@ -67,7 +67,7 @@ docker compose up -d
 
 ### Component Diagram
 
-![](docs/diagrams/compontsServicesModels.puml)
+![](docs/diagrams/compontsServicesModels.png)
 
 ### Auth UML Diagram
 

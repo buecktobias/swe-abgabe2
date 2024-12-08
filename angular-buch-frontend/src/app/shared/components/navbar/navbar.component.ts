@@ -12,7 +12,7 @@ export class NavbarComponent {
   constructor(private readonly authService: AuthService) {}
 
   get isLoggedIn(): boolean {
-    return this.authService.isLoggedIn;
+    return this.authService.isLoggedIn();
   }
 
   get username(): string {

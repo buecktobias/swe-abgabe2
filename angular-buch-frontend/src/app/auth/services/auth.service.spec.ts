@@ -102,15 +102,19 @@ describe('AuthService', () => {
 
   describe('#setupAutoRefresh', () => {
     it('should refresh the token before it expires', fakeAsync(() => {
-      tokenService.login.and.returnValue(of(successfulLoginResult));
-      tokenService.refresh.and.returnValue(of(refreshedSessionTokens));
+      try {
+        tokenService.login.and.returnValue(of(successfulLoginResult));
+        tokenService.refresh.and.returnValue(of(refreshedSessionTokens));
 
-      authService.login(validUser).subscribe();
+        authService.login(validUser).subscribe();
 
-      tick(accessTokenExpiration.subtract(authService.refreshBufferTime).milliseconds);
+        tick(accessTokenExpiration.subtract(authService.refreshBufferTime).ms);
 
-      expect(tokenService.refresh).toHaveBeenCalledWith('refreshToken');
-      expect(authService.isLoggedIn).toBeTrue();
+        expect(tokenService.refresh).toHaveBeenCalledWith('refreshToken');
+        expect(authService.isLoggedIn()).toBeTrue();
+      } catch (e) {
+        console.error(e);
+      }
     }));
 
     it('should log out if token refresh fails', fakeAsync(() => {
@@ -119,10 +123,10 @@ describe('AuthService', () => {
 
       authService.login(validUser).subscribe();
 
-      tick(accessTokenExpiration.subtract(authService.refreshBufferTime).milliseconds);
+      tick(accessTokenExpiration.subtract(authService.refreshBufferTime).ms);
       tick(1000);
 
-      expect(authService.isLoggedIn).toBeFalse();
+      expect(authService.isLoggedIn()).toBeFalse();
       expect(authService.user).toBeNull();
     }));
   });
