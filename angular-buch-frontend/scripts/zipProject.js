@@ -7,7 +7,7 @@ const archive = archiver('zip', {
 });
 
 output.on('close', () => {
-  console.log(`Archive created: ${archive.pointer()} total bytes`);
+  console.log(`Archive created: ${archive.pointer() / 1_000} total kB`);
 });
 
 archive.on('error', (err) => {

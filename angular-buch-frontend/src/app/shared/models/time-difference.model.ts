@@ -1,35 +1,35 @@
-const millisInSeconds = 1000;
+const millisPerSeconds = 1000;
 
 export class TimeDifference {
-  private readonly _ms: number;
+  private readonly _milliseconds: number;
 
   constructor(milliseconds: number) {
-    this._ms = milliseconds;
+    this._milliseconds = milliseconds;
   }
 
-  get ms(): number {
-    return this._ms;
+  get milliseconds(): number {
+    return this._milliseconds;
   }
 
   get seconds(): number {
-    return this._ms / millisInSeconds;
+    return this._milliseconds / millisPerSeconds;
   }
 
-  public static fromMilliseconds(value: number): TimeDifference {
+  public static inMilliseconds(value: number): TimeDifference {
     return new TimeDifference(value);
   }
 
-  public static fromSeconds(value: number): TimeDifference {
-    return new TimeDifference(value * millisInSeconds);
+  public static inSeconds(value: number): TimeDifference {
+    return new TimeDifference(value * millisPerSeconds);
   }
 
   public add(other: TimeDifference): TimeDifference {
-    const resultInMilliseconds = this._ms + other._ms;
+    const resultInMilliseconds = this._milliseconds + other._milliseconds;
     return new TimeDifference(resultInMilliseconds);
   }
 
   public subtract(other: TimeDifference): TimeDifference {
-    const resultInMilliseconds = this._ms - other._ms;
+    const resultInMilliseconds = this._milliseconds - other._milliseconds;
     return new TimeDifference(resultInMilliseconds);
   }
 }

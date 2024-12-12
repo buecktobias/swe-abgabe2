@@ -1,0 +1,12 @@
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+### Angular template
+## Angular ##
+# compiled output
+dist/
+node_modules/
+coverage/
+.angular/

@@ -10,8 +10,8 @@ export class SessionTokens {
   ) {}
 
   static fromTokenResult(tokenResult: TokenResult): SessionTokens {
-    const accessTokenExpiresIn = TimeDifference.fromSeconds(tokenResult.expires_in);
-    const refreshTokenExpiresIn = TimeDifference.fromSeconds(tokenResult.refresh_expires_in);
+    const accessTokenExpiresIn = TimeDifference.inSeconds(tokenResult.expires_in);
+    const refreshTokenExpiresIn = TimeDifference.inSeconds(tokenResult.refresh_expires_in);
     return new SessionTokens(tokenResult.access_token, accessTokenExpiresIn, tokenResult.refresh_token, refreshTokenExpiresIn);
   }
 }

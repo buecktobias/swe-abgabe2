@@ -6,12 +6,11 @@ import { of } from 'rxjs';
 import { SessionTokens } from '../models/session-tokens.model';
 import { UserLoginInformation } from '../models/user-login-information.model';
 import { LoginResultFactory } from './login-result-factory.service';
-import { JwtService } from './jwt.service';
 import { JWTPayload } from '../models/jwt-payload.model';
 import { User } from '../models/user.model';
 import { Role } from '../models/role.model';
-import { LoginErrorType, LoginResult } from '../models/login-result.model';
-import { ENV_CONFIG, LogLevel } from '../../../environments/environment.config';
+import { LoginErrorType, LoginMeta, LoginResult } from '../models/login-result.model';
+import { ENV_CONFIG, EnvironmentConfig, LogLevel } from '../../../environments/environment.config';
 import { TimeDifference } from '../../shared/models/time-difference.model';
 
 class MockTokenService {
@@ -19,15 +18,20 @@ class MockTokenService {
   refresh = jasmine.createSpy();
 }
 
+function encode(jwtPayload: JWTPayload): string {
+  const base64JwtPayload = btoa(JSON.stringify(jwtPayload));
+  return `header.${base64JwtPayload}.signature`;
+}
+
 describe('AuthService', () => {
   let authService: AuthService;
   let tokenService: MockTokenService;
-  let jwtService: JwtService;
   const loginResultFactory = new LoginResultFactory();
   const validUser: UserLoginInformation = { username: 'validUser', password: 'validPassword' };
   const normalUser: UserLoginInformation = { username: 'normalUser', password: 'normalPassword' };
-  const accessTokenExpiration = TimeDifference.fromSeconds(3600);
-  const refreshTokenExpiration = TimeDifference.fromSeconds(7200);
+  const accessTokenExpiration = TimeDifference.inSeconds(3600);
+  const refreshTokenExpiration = TimeDifference.inSeconds(7200);
+  const authServiceRefreshBufferTime = TimeDifference.inSeconds(5);
   const jwtPayload: JWTPayload = {
     preferred_username: 'admin',
     given_name: 'Admin',
@@ -48,28 +52,28 @@ describe('AuthService', () => {
   };
   let mockJwt: string;
   let successfulLoginResult: LoginResult;
-  const refreshedSessionTokens: SessionTokens = new SessionTokens('', accessTokenExpiration, '', refreshTokenExpiration);
+  let successfulSessionTokens: SessionTokens = new SessionTokens('', accessTokenExpiration, '', refreshTokenExpiration);
 
   beforeEach(() => {
+    localStorage.clear();
     TestBed.configureTestingModule({
       providers: [
-        AuthService,
         { provide: TokenService, useClass: MockTokenService },
-        JwtService,
         {
           provide: ENV_CONFIG,
-          useValue: { logLevel: LogLevel.DEBUG },
+          useValue: {
+            logLevel: LogLevel.DEBUG,
+            accessTokenRefreshBufferTime: authServiceRefreshBufferTime,
+          } as EnvironmentConfig,
         },
+        AuthService,
       ],
     });
-    spyOn(localStorage, 'getItem').and.returnValue(null);
     authService = TestBed.inject(AuthService);
-    jwtService = TestBed.inject(JwtService);
     tokenService = TestBed.inject(TokenService) as unknown as MockTokenService;
-    mockJwt = jwtService.encode(jwtPayload);
-    successfulLoginResult = loginResultFactory.success(
-      new SessionTokens(mockJwt, accessTokenExpiration, 'refreshToken', refreshTokenExpiration),
-    );
+    mockJwt = encode(jwtPayload);
+    successfulSessionTokens = new SessionTokens(mockJwt, accessTokenExpiration, 'refresh', refreshTokenExpiration);
+    successfulLoginResult = loginResultFactory.success(successfulSessionTokens);
   });
 
   it('should be created', () => {
@@ -79,11 +83,10 @@ describe('AuthService', () => {
   describe('#login', () => {
     it('should decode JWT and set the User correctly when credentials are valid', () => {
       tokenService.login.and.returnValue(of(successfulLoginResult));
-
+      console.log(authService.login(validUser));
       authService.login(validUser).subscribe((result) => {
         expect(result.success).toBeTrue();
         expect(tokenService.login).toHaveBeenCalledWith(validUser);
-
         expect(authService.user?.email).toBe(mockedUser.email);
       });
     });
@@ -102,29 +105,29 @@ describe('AuthService', () => {
 
   describe('#setupAutoRefresh', () => {
     it('should refresh the token before it expires', fakeAsync(() => {
-      try {
-        tokenService.login.and.returnValue(of(successfulLoginResult));
-        tokenService.refresh.and.returnValue(of(refreshedSessionTokens));
+      tokenService.login.and.returnValue(of(successfulLoginResult));
+      tokenService.refresh.and.returnValue(of(successfulSessionTokens));
 
-        authService.login(validUser).subscribe();
+      authService.login(validUser).subscribe((metaInformation: LoginMeta) => {
+        console.log(metaInformation);
+      });
 
-        tick(accessTokenExpiration.subtract(authService.refreshBufferTime).ms);
+      tick(accessTokenExpiration.milliseconds - authServiceRefreshBufferTime.milliseconds);
 
-        expect(tokenService.refresh).toHaveBeenCalledWith('refreshToken');
-        expect(authService.isLoggedIn()).toBeTrue();
-      } catch (e) {
-        console.error(e);
-      }
+      expect(tokenService.refresh).toHaveBeenCalledWith(successfulSessionTokens.refreshToken);
+      expect(authService.isLoggedIn()).toBeTrue();
+      authService.logout();
     }));
 
     it('should log out if token refresh fails', fakeAsync(() => {
       tokenService.login.and.returnValue(of(successfulLoginResult));
       tokenService.refresh.and.returnValue(of(null));
 
-      authService.login(validUser).subscribe();
+      authService.login(validUser).subscribe((metaInformation: LoginMeta) => {
+        console.log(metaInformation);
+      });
 
-      tick(accessTokenExpiration.subtract(authService.refreshBufferTime).ms);
-      tick(1000);
+      tick(accessTokenExpiration.milliseconds - authServiceRefreshBufferTime.milliseconds);
 
       expect(authService.isLoggedIn()).toBeFalse();
       expect(authService.user).toBeNull();

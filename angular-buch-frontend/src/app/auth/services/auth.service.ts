@@ -1,52 +1,48 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { TokenService } from './token.service';
 import { SessionTokens } from '../models/session-tokens.model';
 import { User } from '../models/user.model';
 import { UserLoginInformation } from '../models/user-login-information.model';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import { Observable, of, timer } from 'rxjs';
+import { Observable, of, Subscription, timer } from 'rxjs';
 import { LoginErrorType, LoginMeta } from '../models/login-result.model';
-import { JwtService } from './jwt.service';
 import { Logger } from '../../shared/services/logger.service';
 import { TimeDifference } from '../../shared/models/time-difference.model';
 import { Role } from '../models/role.model';
+import { JWTPayload } from '../models/jwt-payload.model';
+import { jwtDecode } from 'jwt-decode';
+import { ENV_CONFIG, EnvironmentConfig } from '../../../environments/environment.config';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  // eslint-disable-next-line no-magic-numbers
-  public readonly refreshBufferTime = TimeDifference.fromSeconds(5);
+  private readonly refreshBufferTime;
   private readonly refreshTokenStorageKey = 'refreshToken';
   private currentUser: User | null = null;
+  private sessionTokens: SessionTokens | null = null;
+  private autoRefreshSubscription: Subscription | null = null;
 
   constructor(
     private readonly tokenService: TokenService,
-    private readonly jwtService: JwtService,
     private readonly logger: Logger,
+    @Inject(ENV_CONFIG) private readonly environmentConfig: EnvironmentConfig,
   ) {
     this.tryToRestoreSession();
+    // eslint-disable-next-line no-magic-numbers
+    this.refreshBufferTime = environmentConfig.accessTokenRefreshBufferTime ?? TimeDifference.inSeconds(5);
   }
 
   get user(): User | null {
     return this.currentUser;
   }
 
-  private _sessionTokens: SessionTokens | null = null;
-
-  private get sessionTokens(): SessionTokens | null {
-    return this._sessionTokens;
-  }
-
   private get refreshToken(): string | null {
-    if (this.sessionTokens) {
-      this.logger.warn('Session tokens are already set, You should not call loadRefreshToken');
-    }
     return localStorage.getItem(this.refreshTokenStorageKey);
   }
 
   public isLoggedIn(): boolean {
-    return this.sessionTokens !== null;
+    return this.hasUserAccess();
   }
 
   public hasUserAccess(): boolean {
@@ -76,19 +72,20 @@ export class AuthService {
   logout(): void {
     this.logger.debug('Logging out');
     this.updateSessionTokens(null);
+    this.stopAutoRefresh();
   }
 
   private updateSessionTokens(newSessionTokens: SessionTokens | null) {
     if (newSessionTokens) {
-      this._sessionTokens = newSessionTokens;
-      const jwtPayload = this.jwtService.decode(newSessionTokens.accessToken);
-      this.currentUser = User.fromJWTPayload(jwtPayload);
+      this.sessionTokens = newSessionTokens;
+      this.currentUser = User.fromJWTPayload(jwtDecode<JWTPayload>(newSessionTokens.accessToken));
       localStorage.setItem(this.refreshTokenStorageKey, newSessionTokens.refreshToken);
       this.setupAutoRefresh();
     } else {
-      this._sessionTokens = null;
+      this.sessionTokens = null;
       this.currentUser = null;
       localStorage.removeItem(this.refreshTokenStorageKey);
+      this.stopAutoRefresh();
     }
   }
 
@@ -109,23 +106,31 @@ export class AuthService {
     if (!this.sessionTokens) {
       throw new TypeError('Session tokens are not set');
     }
-    return this.sessionTokens.accessTokenExpiresIn.ms - this.refreshBufferTime.ms;
+    return this.sessionTokens.accessTokenExpiresIn.milliseconds - this.refreshBufferTime.milliseconds;
   }
 
   private setupAutoRefresh(): void {
+    this.stopAutoRefresh();
     if (!this.sessionTokens?.refreshToken) return;
 
-    timer(this.calculateTimeUntilRefresh())
+    this.autoRefreshSubscription = timer(this.calculateTimeUntilRefresh())
       .pipe(
         switchMap(() => {
           this.logger.debug('Auto Refreshing token');
-          // @ts-expect-error sessionTokens is not null
-          return this.tokenService.refresh(this.sessionTokens?.refreshToken);
+          return this.tokenService.refresh(this.sessionTokens?.refreshToken ?? '');
         }),
         tap((newTokens) => {
           this.updateSessionTokens(newTokens);
         }),
       )
       .subscribe();
+  }
+
+  private stopAutoRefresh(): void {
+    if (this.autoRefreshSubscription) {
+      this.autoRefreshSubscription.unsubscribe();
+      this.autoRefreshSubscription = null;
+      this.logger.debug('Auto-refresh timer stopped');
+    }
   }
 }

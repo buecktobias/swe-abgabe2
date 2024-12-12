@@ -14,9 +14,9 @@ describe('LoginResultFactory', () => {
     it('should create a successful LoginResult with the provided session tokens', () => {
       const mockSessionTokens: SessionTokens = new SessionTokens(
         '',
-        TimeDifference.fromMilliseconds(0),
+        TimeDifference.inMilliseconds(0),
         '',
-        TimeDifference.fromMilliseconds(0),
+        TimeDifference.inMilliseconds(0),
       );
 
       const result: LoginResult = factory.success(mockSessionTokens);

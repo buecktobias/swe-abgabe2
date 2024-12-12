@@ -1,15 +1,17 @@
 services:
+  angular:
+    build: angular-buch-frontend
+    ports:
+      - "80:80"
+
   nestjs:
     image: tobiasbueck/swe-nest-buch:latest
     ports:
       - "3000:3000"
-    container_name: nest
     environment:
       - TZ=Europe/Berlin
       - NODE_ENV=development
       - NEST_HOST=localhost
-    mem_limit: 1g
-    cpus: '0.5'
     volumes:
       - keycloak_secret:/secrets
     depends_on:
@@ -22,7 +24,6 @@ services:
       start_period: 30s
   keycloak:
     image: quay.io/keycloak/keycloak:latest
-    container_name: keycloak
     environment:
       - TZ=Europe/Berlin
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
@@ -34,15 +35,12 @@ services:
       - "8080:8080"
     volumes:
       - ./keycloak/nest-realm.json:/opt/keycloak/data/import/nest-realm.json
-    mem_limit: 512m
-    cpus: '4'
     command:
       - start-dev
       - --import-realm
 
   keycloak-setup:
-    build: keycloak
-    container_name: keycloak-setup
+    build: backend/keycloak
     depends_on:
       - keycloak
     environment:
@@ -54,8 +52,6 @@ services:
     restart: "no"
     volumes:
       - keycloak_secret:/secrets
-    mem_limit: 128m
-    cpus: '0.25'
 
   postgres:
     image: postgres:16.4-bookworm
@@ -73,11 +69,6 @@ services:
     security_opt:
       - label:user:postgres
       - no-new-privileges:true
-    hostname: postgres
-    container_name: postgres
-    restart: unless-stopped
-    mem_limit: 256m
-    cpus: '0.25'
 
   pgadmin:
     image: dpage/pgadmin4:8.12.0
@@ -92,10 +83,6 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=p
       - PGADMIN_DISABLE_POSTFIX=true
     user: 'pgadmin:5050'
-    hostname: pgadmin
-    container_name: pgadmin
-    mem_limit: 256m
-    cpus: '0.25'
     profiles: [ debug ]
 
 volumes:

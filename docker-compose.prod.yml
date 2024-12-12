@@ -12,7 +12,7 @@ services:
       - KC_FEATURES=admin-fine-grained-authz,authorization,login,client-policies,persistent-user-sessions
     cpus: '4'
     volumes:
-      - ./keycloak/nest-realm.prod.json:/opt/keycloak/data/import/nest-realm.json
+      - ./backend/keycloak/nest-realm.prod.json:/opt/keycloak/data/import/nest-realm.json
       - keycloak_data:/opt/keycloak/data
     command:
       - start-dev

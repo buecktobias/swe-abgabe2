@@ -1,4 +1,5 @@
 import { InjectionToken } from '@angular/core';
+import { TimeDifference } from '../app/shared/models/time-difference.model';
 
 export enum LogLevel {
   DEBUG = 'DEBUG',
@@ -8,6 +9,7 @@ export enum LogLevel {
 
 export interface EnvironmentConfig {
   logLevel: LogLevel;
+  accessTokenRefreshBufferTime?: TimeDifference;
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention

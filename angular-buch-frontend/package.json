@@ -15,7 +15,7 @@
         "lint": "ng lint",
         "lint:fix": "ng lint --fix",
         "docs:html": "typedoc",
-        "zip": "node zipProject.js"
+        "zip": "node scripts/zipProject.js"
     },
     "private": true,
     "dependencies": {
