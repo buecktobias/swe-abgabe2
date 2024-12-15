@@ -1,3 +1,4 @@
+name: firma
 services:
   angular:
     build: angular-buch-frontend
@@ -5,7 +6,7 @@ services:
       - "80:80"
 
   nestjs:
-    image: tobiasbueck/swe-nest-buch:latest
+    build: backend/nest
     ports:
       - "3000:3000"
     environment:
@@ -22,6 +23,7 @@ services:
       timeout: 10s
       retries: 9
       start_period: 30s
+
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     environment:
@@ -34,7 +36,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./keycloak/nest-realm.json:/opt/keycloak/data/import/nest-realm.json
+      - ./backend/keycloak/nest-realm.json:/opt/keycloak/data/import/nest-realm.json
     command:
       - start-dev
       - --import-realm
@@ -59,8 +61,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-      - ./postgres/csv:/csv
+      - ./backend/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./backend/postgres/csv:/csv
     environment:
       - TZ=Europe/Berlin
       - POSTGRES_DB=buch
@@ -76,7 +78,7 @@ services:
       - "8888:80"
     volumes:
       - pgadmin_data:/var/lib/pgadmin
-      - ./pgadmin/pgadmin-server.json:/pgadmin4/servers.json
+      - ./backend/pgadmin/pgadmin-server.json:/pgadmin4/servers.json
     environment:
       - TZ=Europe/Berlin
       - PGADMIN_DEFAULT_EMAIL=pgadmin@acme.com

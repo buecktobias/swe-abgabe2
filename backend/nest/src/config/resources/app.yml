@@ -1,0 +1,26 @@
+db:
+  type: postgres
+  host: postgres
+
+  username: firma
+  password: p
+  passwordAdmin: p
+  name: firma
+  populate: true
+
+keycloak:
+  authServerUrl: http://keycloak:8080
+  realm: nest
+  clientId: nest-client
+  tokenValidation: online
+log:
+  level: debug
+  pretty: true
+
+health:
+  prettyPrint: true
+
+mail:
+  host: mail
+  port: 8025
+  log: false

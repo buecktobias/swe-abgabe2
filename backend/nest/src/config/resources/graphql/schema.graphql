@@ -1,0 +1,133 @@
+# GraphQL Schema
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+
+# Queries
+type Query {
+  Firma(id: Int!): Firma
+  Firmen(suchkriterien: SuchkriterienInput): [Firma!]!
+}
+
+# Mutationen
+type Mutation {
+  create(input: FirmaDTO!): CreatePayload!
+  update(input: FirmaUpdateDTO!): UpdatePayload!
+  delete(id: IdInput!): Boolean!
+
+  # Mutation, wenn z.B. der Login-Zeitpunkt im IDM-System gespeichert wird
+  token(username: String!, password: String!): TokenResult
+  refresh(refresh_token: String!): TokenResult
+}
+
+# Input Typen
+input FirmaDTO {
+  name: String!
+  branche: Branche!
+  umsatz: Float!
+  mitarbeiterzahl: Int!
+  aktiv: Boolean!
+  gruendungsdatum: String!
+  website: String!
+  schlagwoerter: [String!]
+  beschreibung: BeschreibungDTO!
+  standorte: [StandortDTO!]
+}
+
+input FirmaUpdateDTO {
+  id: String!
+  version: Int!
+  name: String!
+  branche: Branche!
+  umsatz: Float!
+  mitarbeiterzahl: Int!
+  aktiv: Boolean!
+  gruendungsdatum: String!
+  website: String!
+  schlagwoerter: [String!]
+}
+
+input BeschreibungDTO {
+  slogan: String!
+  mission: String!
+}
+
+input StandortDTO {
+  adresse: String!
+  land: String!
+  stadt: String!
+}
+
+input IdInput {
+  id: Int!
+}
+
+input SuchkriterienInput {
+  beschreibung: String
+  branche: Branche
+  aktiv: Boolean
+}
+
+# Enum für Branche
+enum Branche {
+  IT
+  Finanzen
+  Gesundheit
+  Bildung
+}
+
+# Haupt Typen
+type Firma {
+  id: Int!
+  name: String!
+  branche: Branche!
+  umsatz: Float!
+  mitarbeiterzahl: Int!
+  aktiv: Boolean!
+  gruendungsdatum: String!
+  website: String!
+  schlagwoerter: [String!]!
+  beschreibung: Beschreibung
+  standorte: [Standort!]!
+  erzeugt: String!
+  aktualisiert: String!
+}
+
+type Beschreibung {
+  id: Int!
+  slogan: String!
+  mission: String!
+}
+
+type Standort {
+  id: Int!
+  adresse: String!
+  land: String!
+  stadt: String!
+}
+
+# Payloads für Mutation
+type CreatePayload {
+  id: Int!
+}
+
+type UpdatePayload {
+  version: Int!
+}
+
+
+# Zusätzliche Felder / Resolver
+extend type Firma {
+  mitarbeiterzahl(short: Boolean): Int!
+}
+
+type TokenResult {
+  access_token: String!
+  expires_in: Int!
+  refresh_token: String!
+  refresh_expires_in: Int!
+}
+
