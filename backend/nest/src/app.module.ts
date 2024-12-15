@@ -1,3 +1,18 @@
+// Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+
 import { type ApolloDriverConfig } from '@nestjs/apollo';
 import {
     type MiddlewareConsumer,
@@ -6,21 +21,21 @@ import {
 } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AdminModule } from './admin/admin.module.js';
-import { DevModule } from './config/dev/dev.module.js';
-import { graphQlModuleOptions } from './config/graphql.js';
-import { typeOrmModuleOptions } from './config/typeormOptions.js';
-import { FirmaGetController } from './firma/controller/firma-get.controller.js';
-import { FirmaWriteController } from './firma/controller/firma-write.controller.js';
-import { FirmaModule } from './firma/firma.module.js';
-import { LoggerModule } from './logger/logger.module.js';
-import { RequestLoggerMiddleware } from './logger/request-logger.middleware.js';
-import { KeycloakModule } from './security/keycloak/keycloak.module.js';
+import { AdminModule } from './admin/admin.module';
+import { BuchModule } from './buch/buch.module';
+import { BuchGetController } from './buch/controller/buch-get.controller';
+import { BuchWriteController } from './buch/controller/buch-write.controller';
+import { DevModule } from './config/dev/dev.module';
+import { graphQlModuleOptions } from './config/graphql';
+import { typeOrmModuleOptions } from './config/typeormOptions';
+import { LoggerModule } from './logger/logger.module';
+import { RequestLoggerMiddleware } from './logger/request-logger.middleware';
+import { KeycloakModule } from './security/keycloak/keycloak.module';
 
 @Module({
     imports: [
         AdminModule,
-        FirmaModule,
+        BuchModule,
         DevModule,
         GraphQLModule.forRoot<ApolloDriverConfig>(graphQlModuleOptions),
         LoggerModule,
@@ -33,8 +48,8 @@ export class AppModule implements NestModule {
         consumer
             .apply(RequestLoggerMiddleware)
             .forRoutes(
-                FirmaGetController,
-                FirmaWriteController,
+                BuchGetController,
+                BuchWriteController,
                 'auth',
                 'graphql',
             );

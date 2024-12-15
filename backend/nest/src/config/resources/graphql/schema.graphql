@@ -1,127 +1,137 @@
-# GraphQL Schema
+# Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# siehe app.module.ts
 
 schema {
   query: Query
   mutation: Mutation
 }
 
-
-# Queries
+"Funktionen, um Bücherdaten zu lesen"
 type Query {
-  Firma(id: Int!): Firma
-  Firmen(suchkriterien: SuchkriterienInput): [Firma!]!
+  buecher(suchkriterien: SuchkriterienInput): [Buch!]
+
+  buch(id: ID!): Buch
 }
 
-# Mutationen
+"Funktionen, um Bücher neu anzulegen, zu aktualisieren oder zu löschen"
 type Mutation {
-  create(input: FirmaDTO!): CreatePayload!
-  update(input: FirmaUpdateDTO!): UpdatePayload!
-  delete(id: IdInput!): Boolean!
+  create(input: BuchInput!): CreatePayload
 
-  # Mutation, wenn z.B. der Login-Zeitpunkt im IDM-System gespeichert wird
+  update(input: BuchUpdateInput!): UpdatePayload
+
+  delete(id: ID!): Boolean
   token(username: String!, password: String!): TokenResult
   refresh(refresh_token: String!): TokenResult
 }
 
-# Input Typen
-input FirmaDTO {
-  name: String!
-  branche: Branche!
-  umsatz: Float!
-  mitarbeiterzahl: Int!
-  aktiv: Boolean!
-  gruendungsdatum: String!
-  website: String!
-  schlagwoerter: [String!]
-  beschreibung: BeschreibungDTO!
-  standorte: [StandortDTO!]
+"Daten zum Titel eines Buches"
+type Titel {
+  titel: String!
+  untertitel: String
 }
 
-input FirmaUpdateDTO {
-  id: String!
+"Daten zum Titel eines Buches"
+type Abbildung {
+  beschriftung: String!
+  contentType: String
+}
+
+"Datenschema zu einem Buch, das gelesen wird"
+type Buch {
+  id: Int!
   version: Int!
-  name: String!
-  branche: Branche!
-  umsatz: Float!
-  mitarbeiterzahl: Int!
-  aktiv: Boolean!
-  gruendungsdatum: String!
-  website: String!
-  schlagwoerter: [String!]
+  isbn: String!
+  rating: Int
+  art: Art
+  preis: Float!
+  lieferbar: Boolean
+  datum: String
+  homepage: String
+  schlagwoerter: [String]
+  # 1:1-Beziehung
+  titel: Titel!
+  # field mit @ResolveField
+  rabatt(short: Boolean): String!
 }
 
-input BeschreibungDTO {
-  slogan: String!
-  mission: String!
+"Enum-Typ für die Art eines Buches"
+enum Art {
+  EPUB
+  HARDCOVER
+  PAPERBACK
 }
 
-input StandortDTO {
-  adresse: String!
-  land: String!
-  stadt: String!
-}
-
-input IdInput {
-  id: Int!
-}
-
+"Suchkriterien für Bücher"
 input SuchkriterienInput {
-  beschreibung: String
-  branche: Branche
-  aktiv: Boolean
+  titel: String
+  isbn: String
+  rating: Int
+  art: Art
+  lieferbar: Boolean
 }
 
-# Enum für Branche
-enum Branche {
-  IT
-  Finanzen
-  Gesundheit
-  Bildung
+"Daten zum Titel eines neuen Buches"
+input TitelInput {
+  titel: String!
+  untertitel: String
 }
 
-# Haupt Typen
-type Firma {
-  id: Int!
-  name: String!
-  branche: Branche!
-  umsatz: Float!
-  mitarbeiterzahl: Int!
-  aktiv: Boolean!
-  gruendungsdatum: String!
-  website: String!
-  schlagwoerter: [String!]!
-  beschreibung: Beschreibung
-  standorte: [Standort!]!
-  erzeugt: String!
-  aktualisiert: String!
+"Daten zu den Abbildungen eines Buches"
+input AbbildungInput {
+  beschriftung: String!
+  contentType: String!
 }
 
-type Beschreibung {
-  id: Int!
-  slogan: String!
-  mission: String!
+"Daten für ein neues Buch"
+input BuchInput {
+  isbn: String
+  rating: Int
+  art: Art
+  preis: Float
+  rabatt: Float
+  lieferbar: Boolean
+  datum: String
+  homepage: String
+  schlagwoerter: [String]
+  titel: TitelInput!
+  abbildungen: [AbbildungInput!]
 }
 
-type Standort {
-  id: Int!
-  adresse: String!
-  land: String!
-  stadt: String!
-}
-
-# Payloads für Mutation
 type CreatePayload {
-  id: Int!
+  id: Int
+}
+
+"Daten für ein zu änderndes Buch"
+input BuchUpdateInput {
+  id: ID
+  version: Int
+  isbn: String
+  rating: Int
+  art: Art
+  preis: Float
+  rabatt: Float
+  lieferbar: Boolean
+  datum: String
+  homepage: String
+  schlagwoerter: [String]
 }
 
 type UpdatePayload {
-  version: Int!
-}
-
-
-# Zusätzliche Felder / Resolver
-extend type Firma {
-  mitarbeiterzahl(short: Boolean): Int!
+  version: Int
 }
 
 type TokenResult {
@@ -130,4 +140,3 @@ type TokenResult {
   refresh_token: String!
   refresh_expires_in: Int!
 }
-

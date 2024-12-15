@@ -1,6 +1,6 @@
 // https://typedoc.org/guides/options
 /* global module */
-/** @type {import('typedoc').TypeDocOptions} */
+/** @type {import('./typedoc.cjs').TypeDocOptions} */
 module.exports = {
     out: '.extras/doc/api',
     entryPoints: ['src'],

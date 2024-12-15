@@ -12,33 +12,20 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
-import { mkdirSync, existsSync, writeFileSync } from 'fs';
-import { join } from 'path';
+
 import path from 'node:path';
 import pino from 'pino';
 import { type PrettyOptions } from 'pino-pretty';
-import { config } from './app.js';
-import { env } from './env.js';
+import { config } from './app';
+import { env } from './env';
 
 /**
  * Das Modul enthält die Konfiguration für den Logger.
  * @packageDocumentation
  */
-function createDirAndFile(dirPath: string, fileName: string) {
-    // Create the directory if it doesn't exist
-    if (!existsSync(dirPath)) {
-        mkdirSync(dirPath, { recursive: true });
-    }
 
-    // Create an empty file in the directory
-    const filePath = join(dirPath, fileName);
-    if (!existsSync(filePath)) {
-        writeFileSync(filePath, '');
-    }
-}
 const logDirDefault = 'log';
 const logFileNameDefault = 'server.log';
-createDirAndFile(logDirDefault, logFileNameDefault);
 const logFileDefault = path.resolve(logDirDefault, logFileNameDefault);
 
 const { log } = config;
@@ -54,6 +41,11 @@ const logFile =
         : path.resolve(logDir, logFileNameDefault);
 const pretty = log?.pretty === true;
 
+// https://getpino.io
+// Log-Levels: fatal, error, warn, info, debug, trace
+// Alternativen: Winston, log4js, Bunyan
+// Pino wird auch von Fastify genutzt.
+// https://blog.appsignal.com/2021/09/01/best-practices-for-logging-in-nodejs.html
 
 export type LogLevel = 'error' | 'warn' | 'info' | 'debug';
 let logLevelTmp: LogLevel = 'info';

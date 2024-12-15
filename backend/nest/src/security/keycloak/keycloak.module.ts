@@ -1,5 +1,3 @@
-/* eslint-disable @eslint-community/eslint-comments/disable-enable-pair */
-/* eslint-disable max-classes-per-file */
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import {
@@ -7,9 +5,9 @@ import {
     KeycloakConnectModule,
     RoleGuard,
 } from 'nest-keycloak-connect';
-import { KeycloakService } from './keycloak.service.js';
-import { TokenController } from './token.controller.js';
-import { TokenResolver } from './token.resolver.js';
+import { KeycloakService } from './keycloak.service';
+import { TokenController } from './token.controller';
+import { TokenResolver } from './token.resolver';
 
 @Module({
     providers: [KeycloakService],

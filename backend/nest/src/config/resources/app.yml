@@ -2,10 +2,10 @@ db:
   type: postgres
   host: postgres
 
-  username: firma
+  username: postgres
   password: p
   passwordAdmin: p
-  name: firma
+  name: buch
   populate: true
 
 keycloak:
