@@ -6,11 +6,11 @@ import {
     SwaggerModule,
 } from '@nestjs/swagger';
 import compression from 'compression';
-import { AppModule } from './app.module';
-import { corsOptions } from './config/cors';
-import { nodeConfig } from './config/node';
-import { paths } from './config/paths';
-import { helmetHandlers } from './security/http/helmet.handler';
+import { AppModule } from './app.module.js';
+import { corsOptions } from './config/cors.js';
+import { nodeConfig } from './config/node.js';
+import { paths } from './config/paths.js';
+import { helmetHandlers } from './security/http/helmet.handler.js';
 import { promises as fs } from 'fs';
 
 const { port } = nodeConfig;
@@ -52,7 +52,7 @@ const bootstrap = async () => {
 
     app.enableCors(corsOptions);
 
-    await app.listen(port, '0.0.0.0');
+    await app.listen(port);
 };
 
 await bootstrap();

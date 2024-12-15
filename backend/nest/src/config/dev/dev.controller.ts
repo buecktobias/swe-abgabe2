@@ -35,8 +35,8 @@ import {
 } from '@nestjs/swagger';
 import { Response } from 'express';
 import { AuthGuard, Roles } from 'nest-keycloak-connect';
-import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor';
-import { DbPopulateService } from './db-populate.service';
+import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
+import { DbPopulateService } from './db-populate.service.js';
 
 /**
  * Die Controller-Klasse für die Entwicklung, z.B. Neuladen der DB.

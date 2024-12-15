@@ -19,8 +19,8 @@
  */
 
 import { type Request } from 'express';
-import { nodeConfig } from '../../config/node';
-import { BuchReadService } from '../service/buch-read.service';
+import { nodeConfig } from '../../config/node.js';
+import { BuchReadService } from '../service/buch-read.service.js';
 
 const port = `:${nodeConfig.port}`;
 

@@ -14,8 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { Global, Module } from '@nestjs/common';
-import { BannerService } from './banner.service';
-import { ResponseTimeInterceptor } from './response-time.interceptor';
+import { BannerService } from './banner.service.js';
+import { ResponseTimeInterceptor } from './response-time.interceptor.js';
 
 /**
  * Das Modul besteht aus allgemeinen Services, z.B. MailService.

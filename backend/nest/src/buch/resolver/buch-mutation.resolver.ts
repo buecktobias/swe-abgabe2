@@ -18,15 +18,15 @@ import { UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { IsInt, IsNumberString, Min } from 'class-validator';
 import { AuthGuard, Roles } from 'nest-keycloak-connect';
-import { getLogger } from '../../logger/logger';
-import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor';
-import { BuchDTO } from '../controller/buchDTO.entity';
-import { type Abbildung } from '../entity/abbildung.entity';
-import { type Buch } from '../entity/buch.entity';
-import { type Titel } from '../entity/titel.entity';
-import { BuchWriteService } from '../service/buch-write.service';
-import { type IdInput } from './buch-query.resolver';
-import { HttpExceptionFilter } from './http-exception.filter';
+import { getLogger } from '../../logger/logger.js';
+import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
+import { BuchDTO } from '../controller/buchDTO.entity.js';
+import { type Abbildung } from '../entity/abbildung.entity.js';
+import { type Buch } from '../entity/buch.entity.js';
+import { type Titel } from '../entity/titel.entity.js';
+import { BuchWriteService } from '../service/buch-write.service.js';
+import { type IdInput } from './buch-query.resolver.js';
+import { HttpExceptionFilter } from './http-exception.filter.js';
 
 // Authentifizierung und Autorisierung durch
 //  GraphQL Shield

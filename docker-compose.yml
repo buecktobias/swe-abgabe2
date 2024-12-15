@@ -4,6 +4,8 @@ services:
     build: angular-buch-frontend
     ports:
       - "80:80"
+    profiles:
+      - prod
 
   nestjs:
     build: backend/nest
@@ -85,7 +87,8 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=p
       - PGADMIN_DISABLE_POSTFIX=true
     user: 'pgadmin:5050'
-    profiles: [ debug ]
+    profiles:
+      - debug
 
 volumes:
   postgres_data:

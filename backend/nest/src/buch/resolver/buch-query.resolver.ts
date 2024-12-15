@@ -16,12 +16,12 @@
 import { UseFilters, UseInterceptors } from '@nestjs/common';
 import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Public } from 'nest-keycloak-connect';
-import { getLogger } from '../../logger/logger';
-import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor';
-import { Buch } from '../entity/buch.entity';
-import { BuchReadService } from '../service/buch-read.service';
-import { type Suchkriterien } from '../service/suchkriterien';
-import { HttpExceptionFilter } from './http-exception.filter';
+import { getLogger } from '../../logger/logger.js';
+import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
+import { Buch } from '../entity/buch.entity.js';
+import { BuchReadService } from '../service/buch-read.service.js';
+import { type Suchkriterien } from '../service/suchkriterien.js';
+import { HttpExceptionFilter } from './http-exception.filter.js';
 
 export type IdInput = {
     readonly id: number;

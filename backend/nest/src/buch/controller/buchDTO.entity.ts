@@ -37,9 +37,9 @@ import {
     Min,
     ValidateNested,
 } from 'class-validator';
-import { type BuchArt } from '../entity/buch.entity';
-import { AbbildungDTO } from './abbildungDTO.entity';
-import { TitelDTO } from './titelDTO.entity';
+import { type BuchArt } from '../entity/buch.entity.js';
+import { AbbildungDTO } from './abbildungDTO.entity.js';
+import { TitelDTO } from './titelDTO.entity.js';
 
 export const MAX_RATING = 5;
 

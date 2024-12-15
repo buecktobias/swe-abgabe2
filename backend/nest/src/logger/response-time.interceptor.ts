@@ -24,7 +24,7 @@ import { type Response } from 'express';
 import { type Observable } from 'rxjs';
 import { type TapObserver } from 'rxjs/internal/operators/tap';
 import { tap } from 'rxjs/operators';
-import { getLogger } from './logger';
+import { getLogger } from './logger.js';
 
 /**
  * `ResponseTimeInterceptor` protokolliert die Antwortzeit und den Statuscode

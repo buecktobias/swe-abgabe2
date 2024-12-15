@@ -47,15 +47,15 @@ import {
 } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { AuthGuard, Roles } from 'nest-keycloak-connect';
-import { paths } from '../../config/paths';
-import { getLogger } from '../../logger/logger';
-import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor';
-import { type Abbildung } from '../entity/abbildung.entity';
-import { type Buch } from '../entity/buch.entity';
-import { type Titel } from '../entity/titel.entity';
-import { BuchWriteService } from '../service/buch-write.service';
-import { BuchDTO, BuchDtoOhneRef } from './buchDTO.entity';
-import { getBaseUri } from './getBaseUri';
+import { paths } from '../../config/paths.js';
+import { getLogger } from '../../logger/logger.js';
+import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
+import { type Abbildung } from '../entity/abbildung.entity.js';
+import { type Buch } from '../entity/buch.entity.js';
+import { type Titel } from '../entity/titel.entity.js';
+import { BuchWriteService } from '../service/buch-write.service.js';
+import { BuchDTO, BuchDtoOhneRef } from './buchDTO.entity.js';
+import { getBaseUri } from './getBaseUri.js';
 
 const MSG_FORBIDDEN = 'Kein Token mit ausreichender Berechtigung vorhanden';
 /**

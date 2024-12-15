@@ -21,16 +21,16 @@ import {
 } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AdminModule } from './admin/admin.module';
-import { BuchModule } from './buch/buch.module';
-import { BuchGetController } from './buch/controller/buch-get.controller';
-import { BuchWriteController } from './buch/controller/buch-write.controller';
-import { DevModule } from './config/dev/dev.module';
-import { graphQlModuleOptions } from './config/graphql';
-import { typeOrmModuleOptions } from './config/typeormOptions';
-import { LoggerModule } from './logger/logger.module';
-import { RequestLoggerMiddleware } from './logger/request-logger.middleware';
-import { KeycloakModule } from './security/keycloak/keycloak.module';
+import { AdminModule } from './admin/admin.module.js';
+import { BuchModule } from './buch/buch.module.js';
+import { BuchGetController } from './buch/controller/buch-get.controller.js';
+import { BuchWriteController } from './buch/controller/buch-write.controller.js';
+import { DevModule } from './config/dev/dev.module.js';
+import { graphQlModuleOptions } from './config/graphql.js';
+import { typeOrmModuleOptions } from './config/typeormOptions.js';
+import { LoggerModule } from './logger/logger.module.js';
+import { RequestLoggerMiddleware } from './logger/request-logger.middleware.js';
+import { KeycloakModule } from './security/keycloak/keycloak.module.js';
 
 @Module({
     imports: [

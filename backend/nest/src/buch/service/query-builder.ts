@@ -21,12 +21,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { typeOrmModuleOptions } from '../../config/typeormOptions';
-import { getLogger } from '../../logger/logger';
-import { Abbildung } from '../entity/abbildung.entity';
-import { Buch } from '../entity/buch.entity';
-import { Titel } from '../entity/titel.entity';
-import { type Suchkriterien } from './suchkriterien';
+import { typeOrmModuleOptions } from '../../config/typeormOptions.js';
+import { getLogger } from '../../logger/logger.js';
+import { Abbildung } from '../entity/abbildung.entity.js';
+import { Buch } from '../entity/buch.entity.js';
+import { Titel } from '../entity/titel.entity.js';
+import { type Suchkriterien } from './suchkriterien.js';
 
 /** Typdefinitionen für die Suche mit der Buch-ID. */
 export type BuildIdParams = {

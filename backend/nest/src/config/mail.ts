@@ -19,8 +19,8 @@
  */
 
 import { type Options } from 'nodemailer/lib/smtp-transport';
-import { config } from './app';
-import { logLevel } from './logger';
+import { config } from './app.js';
+import { logLevel } from './logger.js';
 
 const { mail } = config;
 

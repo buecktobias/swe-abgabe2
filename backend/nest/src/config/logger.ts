@@ -16,8 +16,8 @@
 import path from 'node:path';
 import pino from 'pino';
 import { type PrettyOptions } from 'pino-pretty';
-import { config } from './app';
-import { env } from './env';
+import { config } from './app.js';
+import { env } from './env.js';
 
 /**
  * Das Modul enthält die Konfiguration für den Logger.

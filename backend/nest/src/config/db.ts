@@ -17,7 +17,7 @@
  * Das Modul enthält die Konfiguration für das DB-System.
  * @packageDocumentation
  */
-import { config } from './app';
+import { config } from './app.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const dbConfig = config.db;

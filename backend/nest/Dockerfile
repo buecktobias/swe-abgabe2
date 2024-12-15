@@ -1,4 +1,4 @@
-FROM node:22.9.0-slim AS builder
+FROM node:22.9.0-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
@@ -20,7 +20,7 @@ COPY . .
 
 RUN npm run build
 
-RUN mkdir log && touch log/server.log
+RUN mkdir -p log && touch log/server.log
 
 EXPOSE 3000
 

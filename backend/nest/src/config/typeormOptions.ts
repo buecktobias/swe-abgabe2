@@ -1,10 +1,10 @@
 import path from 'node:path';
 import { type DataSourceOptions } from 'typeorm';
-import { entities } from '../buch/entity/entities';
-import { config } from './app';
-import { logLevel } from './logger';
-import { nodeConfig } from './node';
-import { SnakeNamingStrategy } from './typeormNamingStrategy';
+import { entities } from '../buch/entity/entities.js';
+import { config } from './app.js';
+import { logLevel } from './logger.js';
+import { nodeConfig } from './node.js';
+import { SnakeNamingStrategy } from './typeormNamingStrategy.js';
 
 const { db } = config;
 

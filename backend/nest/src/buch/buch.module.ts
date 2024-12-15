@@ -15,16 +15,16 @@
 
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MailModule } from '../mail/mail.module';
-import { KeycloakModule } from '../security/keycloak/keycloak.module';
-import { BuchGetController } from './controller/buch-get.controller';
-import { BuchWriteController } from './controller/buch-write.controller';
-import { entities } from './entity/entities';
-import { BuchMutationResolver } from './resolver/buch-mutation.resolver';
-import { BuchQueryResolver } from './resolver/buch-query.resolver';
-import { BuchReadService } from './service/buch-read.service';
-import { BuchWriteService } from './service/buch-write.service';
-import { QueryBuilder } from './service/query-builder';
+import { MailModule } from '../mail/mail.module.js';
+import { KeycloakModule } from '../security/keycloak/keycloak.module.js';
+import { BuchGetController } from './controller/buch-get.controller.js';
+import { BuchWriteController } from './controller/buch-write.controller.js';
+import { entities } from './entity/entities.js';
+import { BuchMutationResolver } from './resolver/buch-mutation.resolver.js';
+import { BuchQueryResolver } from './resolver/buch-query.resolver.js';
+import { BuchReadService } from './service/buch-read.service.js';
+import { BuchWriteService } from './service/buch-write.service.js';
+import { QueryBuilder } from './service/query-builder.js';
 
 /**
  * Das Modul besteht aus Controller- und Service-Klassen für die Verwaltung von

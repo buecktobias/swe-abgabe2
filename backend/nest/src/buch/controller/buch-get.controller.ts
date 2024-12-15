@@ -44,14 +44,14 @@ import {
 } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { Public } from 'nest-keycloak-connect';
-import { paths } from '../../config/paths';
-import { getLogger } from '../../logger/logger';
-import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor';
-import { type Buch, type BuchArt } from '../entity/buch.entity';
-import { type Titel } from '../entity/titel.entity';
-import { BuchReadService } from '../service/buch-read.service';
-import { type Suchkriterien } from '../service/suchkriterien';
-import { getBaseUri } from './getBaseUri';
+import { paths } from '../../config/paths.js';
+import { getLogger } from '../../logger/logger.js';
+import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
+import { type Buch, type BuchArt } from '../entity/buch.entity.js';
+import { type Titel } from '../entity/titel.entity.js';
+import { BuchReadService } from '../service/buch-read.service.js';
+import { type Suchkriterien } from '../service/suchkriterien.js';
+import { getBaseUri } from './getBaseUri.js';
 
 /** href-Link für HATEOAS */
 export type Link = {

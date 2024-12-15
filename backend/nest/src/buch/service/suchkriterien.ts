@@ -18,7 +18,7 @@
  * @packageDocumentation
  */
 
-import { type BuchArt } from '../entity/buch.entity';
+import { type BuchArt } from '../entity/buch.entity.js';
 
 /**
  * Typdefinition für `find` in `buch-read.service` und `QueryBuilder.build()`.

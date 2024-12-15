@@ -1,6 +1,6 @@
-import { RESOURCES_DIR, config } from './app';
-import { env } from './env';
-import { httpsOptions } from './https';
+import { RESOURCES_DIR, config } from './app.js';
+import { env } from './env.js';
+import { httpsOptions } from './https.js';
 
 const { NODE_ENV, NEST_HOST } = env;
 

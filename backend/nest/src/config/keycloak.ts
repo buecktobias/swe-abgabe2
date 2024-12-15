@@ -24,9 +24,9 @@ import {
     TokenValidation,
 } from 'nest-keycloak-connect';
 import { Agent } from 'node:https';
-import { config } from './app';
-import { env } from './env';
-import { httpsOptions } from './https';
+import { config } from './app.js';
+import { env } from './env.js';
+import { httpsOptions } from './https.js';
 
 const { keycloak } = config;
 const authServerUrl =

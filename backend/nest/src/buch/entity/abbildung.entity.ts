@@ -20,7 +20,7 @@ import {
     ManyToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Buch } from './buch.entity';
+import { Buch } from './buch.entity.js';
 
 @Entity()
 export class Abbildung {

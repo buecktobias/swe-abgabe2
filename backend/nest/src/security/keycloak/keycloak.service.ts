@@ -8,8 +8,8 @@ import {
     type KeycloakConnectOptions,
     type KeycloakConnectOptionsFactory,
 } from 'nest-keycloak-connect';
-import { keycloakConnectOptions, paths } from '../../config/keycloak';
-import { getLogger } from '../../logger/logger';
+import { keycloakConnectOptions, paths } from '../../config/keycloak.js';
+import { getLogger } from '../../logger/logger.js';
 import * as fs from 'node:fs';
 
 const { authServerUrl, clientId } = keycloakConnectOptions;

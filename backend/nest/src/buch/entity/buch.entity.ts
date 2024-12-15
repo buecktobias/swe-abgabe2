@@ -48,11 +48,11 @@ import {
     UpdateDateColumn,
     VersionColumn,
 } from 'typeorm';
-import { dbType } from '../../config/db';
-import { Abbildung } from './abbildung.entity';
-import { BuchFile } from './buchFile.entity';
-import { DecimalTransformer } from './decimal-transformer';
-import { Titel } from './titel.entity';
+import { dbType } from '../../config/db.js';
+import { Abbildung } from './abbildung.entity.js';
+import { BuchFile } from './buchFile.entity.js';
+import { DecimalTransformer } from './decimal-transformer.js';
+import { Titel } from './titel.entity.js';
 
 /**
  * Alias-Typ für gültige Strings bei der Art eines Buches.

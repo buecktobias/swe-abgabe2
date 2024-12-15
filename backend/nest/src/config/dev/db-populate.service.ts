@@ -3,13 +3,13 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { DataSource } from 'typeorm';
-import { getLogger } from '../../logger/logger';
-import { dbType } from '../db';
+import { getLogger } from '../../logger/logger.js';
+import { dbType } from '../db.js';
 import {
     dbPopulate,
     dbResourcesDir,
     typeOrmModuleOptions,
-} from '../typeormOptions';
+} from '../typeormOptions.js';
 
 @Injectable()
 export class DbPopulateService implements OnApplicationBootstrap {

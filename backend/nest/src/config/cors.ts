@@ -8,6 +8,8 @@ export const corsOptions: CorsOptions = {
         'http://localhost:4200',
         'https://localhost:3001',
         'http://localhost:3000',
+        'http://localhost',
+        'https://localhost',
     ],
 
     methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE'],
